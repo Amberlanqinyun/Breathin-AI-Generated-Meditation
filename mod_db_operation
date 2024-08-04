@@ -1,0 +1,53 @@
+from db_credentials import *
+import pymysql
+
+# Function to execute SQL queries with transaction management and concurrency control
+def execute_query(query, data=None, fetchone=False, is_insert=False):
+    # Establish a connection to the database
+    connection = None
+    cursor = None
+    result = None
+    
+    # Transaction management encased in a Try/Except scenario to handle errors gracefully
+    try:
+        connection = pymysql.connect(
+            host=db_host, user=db_user, passwd=db_password, db=db_name
+        )
+        # Create a cursor to interact with the database
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+        
+        # If data is provided, execute the query with the data
+        if data:
+            cursor.execute(query, data)
+        else:
+            # If no data is provided, execute the query without data
+            cursor.execute(query)
+        
+        # Commit/save changes to the database
+        connection.commit()
+        
+        # Handle fetching result based on the provided parameters
+        if fetchone:
+            result = cursor.fetchone()
+        else:
+            result = cursor.fetchall()
+        
+        # If it's an INSERT operation, get the last inserted row id
+        if is_insert:
+            result = cursor.lastrowid
+
+    # If an error occurred, roll back the transaction
+    except Exception as e:
+        if connection:
+            connection.rollback()
+        print("Transaction did not complete. You might have missed out. Please try again if the option is there for you to do so:", str(e))
+    
+    finally:
+        # Close the cursor and the database connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+    # Return the fetched result if available
+    return result
