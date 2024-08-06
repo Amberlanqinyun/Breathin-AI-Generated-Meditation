@@ -1,12 +1,11 @@
 from db_baseOperation import execute_query
-from datetime import datetime, date
+from datetime import datetime
 import hashlib
 
 def searchStaff(email):
     query = "SELECT * FROM staff WHERE email = %s"
     result = execute_query(query, (email,), fetchone=True)
     return result
-
 
 def searchStaffById(id):
     query = "SELECT * FROM staff left join roles on roles.role_id = staff.role_id WHERE staff_id = %s"
@@ -107,3 +106,5 @@ def deleteCustomer(customer_id):
     query = "delete from customers WHERE customer_id = %s"
     result = execute_query(query, (customer_id,), fetchone=True)
     return result
+
+

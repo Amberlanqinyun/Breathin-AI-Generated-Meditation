@@ -1,6 +1,6 @@
 
 # Import various modules created for and used in this python srcipt
-from meditator import app, flash, render_template
+from app import app, flash, render_template
 from werkzeug.routing import BuildError
 from jinja2.exceptions import TemplateNotFound
 

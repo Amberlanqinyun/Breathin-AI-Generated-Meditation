@@ -1,44 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meditation App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h1 class="text-center">Meditation App</h1>
-                <form method="POST" action="/">
-                    <div class="mb-3">
-                        <label for="userInput" class="form-label">What do you need today?</label>
-                        <input type="text" class="form-control" id="userInput" name="user_input" placeholder="e.g., stress relief, relaxation, focus" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Submit</button>
-                </form>
+{% extends "layout.html" %}
 
-                {% if generated_text %}
-                <div class="mt-4">
-                    <h3>Generated Meditation Script:</h3>
-                    <p>{{ generated_text }}</p>
-                </div>
-                {% endif %}
+{% block title %}Generate Meditation{% endblock %}
 
-                {% if generated_audio %}
-                <div class="mt-4">
-                    <h3>Audio Playback:</h3>
-                    <audio controls class="w-100">
-                        <source src="{{ generated_audio }}" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                </div>
-                {% endif %}
-            </div>
+{% block content %}
+<h1 class="text-center">breatheasy</h1>
+<form method="POST" action="{{ url_for('index') }}">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="locale">Select language:</label>
+            <select id="locale" name="locale" class="form-control">
+                {% for key, value in languages.items() %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
         </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        <div class="

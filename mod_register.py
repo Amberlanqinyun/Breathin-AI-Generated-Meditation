@@ -5,7 +5,7 @@ from mod_utilize import  app, flash, session, redirect, url_for, render_template
 import os
 import hashlib
 from PIL import Image
-from mod_db_account import searchCustomer, searchStaff,insertCustomer
+from db_account import searchCustomer, searchStaff,insertCustomer
 
 
 # Define the route for user registration with HTTP methods GET and POST

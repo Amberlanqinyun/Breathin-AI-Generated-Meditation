@@ -1,4 +1,4 @@
-from db_credentials import *
+from db_credentials import db_host,db_user,db_password,db_name
 import pymysql
 
 # Function to execute SQL queries with transaction management and concurrency control
