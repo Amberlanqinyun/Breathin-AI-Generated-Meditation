@@ -1,63 +1,55 @@
--- Insert into Users table
-INSERT INTO Users (Username, Email, PasswordHash, SubscriptionStatus)
+-- Insert dummy data into Users table
+INSERT INTO Users (Username, Email, PasswordHash)
 VALUES 
-('john_doe', 'john.doe@example.com', 'hashed_password1', 'active'),
-('jane_smith', 'jane.smith@example.com', 'hashed_password2', 'inactive'),
-('alice_wonder', 'alice.wonder@example.com', 'hashed_password3', 'active'),
-('bob_builder', 'bob.builder@example.com', 'hashed_password4', 'inactive');
+('user1', 'user1@example.com', 'passwordhash1'),
+('user2', 'user2@example.com', 'passwordhash2'),
+('user3', 'user3@example.com', 'passwordhash3');
 
--- Insert into Categories table
+-- Insert dummy data into Categories table
 INSERT INTO Categories (Name, Description)
 VALUES 
-('Relaxation', 'Meditations focused on relaxation and calmness.'),
-('Focus', 'Meditations aimed at improving focus and concentration.'),
-('Sleep', 'Guided sessions to help you fall asleep.'),
-('Stress Relief', 'Techniques to manage and reduce stress.');
+('Mindfulness', 'Meditations focused on mindfulness'),
+('Relaxation', 'Meditations for relaxation and stress relief'),
+('Focus', 'Meditations to improve focus and concentration');
 
--- Insert into Meditations table
-INSERT INTO Meditations (UserID, Category, TextContent, AudioFilePath, VisualContentPath, Duration)
+-- Insert dummy data into Meditations table
+INSERT INTO Meditations (UserID, CategoryID, Category, TextContent, AudioFilePath, VisualContentPath, Duration)
 VALUES 
-(1, 'Relaxation', 'Guided meditation for relaxation...', 'path/to/audio1.mp3', 'path/to/visual1.jpg', 10),
-(2, 'Focus', 'Guided meditation to enhance focus...', 'path/to/audio2.mp3', 'path/to/visual2.jpg', 15),
-(3, 'Sleep', 'Calm narration to help with sleep...', 'path/to/audio3.mp3', 'path/to/visual3.jpg', 20),
-(4, 'Stress Relief', 'Breathing exercises to manage stress...', 'path/to/audio4.mp3', 'path/to/visual4.jpg', 12);
+(1, 1, 'Mindfulness', 'Meditation content 1', 'audio1.mp3', 'visual1.jpg', 600),
+(2, 2, 'Relaxation', 'Meditation content 2', 'audio2.mp3', 'visual2.jpg', 1200),
+(3, 3, 'Focus', 'Meditation content 3', 'audio3.mp3', 'visual3.jpg', 900);
 
--- Insert into UserFeedback table
+-- Insert dummy data into UserFeedback table
 INSERT INTO UserFeedback (UserID, MeditationID, Rating, Comments)
 VALUES 
-(1, 1, 5, 'Very relaxing meditation.'),
-(2, 2, 4, 'Helped me concentrate better.'),
-(3, 3, 5, 'Fell asleep quickly, very soothing.'),
-(4, 4, 3, 'Good, but not my favorite.');
+(1, 1, 5, 'Very helpful!'),
+(2, 2, 4, 'Relaxing, but a bit long.'),
+(3, 3, 3, 'Good, but could be more focused.');
 
--- Insert into UsageReports table
+-- Insert dummy data into UsageReports table
 INSERT INTO UsageReports (UserID, MeditationID, SessionDate, Duration, EngagementLevel)
 VALUES 
-(1, 1, '2024-08-04 10:00:00', 10, 'High'),
-(2, 2, '2024-08-04 11:00:00', 15, 'Medium'),
-(3, 3, '2024-08-04 22:00:00', 20, 'High'),
-(4, 4, '2024-08-04 15:00:00', 12, 'Low');
+(1, 1, '2024-01-01 10:00:00', 600, 'High'),
+(2, 2, '2024-01-02 11:00:00', 1200, 'Medium'),
+(3, 3, '2024-01-03 12:00:00', 900, 'Low');
 
--- Insert into Achievements table
+-- Insert dummy data into Achievements table
 INSERT INTO Achievements (UserID, Type, Description)
 VALUES 
-(1, 'Streak', 'Completed 5 sessions in a row.'),
-(2, 'Milestone', 'Reached 10 hours of meditation.'),
-(3, 'Daily Practice', 'Practiced daily for a week.'),
-(4, 'New User', 'Completed first meditation.');
+(1, 'Daily Streak', 'Completed 7 days of meditation'),
+(2, 'First Meditation', 'Completed the first meditation'),
+(3, 'Focus Master', 'Completed 10 focus meditations');
 
--- Insert into Subscriptions table
+-- Insert dummy data into Subscriptions table
 INSERT INTO Subscriptions (UserID, PlanType, StartDate, EndDate, Status)
 VALUES 
-(1, 'Monthly', '2024-07-01', '2024-08-01', 'Active'),
-(2, 'Yearly', '2024-01-01', '2025-01-01', 'Inactive'),
-(3, 'Monthly', '2024-07-15', '2024-08-15', 'Active'),
-(4, 'Yearly', '2024-01-15', '2025-01-15', 'Inactive');
+(1, 'Monthly', '2024-01-01', '2024-01-31', 'Active'),
+(2, 'Annual', '2024-01-01', '2024-12-31', 'Active'),
+(3, 'Trial', '2024-01-01', '2024-01-07', 'Expired');
 
--- Insert into Payments table
+-- Insert dummy data into Payments table
 INSERT INTO Payments (UserID, Amount, PaymentMethod, PaymentDate, Status)
 VALUES 
-(1, 9.99, 'Credit Card', '2024-07-01', 'Completed'),
+(1, 9.99, 'Credit Card', '2024-01-01', 'Completed'),
 (2, 99.99, 'PayPal', '2024-01-01', 'Completed'),
-(3, 9.99, 'Credit Card', '2024-07-15', 'Completed'),
-(4, 99.99, 'PayPal', '2024-01-15', 'Completed');
+(3, 0.00, 'Trial', '2024-01-01', 'Completed');
