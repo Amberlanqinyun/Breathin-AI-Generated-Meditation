@@ -1,72 +1,25 @@
-import streamlit as st
-from datetime import date
-from mod_db_account import insertStaff, searchStaff, hash_password, searchCustomer, insertCustomer
+from flask import Flask, render_template, request
+from meditator import generate_meditation_script
+from mod_text_generation import generate_text
+from mod_voice_synthesis import synthesize_voice
 
-# Streamlit doesn't have sessions like Flask, but you can use st.session_state for stateful data
-if 'user_id' not in st.session_state:
-    st.session_state.user_id = None
-if 'role_id' not in st.session_state:
-    st.session_state.role_id = None
+app = Flask(__name__)
 
-# Create Staff Account Page
-def create_account():
-    st.title("Create a new staff account")
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    user_input = None
+    generated_text = None
+    generated_audio = None
+    if request.method == 'POST':
+        user_input = request.form.get('user_input')
+        # Process the user input
+        if user_input:
+            generated_text = generate_text(user_input)
+            generated_audio = synthesize_voice(generated_text)
+            # Assume generate_text returns the generated text and
+            # synthesize_voice returns a path or link to the audio file.
 
-    if st.session_state.role_id != 3:
-        st.error("Access denied. Admins only.")
-        return
+    return render_template('index.html', user_input=user_input, generated_text=generated_text, generated_audio=generated_audio)
 
-    with st.form("create_staff_account"):
-        role_id = st.selectbox("Role", options=[(2, "Staff"), (3, "Admin")], format_func=lambda x: x[1])[0]
-        first_name = st.text_input("First Name")
-        last_name = st.text_input("Last Name")
-        phone_number = st.text_input("Mobile Number")
-        email = st.text_input("Email")
-
-        submit = st.form_submit_button("Create Account")
-        if submit:
-            if searchStaff(email):
-                st.error("Email taken, sorry. Please log in or use a different email.")
-            else:
-                hashed_password = hash_password('1')  # Default password
-                employment_start_date = date.today()
-                insertStaff(role_id, first_name, last_name, phone_number, email, hashed_password, employment_start_date)
-                st.success("Account created successfully.")
-
-# Create Customer Account Page
-def create_customer_account():
-    st.title("Create a new customer account")
-
-    if st.session_state.role_id == 1:
-        st.error("Access denied. Admins only.")
-        return
-
-    with st.form("create_customer_account"):
-        first_name = st.text_input("First Name")
-        last_name = st.text_input("Last Name")
-        phone_number = st.text_input("Mobile Number")
-        email = st.text_input("Email")
-        dob = st.date_input("Date of Birth")
-        address = st.text_input("Address")
-
-        submit = st.form_submit_button("Create Account")
-        if submit:
-            if searchCustomer(email):
-                st.error("Email taken, sorry. Please use a different email.")
-            else:
-                hashed_password = hash_password('123456')  # Default password
-                insertCustomer(first_name, last_name, phone_number, email, hashed_password, address, dob)
-                st.success("Account created successfully.")
-
-# Main application
-def main():
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Go to", ["Create Staff Account", "Create Customer Account"])
-
-    if page == "Create Staff Account":
-        create_account()
-    elif page == "Create Customer Account":
-        create_customer_account()
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(debug=True)

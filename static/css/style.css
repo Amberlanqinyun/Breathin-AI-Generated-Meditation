@@ -1,0 +1,175 @@
+:root {
+    /* Color Variables */
+    --color-primary: #C8B68E; /* Warm Beige */
+    --color-secondary: #F4F0E6; /* Light Cream */
+    --color-accent: #6B6B6B; /* Soft Gray */
+    --color-text: #2C2C2C; /* Dark Charcoal */
+    --color-background: #FFFFFF; /* Pure White */
+    --color-border: #E0E0E0; /* Light Gray for Borders */
+
+    /* Typography Variables */
+    --font-family-primary: 'Comfortaa', sans-serif;
+    --font-family-secondary: 'Open Sans', sans-serif;
+    --font-size-h1: 2em;
+    --font-size-h2: 1.5em;
+    --font-size-h3: 1.2em;
+    --font-size-body: 1em;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    /* Spacing Variables */
+    --spacing-small: 10px;
+    --spacing-medium: 20px;
+    --spacing-large: 40px;
+
+    /* Border Radius Variables */
+    --border-radius-small: 10px;
+    --border-radius-medium: 15px;
+    --border-radius-large: 20px;
+
+    /* Shadow Variables */
+    --box-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --box-shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+    /* Transition Variables */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+}
+
+/* General Styles */
+body {
+    font-family: var(--font-family-primary);
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-primary);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-small);
+}
+
+h1 {
+    font-size: var(--font-size-h1);
+    color: var(--color-primary);
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+    color: var(--color-primary);
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+}
+
+/* Text */
+p, a, span, li {
+    font-size: var(--font-size-body);
+    color: var(--color-text);
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+/* Buttons */
+button, .btn {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    border: none;
+    border-radius: var(--border-radius-large);
+    padding: var(--spacing-small) var(--spacing-medium);
+    font-size: var(--font-size-body);
+    cursor: pointer;
+    transition: background-color var(--transition-medium);
+}
+
+button:hover, .btn:hover {
+    background-color: var(--color-accent);
+}
+
+/* Cards */
+.card {
+    background-color: var(--color-background);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--box-shadow-light);
+    padding: var(--spacing-medium);
+    margin: var(--spacing-medium) 0;
+    transition: box-shadow var(--transition-medium);
+}
+
+.card:hover {
+    box-shadow: var(--box-shadow-medium);
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-small) var(--spacing-medium);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: var(--color-primary);
+    margin: 0 15px;
+    font-size: 1.1em;
+}
+
+.navbar a:hover {
+    color: var(--color-accent);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--color-background);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-small) var(--spacing-medium);
+    text-align: center;
+    color: var(--color-text);
+}
+
+/* Forms */
+input, textarea {
+    width: 100%;
+    padding: var(--spacing-small);
+    margin: var(--spacing-small) 0;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--color-primary);
+    transition: border-color var(--transition-fast);
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+/* Specific Elements */
+.title {
+    font-size: 2.5em;
+    color: var(--color-primary);
+    text-align: center;
+    margin-top: var(--spacing-large);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: var(--color-accent);
+    text-align: center;
+    margin-bottom: var(--spacing-medium);
+}

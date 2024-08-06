@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - beatheasy{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Get Started</h1>
+
+    <a href="{{ url_for('signup') }}" class="btn btn-primary">Sign Up</a>
+    <a href="{{ url_for('login') }}" class="btn btn-secondary">Log In</a>
+</div>
+{% endblock %}
