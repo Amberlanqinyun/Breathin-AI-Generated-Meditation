@@ -1,15 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import render_template, request, redirect, url_for, flash, session
 import wave
 import io
 import re
 import base64
 import numpy as np
+import openai
 from mod_voice_synthesis import synthesize_ssml, get_voice_list
 from mod_text_generation import generate_text_v1
-
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'
-app.config['SESSION_TYPE'] = 'filesystem'
+from app_init import app  # Import the app from app_init
 
 languages = {
     "en-US": "English (US)",
@@ -100,7 +98,7 @@ def concatenate_audio(audio1, audio2, pause_duration=0):
 
 def generate_audio(meditation, music, sentence_break_time, speaking_rate, voice_model, locale):
     full_audio = None
-    meditation = meditation.replace(". <",".<").replace(". ",f". <break time=\"{sentence_break_time}s\" /> ")
+    meditation = meditation.replace(". <", ".<").replace(". ", f". <break time=\"{sentence_break_time}s\" /> ")
     try:
         pattern = r'\[PAUSE=(\d+)\]'
         split_text = re.split(pattern, meditation)
@@ -122,27 +120,35 @@ def generate_audio(meditation, music, sentence_break_time, speaking_rate, voice_
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        gender = request.form['gender']
-        locale = request.form['locale']
-        music = request.form['music']
-        text = request.form['text']
-        openai_model = request.form['openai_model']
-        time = int(request.form['time'])
-        max_tokens = int(request.form.get('max_tokens', 2000))
-        sentence_break_time = float(request.form['sentence_break_time'])
-        speaking_rate = float(request.form['speaking_rate'])
+        gender = request.form.get('gender', 'MALE')  # Default to 'MALE' if gender is not present
+        locale = request.form.get('locale', 'en-US')  # Default to 'en-US' if locale is not present
+        music = request.form.get('music', 'No Music')  # Default to 'No Music' if music is not present
+        text = request.form.get('text', '')  # Default to empty string if text is not present
+        openai_model = request.form.get('openai_model', 'text-davinci-003')  # Default to 'text-davinci-003' if openai_model is not present
+        time = int(request.form.get('time', 0))  # Default to 0 if time is not present
+        max_tokens = int(request.form.get('max_tokens', 2000))  # Default to 2000 if max_tokens is not present
+        sentence_break_time = float(request.form.get('sentence_break_time', 0.5))  # Default to 0.5 if sentence_break_time is not present
+        speaking_rate = float(request.form.get('speaking_rate', 1.0))  # Default to 1.0 if speaking_rate is not present
         
         voice_models = get_voices(locale, gender)
-        voice_model_name = best_models[gender].get(locale, "")
+        voice_model_name = best_models.get(gender, {}).get(locale, "")
         voice_model = next((model for model in voice_models if model.name == voice_model_name), voice_models[0])
 
-        meditation = generate_text_v1(text, time=time, max_tokens=max_tokens, model=openai_model, language=languages[locale])
-        voice = generate_audio(meditation, musics[music], sentence_break_time, speaking_rate, voice_model, locale)
+        try:
+            meditation = generate_text_v1(text, time=time, max_tokens=max_tokens, model=openai_model, language=languages[locale])
+            voice = generate_audio(meditation, musics[music], sentence_break_time, speaking_rate, voice_model, locale)
 
-        session['meditation'] = meditation
-        session['voice'] = base64.b64encode(voice).decode('utf-8')
+            session['meditation'] = meditation
+            session['voice'] = base64.b64encode(voice).decode('utf-8')
 
-        return redirect(url_for('result'))
+            return redirect(url_for('result'))
+
+        except InvalidRequestError as e:
+            flash(str(e), 'error')
+        except OpenAIError as e:
+            flash(str(e), 'error')
+        except Exception as e:
+            flash('An unexpected error occurred: ' + str(e), 'error')
     
     return render_template('index.html', languages=languages, musics=musics)
 
@@ -150,6 +156,3 @@ def index():
 def result():
     voice = base64.b64decode(session.get('voice', ''))
     return render_template('result.html', voice=voice)
-
-if __name__ == '__main__':
-    app.run(debug=True)
