@@ -22,16 +22,16 @@
         </div>
     </div>
 </div>
-
-<!-- Second Page (Input Page) -->
 <div id="input-page" class="hidden">
     <div class="content">
         <!-- Logo Image -->
         <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Logo" class="logo-img">
 
-        <h2 class="input-heading">What's on your mind?</h2>
-        <textarea id="user-input" class="user-input" placeholder="Type your thoughts here..."></textarea>
-        <a href="#" id="submit-button" class="cta-button hidden">continue</a>
+        <form action="{{ url_for('prepare_meditation') }}" method="POST">
+            <textarea id="user-input" name="user_input" class="user-input" placeholder="Type your thoughts here..."></textarea>
+            <button type="submit" class="cta-button">Continue</button>
+        </form>
     </div>
 </div>
+
 {% endblock %}

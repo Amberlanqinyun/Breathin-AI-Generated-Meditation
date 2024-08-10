@@ -16,8 +16,7 @@ from mod_view_customers import view_customers
 from mod_view_notification import view_notification
 from mod_view_profile import view_profile
 from mod_view_staffs import view_staffs
-
-
+from mod_prepare_meditation import *
 
 # Function for showing the homepage
 @app.route('/')

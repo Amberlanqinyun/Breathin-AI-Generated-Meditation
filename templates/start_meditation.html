@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}breathe in{% endblock %}
+<img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Logo" class="logo-img">
+<audio controls autoplay>
+  <source src="{{ url_for('static', filename=audio_file) }}" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+{% block content %}
+{% endblock %}

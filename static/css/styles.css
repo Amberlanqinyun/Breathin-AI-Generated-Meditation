@@ -3,7 +3,7 @@
   font-family: 'Comfortaa';
   font-display: block;
   src: url('fonts/Comfortaa-Regular.ttf') format('truetype');
-  font-weight: 400;
+  font-weight:00;
 }
 
 @font-face {
@@ -16,7 +16,7 @@
 /* Define colors and fonts */
 :root {
   --background: #21232F;
-  --main: #e7ebb2;
+  --main: #f4e3b2;
   --header: #d38638;
   --element-background: #2d3143;
   --element-placeholder: #5D605E;
@@ -118,6 +118,7 @@ body {
 #landing-page.show, #input-page.show {
   opacity: 1;
 }
+
 /* Logo Image */
 .logo-img {
   width: 100px;
@@ -143,13 +144,6 @@ body {
   margin-bottom: 8rem;
 }
 
-@media (max-width: 768px) {
-  .intro-text {
-    font-size: 1.2rem;
-    margin-bottom: 4rem;
-  }
-}
-
 /* Call to Action Button */
 .cta-button {
   background-color: transparent;
@@ -166,14 +160,6 @@ body {
 .cta-button:hover {
   background-color: var(--main);
   color: var(--background);
-}
-
-@media (max-width: 768px) {
-  .cta-button {
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
-    margin-bottom: 6rem;
-  }
 }
 
 /* Feedback Link */
@@ -202,14 +188,6 @@ body {
   margin-right: 0.5rem;
 }
 
-/* Logo Image */
-.logo-img {
-  width: 100px;
-  height: auto;
-  margin-bottom: 2rem;
-}
-
-/* Input Page */
 /* Input Page */
 .input-heading {
   color: var(--main);
@@ -230,33 +208,6 @@ body {
 
 .user-input::placeholder {
   color: var(--element-placeholder);
-}
-
-/* Call to Action Button */
-.cta-button {
-  background-color: transparent;
-  color: var(--main);
-  border: 2px solid var(--main);
-  padding: 1rem 3rem;
-  border-radius: 30px;
-  text-decoration: none;
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin-bottom: 10rem;
-  margin-top: 2rem; /* Add space above the button */
-}
-
-
-@media (max-width: 768px) {
-  .input-heading {
-    font-size: 1rem;
-  }
-
-  .user-input {
-    font-size: 0.8rem;
-    padding: 0.8rem;
-    height: 120px;
-  }
 }
 
 /* Hamburger Menu Styles */
@@ -309,10 +260,6 @@ body {
   display: flex;
   transform: translateX(0);
   opacity: 1;
-}
-
-#menu-content:hover {
-  background-color: rgba(231, 235, 178, 0.1); /* Slightly transparent background on hover */
 }
 
 #menu-content ul {
@@ -442,4 +389,121 @@ body {
 .terms-link a {
   color: var(--main);
   text-decoration: underline;
+}
+
+/* Style for the disabled button */
+.cta-button.disabled {
+  background-color: var(--primary-color);
+  color: #fff; /* Assuming you want white text on the disabled button */
+  cursor: not-allowed;
+  opacity: 0.6; /* Slightly transparent to indicate it’s disabled */
+}
+
+/* Style for the error message */
+#feedback-message {
+  color: var(--header); /* Use the header color for consistency */
+  font-size: 1rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: rgba(211, 134, 56, 0.1); /* Light background with the header color */
+  font-family: var(--font-secondary); /* Use secondary font for contrast */
+  text-align: center; /* Center-align the text */
+  width: 90%; /* Match the width of the input box */
+}
+
+/* Hide the error message by default */
+#feedback-message.hidden {
+  display: none;
+}
+
+/* Add some transition for a smooth appearance/disappearance */
+#feedback-message {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Optional: Add a slight bounce effect when showing the message */
+#feedback-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#feedback-message.hidden {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Responsive Design Enhancements */
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+  .intro-text {
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+  }
+
+  .cta-button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    margin-bottom: 6rem;
+  }
+
+  .user-input {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+    height: 150px; /* Adjusted height for smaller screens */
+    width: 90%;
+    margin-bottom: 2rem;
+  }
+
+  .content {
+    padding-top: 1rem;
+    max-width: 90%; /* Adjusted content width */
+  }
+
+  #menu-content ul li a {
+    font-size: 0.9rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .logo-img {
+    width: 80px;
+  }
+}
+
+/* Adjustments for larger screens */
+@media (min-width: 1024px) {
+  .logo-img {
+    width: 120px;
+    margin-bottom: 3rem;
+  }
+
+  .intro-text {
+    font-size: 2rem;
+    margin-bottom: 10rem;
+  }
+
+  .cta-button {
+    padding: 1.2rem 3.5rem;
+    font-size: 1.4rem;
+    margin-bottom: 12rem;
+  }
+
+  .user-input {
+    font-size: 1.2rem;
+    padding: 1.2rem;
+    height: 300px; /* Adjusted height for larger screens */
+    width: 80%;
+    margin-bottom: 3rem;
+  }
+
+  .content {
+    padding-top: 3rem;
+    max-width: 60%; /* Adjusted content width */
+  }
+
+  #menu-content ul li a {
+    font-size: 1.2rem;
+    padding: 1rem 1.2rem;
+  }
 }
