@@ -1,3 +1,5 @@
+# db_credentials.py
+
 db_config = {
     'db_host': 'localhost',
     'db_user': 'root',

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Breathe In{% endblock %}
+
+{% block content %}
+<!-- Intro Section -->
+<div id="intro-section" class="fullscreen">
+    <img src="{{ url_for('static', filename='images/intro.gif') }}" alt="breathin" class="centered-svg">
+</div>
+
+<!-- Landing Page Content -->
+<div id="landing-page" class="hidden">
+    <div class="content">
+        <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Logo" class="logo-img">
+        <p class="intro-text">Hi, I can create a 5 minute guided meditation based on your feelings right now</p>
+        <a href="#" id="start-button" class="cta-button">Sounds good</a>
+        <div class="feedback-link">
+            <a href="#" class="text-light">
+                <img src="{{ url_for('static', filename='images/feedback-icon-small.svg') }}" alt="Feedback Icon" class="feedback-icon">
+                Give Feedback
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Second Page (Input Page) -->
+<div id="input-page" class="hidden">
+    <div class="content">
+        <!-- Logo Image -->
+        <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Logo" class="logo-img">
+
+        <h2 class="input-heading">What's on your mind?</h2>
+        <textarea id="user-input" class="user-input" placeholder="Type your thoughts here..."></textarea>
+        <a href="#" id="submit-button" class="cta-button hidden">continue</a>
+    </div>
+</div>
+{% endblock %}

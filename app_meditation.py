@@ -7,7 +7,7 @@ import numpy as np
 import openai
 from mod_voice_synthesis import synthesize_ssml, get_voice_list
 from mod_text_generation import generate_text_v1
-from app_init import app  # Import the app from app_init
+from app import app_meditation  # Import the app from app_init
 
 languages = {
     "en-US": "English (US)",
@@ -117,8 +117,8 @@ def generate_audio(meditation, music, sentence_break_time, speaking_rate, voice_
         flash(str(e), 'error')
     return full_audio
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+@app_meditation.route('/', methods=['GET', 'POST'])
+def home():
     if request.method == 'POST':
         gender = request.form.get('gender', 'MALE')  # Default to 'MALE' if gender is not present
         locale = request.form.get('locale', 'en-US')  # Default to 'en-US' if locale is not present
@@ -143,16 +143,12 @@ def index():
 
             return redirect(url_for('result'))
 
-        except InvalidRequestError as e:
-            flash(str(e), 'error')
-        except OpenAIError as e:
-            flash(str(e), 'error')
         except Exception as e:
             flash('An unexpected error occurred: ' + str(e), 'error')
     
     return render_template('index.html', languages=languages, musics=musics)
 
-@app.route('/result')
+@app_meditation.route('/result')
 def result():
     voice = base64.b64decode(session.get('voice', ''))
     return render_template('result.html', voice=voice)

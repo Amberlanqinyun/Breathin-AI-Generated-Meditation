@@ -1,17 +1,20 @@
-from db_credentials import db_host,db_user,db_password,db_name
+from db_credentials import db_config
 import pymysql
 
-# Function to execute SQL queries with transaction management and concurrency control
+
 def execute_query(query, data=None, fetchone=False, is_insert=False):
-    # Establish a connection to the database
+    # Establish a connection to the database using the db_config dictionary
     connection = None
     cursor = None
     result = None
-    
-    # Transaction management encased in a Try/Except scenario to handle errors gracefully
+
     try:
         connection = pymysql.connect(
-            host=db_host, user=db_user, passwd=db_password, db=db_name
+            host=db_config['db_host'],
+            user=db_config['db_user'],
+            password=db_config['db_password'],
+            db=db_config['db_name'],
+            port=db_config['port']
         )
         # Create a cursor to interact with the database
         cursor = connection.cursor(pymysql.cursors.DictCursor)
@@ -40,7 +43,7 @@ def execute_query(query, data=None, fetchone=False, is_insert=False):
     except Exception as e:
         if connection:
             connection.rollback()
-        print("Transaction did not complete. You might have missed out. Please try again if the option is there for you to do so:", str(e))
+        print("Transaction did not complete. Please try again if the option is there for you to do so:", str(e))
     
     finally:
         # Close the cursor and the database connection

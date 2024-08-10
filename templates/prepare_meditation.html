@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Breathe In{% endblock %}
+
+{% block content %}
+  <!-- Meditation Preparation Content -->
+  <div id="meditation-prep-page" class="content-center">
+    <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Logo" class="logo-img">
+    <p class="meditation-prep-text">Alright. Get comfy and make sure your sound's on.</p>
+    <a href="#" id="start-meditation-button" class="cta-button">Start meditation</a>
+    <div class="terms-link">
+        <p>By clicking Start meditation, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+</div>
+{% endblock%%}

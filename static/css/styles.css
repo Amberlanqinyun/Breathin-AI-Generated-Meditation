@@ -1,0 +1,445 @@
+/* Import fonts */
+@font-face {
+  font-family: 'Comfortaa';
+  font-display: block;
+  src: url('fonts/Comfortaa-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-display: block;
+  src: url('fonts/OpenSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+/* Define colors and fonts */
+:root {
+  --background: #21232F;
+  --main: #e7ebb2;
+  --header: #d38638;
+  --element-background: #2d3143;
+  --element-placeholder: #5D605E;
+  --privacy-color: #848770;
+  --element-main: white;
+
+  /* Font families */
+  --font-primary: 'Comfortaa', sans-serif;
+  --font-secondary: 'Open Sans', sans-serif;
+}
+
+/* CSS reset */
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: var(--font-primary);
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+select,
+textarea {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+}
+
+/* Body Styles */
+body {
+  background-color: var(--background);
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Fullscreen Section (Intro) */
+.fullscreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.centered-svg {
+  width: 40vw;
+  max-width: 300px;
+}
+
+/* Landing Page */
+#landing-page, #input-page {
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  transition: opacity 1.5s ease-in-out;
+}
+
+#landing-page.show, #input-page.show {
+  opacity: 1;
+}
+/* Logo Image */
+.logo-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 2rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content {
+  max-width: 800px;
+  text-align: center;
+  padding-top: 2rem;
+}
+
+/* Intro Text */
+.intro-text {
+  color: var(--main);
+  font-size: 1.5rem;
+  line-height: 1.8;
+  margin-top: 2rem;
+  margin-bottom: 8rem;
+}
+
+@media (max-width: 768px) {
+  .intro-text {
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+  }
+}
+
+/* Call to Action Button */
+.cta-button {
+  background-color: transparent;
+  color: var(--main);
+  border: 2px solid var(--main);
+  padding: 1rem 3rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-bottom: 10rem;
+}
+
+.cta-button:hover {
+  background-color: var(--main);
+  color: var(--background);
+}
+
+@media (max-width: 768px) {
+  .cta-button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    margin-bottom: 6rem;
+  }
+}
+
+/* Feedback Link */
+.feedback-link {
+  margin-top: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-link a {
+  color: var(--main);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-link a:hover {
+  text-decoration: underline;
+}
+
+.feedback-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+}
+
+/* Logo Image */
+.logo-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+/* Input Page */
+/* Input Page */
+.input-heading {
+  color: var(--main);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.user-input {
+  background-color: var(--element-background);
+  color: var(--element-main);
+  font-size: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 90%; /* Increased width */
+  height: 250px; /* Increased height */
+  margin-bottom: 3rem; /* Add more space below the input box */
+}
+
+.user-input::placeholder {
+  color: var(--element-placeholder);
+}
+
+/* Call to Action Button */
+.cta-button {
+  background-color: transparent;
+  color: var(--main);
+  border: 2px solid var(--main);
+  padding: 1rem 3rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-bottom: 10rem;
+  margin-top: 2rem; /* Add space above the button */
+}
+
+
+@media (max-width: 768px) {
+  .input-heading {
+    font-size: 1rem;
+  }
+
+  .user-input {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+    height: 120px;
+  }
+}
+
+/* Hamburger Menu Styles */
+.hamburger-menu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.menu-icon {
+  width: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.menu-icon .bar {
+  height: 3px;
+  background-color: var(--main);
+  margin: 5px 0;
+  transition: all 0.3s ease;
+}
+
+.menu-icon:hover .bar {
+  background-color: var(--header); /* Changes color on hover */
+}
+
+/* Menu Content */
+#menu-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%; /* Full width menu */
+  max-width: 300px;
+  height: auto;
+  background-color: var(--background);
+  padding: 1rem 1.5rem;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  transform: translateX(100%);
+  opacity: 0;
+  border-radius: 10px; /* Optional: Rounds the whole menu */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Adds a slight shadow for depth */
+}
+
+#menu-content.show {
+  display: flex;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+#menu-content:hover {
+  background-color: rgba(231, 235, 178, 0.1); /* Slightly transparent background on hover */
+}
+
+#menu-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+#menu-content ul li {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+#menu-content ul li a {
+  display: block;
+  width: 100%;
+  color: var(--main);
+  text-decoration: none;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 8px; /* Slight rounding for a smooth appearance */
+}
+
+#menu-content ul li a:hover {
+  background-color: transparent; /* No hover effect on individual items */
+  color: var(--header); /* Change text color on hover */
+}
+
+#menu-content ul li a .icon {
+  margin-left: auto;
+  font-size: 1rem;
+  color: var(--main);
+}
+
+/* Close Menu Button */
+.close-menu {
+  font-size: 1.5rem;
+  color: var(--main);
+  cursor: pointer;
+  margin-top: 1rem;
+  align-self: flex-end;
+}
+
+/* Adjustments for the 'back to app' button */
+#back-to-app {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: rgba(231, 235, 178, 0.1);
+  color: var(--main);
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  transition: background-color 0.3s ease;
+}
+
+#back-to-app:hover {
+  background-color: rgba(231, 235, 178, 0.2);
+}
+
+/* Additional Responsive Tweaks */
+@media(max-width: 480px) {
+  .hamburger-menu {
+    top: 15px;
+    right: 15px;
+  }
+
+  #menu-content {
+    width: 100%;
+    max-width: 250px;
+    padding: 1.5rem;
+  }
+
+  #menu-content ul li a {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .close-menu {
+    font-size: 1.2rem;
+  }
+}
+
+@media(min-width: 1024px) {
+  #menu-content {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  #menu-content ul li a {
+    font-size: 1.1rem;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+/*meditation page*/
+.content-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.meditation-prep-text {
+  color: var(--main);
+  font-size: 1.5rem;
+  line-height: 1.8;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.terms-link p {
+  color: var(--element-placeholder);
+  font-size: 0.8rem;
+}
+
+.terms-link a {
+  color: var(--main);
+  text-decoration: underline;
+}

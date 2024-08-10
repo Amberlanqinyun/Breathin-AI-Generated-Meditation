@@ -3,37 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}StillMe Meditation{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <title>{% block title %}Breathe In{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+<!-- Favicon -->
+<link rel="icon" type="image/gif" href="{{ url_for('static', filename='images/favicon.gif') }}">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">StillMe</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/explore">Explore</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/profile">Profile</a>
-                </li>
-            </ul>
+    <header>
+        <!-- Hamburger Menu -->
+        <div class="hamburger-menu">
+            <div class="menu-icon" id="menu-icon">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <nav id="menu-content" class="hidden">
+                <ul>
+                    <li><a href="#">team & culture</a></li>
+                    <li><a href="#">revenue ideas</a></li>
+                    <li><a href="#">design principles</a></li>
+                    <li><a href="#">wish list</a></li>
+                    <li><a href="#">contact</a></li>
+                    <li><a href="#">legal</a></li>
+                </ul>
+                <div class="close-menu" id="close-menu">✕</div>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content Area -->
-    <div class="container mt-4">
+    <main>
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <footer>
+        <!-- Optional: Add a footer here -->
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
