@@ -20,7 +20,7 @@ from mod_prepare_meditation import *
 
 # Function for showing the homepage
 @app.route('/')
-def index():
+def home():
     return render_template('homepage.html')
 
 # Run the app in debug mode

@@ -1,4 +1,4 @@
-# GROUP 2 PROJECT 2
+
 
 # Import various modules created for and used in this python script
 from mod_utilize import  app, session, redirect, url_for, request, flash, render_template
