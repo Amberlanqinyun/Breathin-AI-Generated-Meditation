@@ -22,16 +22,113 @@
         </div>
     </div>
 </div>
+
 <div id="input-page" class="hidden">
     <div class="content">
         <!-- Logo Image -->
         <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Logo" class="logo-img">
 
-        <form action="{{ url_for('prepare_meditation') }}" method="POST">
+        <form id="input-form" action="{{ url_for('prepare_meditation') }}" method="POST">
             <textarea id="user-input" name="user_input" class="user-input" placeholder="Type your thoughts here..."></textarea>
-            <button type="submit" class="cta-button">Continue</button>
+            <button type="submit" class="cta-button" id="submit-button">Start meditation</button>
         </form>
+        
+        <div class="terms-link">
+            <p>By clicking Start meditation, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+        </div>
     </div>
 </div>
 
+<!-- Breathing Exercise Overlay -->
+<div id="breathing-overlay" class="hidden">
+    <div class="overlay-content">
+        <img src="{{ url_for('static', filename='images/breathing-gif.gif') }}" alt="Breathing Exercise" class="breathing-gif">
+        <p class="breathing-instructions">Inhale deeply... Exhale slowly...</p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('input-form').onsubmit = function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Debug: Log to ensure the function is being triggered
+        console.log("Form submitted, showing breathing overlay.");
+
+        // Show the breathing overlay with a fade-in effect
+        const breathingOverlay = document.getElementById('breathing-overlay');
+        breathingOverlay.classList.remove('hidden');
+        breathingOverlay.classList.add('fade-in');
+
+        // Asynchronously trigger the audio generation and submission
+        fetch('{{ url_for("prepare_meditation") }}', {
+            method: 'POST',
+            body: new FormData(document.getElementById('input-form'))
+        })
+        .then(response => response.json())
+        .then(data => {
+            // After the audio is ready, hide the breathing overlay and redirect to the meditation page
+            breathingOverlay.classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = "{{ url_for('start_meditation') }}?audio_file=" + data.audio_file_url;
+            }, 500); // Adjust this timing if needed
+        })
+        .catch(error => {
+            console.error('Error generating audio:', error);
+            // Optionally handle errors here, e.g., show an error message to the user
+        });
+    };
+</script>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .hidden {
+        display: none;
+    }
+
+    /* Fullscreen overlay for breathing exercise */
+    #breathing-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        flex-direction: column;
+        text-align: center;
+        color: white;
+        opacity: 0; /* Start hidden */
+        transition: opacity 0.5s ease-in-out; /* Add a transition for fade effect */
+    }
+
+    .fade-in {
+        opacity: 1;
+    }
+
+    .fade-out {
+        opacity: 0;
+    }
+
+    .overlay-content {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .breathing-gif {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .breathing-instructions {
+        font-size: 24px;
+        margin-top: 20px;
+    }
+</style>
 {% endblock %}

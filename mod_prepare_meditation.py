@@ -1,11 +1,8 @@
-from flask import render_template, request, redirect, url_for, flash, session
+from flask import render_template, request, redirect, url_for
 from mod_text_generation import generate_meditation_text
 from mod_voice_synthesis import synthesize_voice
 from pydub import AudioSegment
-import os
-from app import app
 
-@app.route('/prepare_meditation', methods=['GET', 'POST'])
 def prepare_meditation():
     if request.method == 'POST':
         user_input = request.form.get('user_input')
@@ -30,10 +27,3 @@ def prepare_meditation():
         return redirect(url_for('start_meditation', audio_file='output/meditation_output.mp3'))
 
     return render_template('prepare_meditation.html')
-
-
-@app.route('/start_meditation')
-def start_meditation():
-    audio_file = request.args.get('audio_file')
-    return render_template('start_meditation.html', audio_file=audio_file)
-

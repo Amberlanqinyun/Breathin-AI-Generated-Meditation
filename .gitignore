@@ -4,3 +4,4 @@ __pycache__/app.cpython-311.pyc
 __pycache__/app_error_handling.cpython-311.pyc
 *.pyc
 *.pyc
+.env

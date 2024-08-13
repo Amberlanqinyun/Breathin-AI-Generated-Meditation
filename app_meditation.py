@@ -118,8 +118,8 @@
 #         flash(str(e), 'error')
 #     return full_audio
 
-# @app_meditation.route('/', methods=['GET', 'POST'])
-# def home():
+# @app_meditation.route('/me', methods=['GET', 'POST'])
+# def me():
 #     if request.method == 'POST':
 #         gender = request.form.get('gender', 'MALE')  # Default to 'MALE' if gender is not present
 #         locale = request.form.get('locale', 'en-US')  # Default to 'en-US' if locale is not present

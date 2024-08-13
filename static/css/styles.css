@@ -447,7 +447,11 @@ body {
     font-size: 1rem;
     margin-bottom: 6rem;
   }
-
+  /* Hover state */
+  .cta-button:hover {
+    background-color: var(--main);
+    color: var(--background);
+  }
   .user-input {
     font-size: 0.8rem;
     padding: 0.8rem;
@@ -505,5 +509,70 @@ body {
   #menu-content ul li a {
     font-size: 1.2rem;
     padding: 1rem 1.2rem;
+  }
+}
+/* Modal Container */
+.modal {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px); /* Initially translateY for transition */
+  width: 80%;
+  max-width: 400px;
+  background-color: var(--element-background); /* Softer background */
+  padding: 20px;
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow for a floating effect */
+  z-index: 1000;
+  text-align: center;
+  margin-top: 20px;
+  opacity: 0; /* Start hidden */
+  transition: opacity 0.4s ease, transform 0.4s ease; /* Gentle transition */
+}
+
+/* Modal when shown */
+.modal.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0); /* Bring to position smoothly */
+}
+
+/* Modal Content */
+.modal-content {
+  color: var(--main);
+  font-family: var(--font-primary);
+}
+
+/* Close Button */
+.modal-close-button {
+  background-color: var(--header);
+  color: var(--background);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px; /* Slightly larger rounding */
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth color change */
+}
+
+.modal-close-button:hover {
+  background-color: var(--main);
+  color: var(--background);
+}
+
+/* Hidden Modal */
+.hidden {
+  display: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .modal {
+      width: 90%;
+      max-width: 300px;
+      padding: 15px;
+  }
+
+  .modal-close-button {
+      padding: 8px 15px;
+      font-size: 0.9rem;
   }
 }

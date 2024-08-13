@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Breathe In{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.gif') }}" type="image/gif">
 <!-- Favicon -->
 <link rel="icon" type="image/gif" href="{{ url_for('static', filename='images/favicon.gif') }}">
 </head>
@@ -34,12 +34,23 @@
 
     <main>
         {% block content %}{% endblock %}
+   
+    <div id="error-modal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modal-message"></p>
+            <button id="modal-close" class="modal-close-button">OK</button>
+        </div>
+    </div>
     </main>
+
 
     <footer>
         <!-- Optional: Add a footer here -->
     </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- Modal Structure -->
+
+
 </body>
 </html>
