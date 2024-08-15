@@ -1,64 +1,72 @@
-import sqlite3
+import mysql.connector
 from datetime import datetime, timedelta
 import random
+from db_credentials import db_config
 
-# Create a SQLite database connection
-conn = sqlite3.connect('meditation_app.db')
+# Establish a MySQL database connection
+conn = mysql.connector.connect(
+    host=db_config['db_host'],
+    user=db_config['db_user'],
+    password=db_config['db_password'],
+    database=db_config['db_name'],
+    port=db_config['port']
+)
+
 c = conn.cursor()
 
-# Create tables
+# Create tables (if not already created)
 c.execute('''
     CREATE TABLE IF NOT EXISTS Roles (
-        RoleID INTEGER PRIMARY KEY,
-        RoleName TEXT UNIQUE NOT NULL
+        RoleID INT AUTO_INCREMENT PRIMARY KEY,
+        RoleName VARCHAR(50) UNIQUE NOT NULL
     )
 ''')
 
 c.execute('''
     CREATE TABLE IF NOT EXISTS Customers (
-        CustomerID INTEGER PRIMARY KEY AUTOINCREMENT,
-        Username TEXT UNIQUE NOT NULL,
-        Email TEXT UNIQUE NOT NULL,
-        PasswordHash TEXT NOT NULL,
-        RoleID INTEGER NOT NULL,
+        CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+        Username VARCHAR(50) UNIQUE NOT NULL,
+        Email VARCHAR(100) UNIQUE NOT NULL,
+        PasswordHash VARCHAR(255) NOT NULL,
+        RoleID INT NOT NULL,
         CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
     )
 ''')
 
 c.execute('''
     CREATE TABLE IF NOT EXISTS Staff (
-        StaffID INTEGER PRIMARY KEY AUTOINCREMENT,
-        Username TEXT UNIQUE NOT NULL,
-        Email TEXT UNIQUE NOT NULL,
-        PasswordHash TEXT NOT NULL,
-        RoleID INTEGER NOT NULL,
+        StaffID INT AUTO_INCREMENT PRIMARY KEY,
+        Username VARCHAR(50) UNIQUE NOT NULL,
+        Email VARCHAR(100) UNIQUE NOT NULL,
+        PasswordHash VARCHAR(255) NOT NULL,
+        RoleID INT NOT NULL,
         CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
     )
 ''')
 
 c.execute('''
     CREATE TABLE IF NOT EXISTS Categories (
-        CategoryID INTEGER PRIMARY KEY AUTOINCREMENT,
-        Name TEXT NOT NULL,
+        CategoryID INT AUTO_INCREMENT PRIMARY KEY,
+        Name VARCHAR(50) NOT NULL,
         Description TEXT
     )
 ''')
 
 c.execute('''
     CREATE TABLE IF NOT EXISTS Meditations (
-        MeditationID INTEGER PRIMARY KEY AUTOINCREMENT,
-        CustomerID INTEGER NOT NULL,
-        CategoryID INTEGER,
-        Category TEXT,
+        MeditationID INT AUTO_INCREMENT PRIMARY KEY,
+        CustomerID INT NOT NULL,
+        CategoryID INT,
+        Category VARCHAR(50),
         TextContent TEXT,
-        AudioFilePath TEXT,
-        VisualContentPath TEXT,
+        AudioFilePath VARCHAR(255),
+        VisualContentPath VARCHAR(255),
         CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
         FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
     )
@@ -66,9 +74,9 @@ c.execute('''
 
 c.execute('''
     CREATE TABLE IF NOT EXISTS MeditationSessions (
-        SessionID INTEGER PRIMARY KEY AUTOINCREMENT,
-        CustomerID INTEGER NOT NULL,
-        MeditationID INTEGER NOT NULL,
+        SessionID INT AUTO_INCREMENT PRIMARY KEY,
+        CustomerID INT NOT NULL,
+        MeditationID INT NOT NULL,
         SessionDate DATE NOT NULL,
         FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
         FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID),
@@ -81,7 +89,7 @@ roles_data = [
     (1, 'Admin'),
     (2, 'User')
 ]
-c.executemany('INSERT OR IGNORE INTO Roles (RoleID, RoleName) VALUES (?, ?)', roles_data)
+c.executemany('INSERT INTO Roles (RoleID, RoleName) VALUES (%s, %s) ON DUPLICATE KEY UPDATE RoleName = VALUES(RoleName)', roles_data)
 
 # Insert dummy data into Customers
 customers_data = [
@@ -89,14 +97,14 @@ customers_data = [
     ('john_doe', 'john@example.com', 'hashed_password', 2),
     ('jane_smith', 'jane@example.com', 'hashed_password', 2)
 ]
-c.executemany('INSERT INTO Customers (Username, Email, PasswordHash, RoleID) VALUES (?, ?, ?, ?)', customers_data)
+c.executemany('INSERT INTO Customers (Username, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s)', customers_data)
 
 # Insert dummy data into Staff
 staff_data = [
     ('staff1', 'staff1@example.com', 'hashed_password', 1),
     ('staff2', 'staff2@example.com', 'hashed_password', 1)
 ]
-c.executemany('INSERT INTO Staff (Username, Email, PasswordHash, RoleID) VALUES (?, ?, ?, ?)', staff_data)
+c.executemany('INSERT INTO Staff (Username, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s)', staff_data)
 
 # Insert dummy data into Categories
 categories_data = [
@@ -104,7 +112,7 @@ categories_data = [
     ('Sleep', 'Guided meditations for better sleep.'),
     ('Stress Relief', 'Meditations to help manage stress.')
 ]
-c.executemany('INSERT INTO Categories (Name, Description) VALUES (?, ?)', categories_data)
+c.executemany('INSERT INTO Categories (Name, Description) VALUES (%s, %s)', categories_data)
 
 # Insert dummy data into Meditations
 meditations_data = [
@@ -114,7 +122,7 @@ meditations_data = [
 ]
 c.executemany('''
     INSERT INTO Meditations (CustomerID, CategoryID, Category, TextContent, AudioFilePath, VisualContentPath)
-    VALUES (?, ?, ?, ?, ?, ?)
+    VALUES (%s, %s, %s, %s, %s, %s)
 ''', meditations_data)
 
 # Function to generate a random date within a given range
@@ -138,7 +146,7 @@ for customer_id in [1, 2, 3]:
 
 c.executemany('''
     INSERT INTO MeditationSessions (CustomerID, MeditationID, SessionDate)
-    VALUES (?, ?, ?)
+    VALUES (%s, %s, %s)
 ''', meditation_sessions_data)
 
 # Commit the transaction

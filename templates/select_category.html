@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Select Meditation Category{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="content">
+        <h2 class="text-center mb-4">Choose a style for your meditation</h2>
+        <form method="POST" action="{{ url_for('select_category') }}">
+            <div class="row justify-content-center">
+                {% for category in categories %}
+                <div class="col-md-3">
+                    <button type="submit" name="category" value="{{ category }}" class="category-button">
+                        {{ category }}
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .container {
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    .category-button {
+        background-color: #2d3143;
+        color: #f4e3b2;
+        border: 2px solid #d38638;
+        border-radius: 30px;
+        padding: 1rem 2rem;
+        margin: 10px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .category-button:hover {
+        background-color: #d38638;
+        color: #21232F;
+    }
+</style>
+{% endblock %}

@@ -19,12 +19,9 @@ def register():
         # Retrieve form data
         first_name = request.form['first_name']
         last_name = request.form['last_name']
-        phone_number = request.form['phone_number']
         email = request.form['email']
         password = request.form['new_password']
         confirmPassword = request.form['new_password_confirm']
-        address = request.form['street_number_name']
-        date_of_birth = request.form['date_of_birth']
 
         # # Check password strength
         if len(password) < 6 or not any(character.isdigit() for character in password) or not any(character.isalpha() for character in password):
@@ -52,7 +49,7 @@ def register():
                 # encrypt the password using bcrypt
                 pwd = hashlib.md5(password.encode()).hexdigest()
                 # Insert customer data into the customers table
-                result = insertCustomer(first_name,last_name,phone_number,email,pwd,address,date_of_birth)
+                result = insertCustomer(first_name,last_name,email,pwd)
                 # Display success message and redirect
                 result = searchCustomer(email)
                 if result:

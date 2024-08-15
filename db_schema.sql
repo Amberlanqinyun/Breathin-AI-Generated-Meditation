@@ -1,3 +1,4 @@
+
 -- Drop existing database if it exists
 DROP DATABASE IF EXISTS meditation_app;
 
@@ -8,8 +9,8 @@ CREATE DATABASE meditation_app;
 USE meditation_app;
 
 -- Drop existing tables if they exist to avoid conflicts
-DROP TABLE IF EXISTS Customers;
-DROP TABLE IF EXISTS Staff;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Admin;
 DROP TABLE IF EXISTS Categories;
 DROP TABLE IF EXISTS Meditations;
 DROP TABLE IF EXISTS UserFeedback;
@@ -29,27 +30,25 @@ CREATE TABLE Roles (
 -- Insert roles into Roles table
 INSERT INTO Roles (RoleName) VALUES ('Admin'), ('User');
 
--- Create Customers table (formerly Users)
-CREATE TABLE Customers (
-    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
-    Username VARCHAR(50) UNIQUE NOT NULL,
+-- Create User table (formerly Customers)
+CREATE TABLE User (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Firstname VARCHAR(50) NOT NULL,
+    Lastname VARCHAR(50) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
     RoleID INT NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
--- Create Staff table
-CREATE TABLE Staff (
-    StaffID INT AUTO_INCREMENT PRIMARY KEY,
-    Username VARCHAR(50) UNIQUE NOT NULL,
+-- Create Admin table (formerly Staff)
+CREATE TABLE Admin (
+    AdminID INT AUTO_INCREMENT PRIMARY KEY,
+    Firstname VARCHAR(50) NOT NULL,
+    Lastname VARCHAR(50) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
     RoleID INT NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
@@ -63,88 +62,87 @@ CREATE TABLE Categories (
 -- Create Meditations table
 CREATE TABLE Meditations (
     MeditationID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
+    UserID INT NOT NULL,
     CategoryID INT,
-    Category VARCHAR(50),
     TextContent TEXT,
     AudioFilePath VARCHAR(255),
     VisualContentPath VARCHAR(255),
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
 
 -- Create MeditationSessions table
 CREATE TABLE MeditationSessions (
     SessionID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
+    UserID INT NOT NULL,
     MeditationID INT NOT NULL,
     SessionDate DATE NOT NULL,
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID),
-    UNIQUE (CustomerID, SessionDate) -- Ensures one session per day per customer
+    UNIQUE (UserID, SessionDate) -- Ensures one session per day per user
 );
 
 -- Create UserFeedback table
 CREATE TABLE UserFeedback (
     FeedbackID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
+    UserID INT NOT NULL,
     MeditationID INT NOT NULL,
     Rating INT, -- (Rating BETWEEN 1 AND 5) -- To be handled by application logic
     Comments TEXT,
     SubmittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID)
 );
 
 -- Create UsageReports table
 CREATE TABLE UsageReports (
     ReportID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
+    UserID INT NOT NULL,
     MeditationID INT NOT NULL,
     SessionDate TIMESTAMP,
     EngagementLevel VARCHAR(50),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID)
 );
 
 -- Create Achievements table
 CREATE TABLE Achievements (
     AchievementID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
+    UserID INT NOT NULL,
     Type VARCHAR(50),
     Description TEXT,
     AchievedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
 -- Create Subscriptions table
 CREATE TABLE Subscriptions (
     SubscriptionID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
+    UserID INT NOT NULL,
     PlanType VARCHAR(50),
     StartDate TIMESTAMP,
     EndDate TIMESTAMP,
     Status VARCHAR(50),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
 -- Create Payments table
 CREATE TABLE Payments (
     PaymentID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
+    UserID INT NOT NULL,
     Amount DECIMAL(10, 2),
     PaymentMethod VARCHAR(50),
     PaymentDate TIMESTAMP,
     Status VARCHAR(50),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
 -- Indexing
-CREATE INDEX idx_customer_id_meditations ON Meditations(CustomerID);
-CREATE INDEX idx_customer_id_userfeedback ON UserFeedback(CustomerID);
-CREATE INDEX idx_customer_id_usagereports ON UsageReports(CustomerID);
-CREATE INDEX idx_customer_id_achievements ON Achievements(CustomerID);
-CREATE INDEX idx_customer_id_subscriptions ON Subscriptions(CustomerID);
-CREATE INDEX idx_customer_id_payments ON Payments(CustomerID);
+CREATE INDEX idx_user_id_meditations ON Meditations(UserID);
+CREATE INDEX idx_user_id_userfeedback ON UserFeedback(UserID);
+CREATE INDEX idx_user_id_usagereports ON UsageReports(UserID);
+CREATE INDEX idx_user_id_achievements ON Achievements(UserID);
+CREATE INDEX idx_user_id_subscriptions ON Subscriptions(UserID);
+CREATE INDEX idx_user_id_payments ON Payments(UserID);
