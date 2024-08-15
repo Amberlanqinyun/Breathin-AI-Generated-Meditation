@@ -1,0 +1,140 @@
+<!-- GROUP 2 PROJECT 2 -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mb-3">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="page-container">
+        <h4 class="page-heading">We want to make this better</h4>
+        <p>We really appreciate you trying out this app.
+
+          We're just starting out and trying to see which direction to take this. If you can tell us what you thought, that'll help us make something that truly helps others.
+          
+          We won't send anything to your email unless you agree</p>
+        <form class="needs-validation" action="{{ url_for('contact_us') }}" method="post" novalidate>
+          <!-- Hidden field for date -->
+          <div class="form-group mb-2">
+            <input type="text" class="form-control" id="date" name="date" value="{{ current_date }}" hidden>
+          </div>
+          <!-- First name field -->
+          <div class="form-group mb-2">
+            <label for="first_name"><span class="text-danger">*</span>First Name</label>
+            {%if customerDetails == None %}
+            <input type="text" class="form-control" id="first_name" name="first_name" maxlength="50"
+              pattern="[A-Za-z-]+" required>
+            <div class="invalid-feedback" id="first-name-invalid-feedback"></div>
+            {% else %}
+            <input type="text" class="form-control" id="first_name" name="first_name" value={{customerDetails.first_name}} readonly>
+            {% endif %}
+          </div>
+          <!-- Last name field -->
+          <div class="form-group mb-2">
+            <label for="last_name"><span class="text-danger">*</span>Last Name</label>
+            {%if customerDetails == None %}
+            <input type="text" class="form-control" id="last_name" name="last_name" maxlength="50" pattern="[A-Za-z-]+"
+              required>
+            <div class="invalid-feedback" id="last-name-invalid-feedback"></div>
+            {% else %}
+            <input type="text" class="form-control" id="last_name" name="last_name" value={{customerDetails.last_name}} readonly>
+            {% endif %}
+          </div>
+          <!-- Contact Number field -->
+          <div class="form-group mb-2">
+            <label for="phone_number"><span class="text-danger">*</span>Phone Number</label>
+            {%if customerDetails == None %}
+            <input type="text" class="form-control" id="phone_number" name="phone_number" minlength="8" maxlength="15"
+              pattern="[0-9]+" required>
+            <div class="invalid-feedback" id="phone-number-invalid-feedback"></div>
+            {% else %}
+            <input type="text" class="form-control" id="phone_number" name="phone_number" value={{customerDetails.phone_number}} readonly>
+            {% endif %}
+          </div>
+          <!-- Email field -->
+          <div class="form-group mb-2">
+            <label for="email"><span class="text-danger">*</span>Email</label>
+            {%if customerDetails == None %}
+            <input type="email" class="form-control" id="email" name="email" maxlength="100" required>
+            <div class="invalid-feedback">Please provide a valid email.</div>
+            {% else %}
+            <input type="text" class="form-control" id="email" name="email" value={{customerDetails.email}} readonly>
+            {% endif %}
+          </div>
+          <!-- Message field -->
+          <div class="form-group mb-2">
+            <label for="message"><span class="text-danger">*</span>Message: You only have 500 characters, so please
+              make it brief</label>
+            <textarea class="form-control" id="message" name="message" rows="4" maxlength="500" minlength="1"></textarea>
+            <div class="invalid-feedback" id="message-invalid-feedback"></div>
+          </div>
+          {% if 'user_id' in session %}
+          <!-- Show return to dashboard button -->
+          <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm mt-2">Dashboard</a>
+          {% endif %}
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary btn-sm mt-2" disabled id="submit-btn">Send Message</button>
+          <p class="text-center"><small>If you know your info is valid, but the submit button is still
+              disabled, try clicking in and out of a name field.</small></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS to delay the loading of the background image on non - user pages until after the page has fully loaded to speed up initial viewing -->
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Attach input event listeners to the fields to monitor live inputs
+        const emailField = document.getElementById('email');
+        
+        emailField.addEventListener('input', () => validateEmailFields());
+        // Function to validate email field
+        function validateEmailField(emailField, errorField) {
+            const emailValue = emailField.value.trim();
+            // IF email does not have the necessary requirements display an error message
+            if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailValue)) {
+                emailField.classList.add('is-invalid');
+                errorField.textContent = "Please enter a valid email";
+                return false;
+                // Otherwise let it through
+            } else {
+                emailField.classList.remove('is-invalid');
+                emailField.classList.add('is-valid');
+                document.getElementById('submit-btn').removeAttribute('disabled');
+                errorField.textContent = "";
+                return true;
+            }
+        }
+        
+        // Function to validate both email fields
+        function validateEmailFields() {
+            // Get the email inputs from the email fields
+            const emailField = document.getElementById('email');
+            const emailError = document.getElementById('email-invalid-feedback');
+
+            const isEmailValid = validateEmailField(emailField, emailError);
+            // Call the validate fields function (defined at the bottom) to ensure submit button is only enabled when ALL criteria are met
+            validateFields();
+        }
+       
+       
+        // Define function to validate all fields again for submit button enabling/disabling
+        function validateFields() {
+            const emailField = document.getElementById('email');
+            // Declare again what valid inputs shall be
+            const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailField.value.trim());
+            if (isEmailValid ) {
+                document.getElementById('submit-btn').removeAttribute('disabled');
+            } else {
+                document.getElementById('submit-btn').setAttribute('disabled', 'disabled');
+            }
+        }
+        validateFields();
+    });
+</script>
+
+</script>
+
+{% endblock %}

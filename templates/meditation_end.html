@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Meditation Completed{% endblock %}
+
+{% block content %}
+<div id="meditation-end" class="content-center">
+    <p>If this was impactful, you can help us spread the good vibes</p>
+    <div class="action-buttons">
+        <a href="{{ url_for('register') }}" class="button signup-button">
+            <i class="icon-heart"></i> Sign Up
+        </a>
+        <a href="{{ url_for('login') }}" class="button login-button">
+            <i class="icon-login"></i> Log in
+        </a>
+    </div>
+    <div class="give-feedback">
+        <a href="{{ url_for('login') }}"> Give Feedback</a>
+    </div>
+</div>
+{% endblock %}

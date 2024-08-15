@@ -576,3 +576,46 @@ body {
       font-size: 0.9rem;
   }
 }
+/* Override Bootstrap Default Font Color */
+body, p, .form-control, .btn {
+  color: var(--main);
+  font-family: var(--font-primary);
+}
+
+/* Override Bootstrap Form Control Background */
+.form-control {
+  background-color: var(--element-background);
+  color: var(--element-main);
+  border: 1px solid var(--element-placeholder);
+  border-radius: 8px;
+}
+
+/* Customize Bootstrap Button */
+.btn-primary {
+  background-color: var(--header);
+  border-color: var(--header);
+  color: var(--background);
+  font-family: var(--font-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--main);
+  border-color: var(--main);
+  color: var(--background);
+}
+
+/* Customize Modal Close Button */
+.modal-close-button {
+  background-color: var(--header);
+  color: var(--background);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal-close-button:hover {
+  background-color: var(--main);
+  color: var(--background);
+}

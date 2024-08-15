@@ -1,0 +1,33 @@
+<!-- GROUP 2 PROJECT 2 -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mb-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="page-container">
+                <!-- Check if error is caused by user or system -->
+                <!-- If user error, suggest retyping or going back -->
+                {% if error_type in ["template_not_found", "page_not_found"] %}
+                <h4 class="page-heading">Oops, you might have done a typo!</h4>
+                <p class="ms-2">
+                    {{ error_type }}<br><br>
+                    Please press the back button to return, or try typing the address again.
+                    {% else %}
+                    <!-- If system error, apologise and display the error type and request they inform us -->
+                <h4 class="page-heading">Oops, this is embarrassing!</h4>
+                <p class="ms-2">
+                    {{ error_type }}<br><br>
+                    Please use the back button or try again later.<br><br>
+                    So we can fix it, feel free to copy and paste this entire message and <a
+                        style="text-decoration: none;" href="{{ url_for('contact_us') }}">send it to us</a>.<br><br>
+                    If you could state exactly what you were doing when it happened, we would greatly appreciate
+                    it.<br><br>
+                    Humble apologies, and thank you so much for helping us rectify it.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
