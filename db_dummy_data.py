@@ -14,97 +14,27 @@ conn = mysql.connector.connect(
 
 c = conn.cursor()
 
-# Create tables (if not already created)
-c.execute('''
-    CREATE TABLE IF NOT EXISTS Roles (
-        RoleID INT AUTO_INCREMENT PRIMARY KEY,
-        RoleName VARCHAR(50) UNIQUE NOT NULL
-    )
-''')
-
-c.execute('''
-    CREATE TABLE IF NOT EXISTS Customers (
-        CustomerID INT AUTO_INCREMENT PRIMARY KEY,
-        Username VARCHAR(50) UNIQUE NOT NULL,
-        Email VARCHAR(100) UNIQUE NOT NULL,
-        PasswordHash VARCHAR(255) NOT NULL,
-        RoleID INT NOT NULL,
-        CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
-    )
-''')
-
-c.execute('''
-    CREATE TABLE IF NOT EXISTS Staff (
-        StaffID INT AUTO_INCREMENT PRIMARY KEY,
-        Username VARCHAR(50) UNIQUE NOT NULL,
-        Email VARCHAR(100) UNIQUE NOT NULL,
-        PasswordHash VARCHAR(255) NOT NULL,
-        RoleID INT NOT NULL,
-        CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
-    )
-''')
-
-c.execute('''
-    CREATE TABLE IF NOT EXISTS Categories (
-        CategoryID INT AUTO_INCREMENT PRIMARY KEY,
-        Name VARCHAR(50) NOT NULL,
-        Description TEXT
-    )
-''')
-
-c.execute('''
-    CREATE TABLE IF NOT EXISTS Meditations (
-        MeditationID INT AUTO_INCREMENT PRIMARY KEY,
-        CustomerID INT NOT NULL,
-        CategoryID INT,
-        Category VARCHAR(50),
-        TextContent TEXT,
-        AudioFilePath VARCHAR(255),
-        VisualContentPath VARCHAR(255),
-        CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
-        FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
-    )
-''')
-
-c.execute('''
-    CREATE TABLE IF NOT EXISTS MeditationSessions (
-        SessionID INT AUTO_INCREMENT PRIMARY KEY,
-        CustomerID INT NOT NULL,
-        MeditationID INT NOT NULL,
-        SessionDate DATE NOT NULL,
-        FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
-        FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID),
-        UNIQUE (CustomerID, SessionDate)
-    )
-''')
-
 # Insert dummy data into Roles
 roles_data = [
-    (1, 'Admin'),
-    (2, 'User')
+    ('Admin',),
+    ('User',)
 ]
-c.executemany('INSERT INTO Roles (RoleID, RoleName) VALUES (%s, %s) ON DUPLICATE KEY UPDATE RoleName = VALUES(RoleName)', roles_data)
+c.executemany('INSERT IGNORE INTO Roles (RoleName) VALUES (%s)', roles_data)
 
-# Insert dummy data into Customers
-customers_data = [
-    ('admin', 'admin@example.com', 'hashed_password', 1),
-    ('john_doe', 'john@example.com', 'hashed_password', 2),
-    ('jane_smith', 'jane@example.com', 'hashed_password', 2)
+# Insert dummy data into User
+users_data = [
+    ('John', 'Doe', 'john@example.com', 'hashed_password1', 2),  # User role
+    ('Jane', 'Smith', 'jane@example.com', 'hashed_password2', 2),  # User role
+    ('Admin', 'User', 'admin@example.com', 'hashed_password3', 1)  # Admin role
 ]
-c.executemany('INSERT INTO Customers (Username, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s)', customers_data)
+c.executemany('INSERT INTO User (Firstname, Lastname, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s, %s)', users_data)
 
-# Insert dummy data into Staff
-staff_data = [
-    ('staff1', 'staff1@example.com', 'hashed_password', 1),
-    ('staff2', 'staff2@example.com', 'hashed_password', 1)
+# Insert dummy data into Admin
+admins_data = [
+    ('Alice', 'Admin', 'alice.admin@example.com', 'hashed_password4', 1),
+    ('Bob', 'Admin', 'bob.admin@example.com', 'hashed_password5', 1)
 ]
-c.executemany('INSERT INTO Staff (Username, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s)', staff_data)
+c.executemany('INSERT INTO Admin (Firstname, Lastname, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s, %s)', admins_data)
 
 # Insert dummy data into Categories
 categories_data = [
@@ -114,16 +44,27 @@ categories_data = [
 ]
 c.executemany('INSERT INTO Categories (Name, Description) VALUES (%s, %s)', categories_data)
 
-# Insert dummy data into Meditations
+# Retrieve UserID and CategoryID values from the User and Categories tables
+c.execute('SELECT UserID FROM User')
+user_ids = [row[0] for row in c.fetchall()]
+
+c.execute('SELECT CategoryID FROM Categories')
+category_ids = [row[0] for row in c.fetchall()]
+
+# Insert dummy data into Meditations using valid CategoryID values
 meditations_data = [
-    (1, 1, 'Mindfulness', 'Mindfulness Session 1', '/path/to/audio1.mp3', '/path/to/visual1.jpg'),
-    (2, 2, 'Sleep', 'Sleep Session 1', '/path/to/audio2.mp3', '/path/to/visual2.jpg'),
-    (3, 3, 'Stress Relief', 'Stress Relief Session 1', '/path/to/audio3.mp3', '/path/to/visual3.jpg')
+    (user_ids[0], category_ids[0], 'Mindfulness Session 1', '/path/to/audio1.mp3', '/path/to/visual1.jpg'),
+    (user_ids[1], category_ids[1], 'Sleep Session 1', '/path/to/audio2.mp3', '/path/to/visual2.jpg'),
+    (user_ids[2], category_ids[2], 'Stress Relief Session 1', '/path/to/audio3.mp3', '/path/to/visual3.jpg')
 ]
 c.executemany('''
-    INSERT INTO Meditations (CustomerID, CategoryID, Category, TextContent, AudioFilePath, VisualContentPath)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    INSERT INTO Meditations (UserID, CategoryID, TextContent, AudioFilePath, VisualContentPath)
+    VALUES (%s, %s, %s, %s, %s)
 ''', meditations_data)
+
+# Retrieve valid MeditationID values from the Meditations table
+c.execute('SELECT MeditationID FROM Meditations')
+meditation_ids = [row[0] for row in c.fetchall()]
 
 # Function to generate a random date within a given range
 def random_date(start, end):
@@ -134,20 +75,75 @@ start_date = datetime.strptime('2023-01-01', '%Y-%m-%d')
 end_date = datetime.strptime('2023-08-01', '%Y-%m-%d')
 
 meditation_sessions_data = []
-for customer_id in [1, 2, 3]:
+for user_id in user_ids:  # Loop through existing user_ids
     session_count = random.randint(5, 20)
     session_dates = set()
     while len(session_dates) < session_count:
         session_date = random_date(start_date, end_date).strftime('%Y-%m-%d')
         session_dates.add(session_date)
     for session_date in session_dates:
-        meditation_id = random.choice([1, 2, 3])
-        meditation_sessions_data.append((customer_id, meditation_id, session_date))
+        meditation_id = random.choice(meditation_ids)  # Use only valid MeditationIDs
+        meditation_sessions_data.append((user_id, meditation_id, session_date))
 
 c.executemany('''
-    INSERT INTO MeditationSessions (CustomerID, MeditationID, SessionDate)
+    INSERT INTO MeditationSessions (UserID, MeditationID, SessionDate)
     VALUES (%s, %s, %s)
 ''', meditation_sessions_data)
+
+# Insert dummy data into UserFeedback
+feedback_data = [
+    (user_ids[0], meditation_ids[0], 5, 'Very relaxing session.'),
+    (user_ids[1], meditation_ids[1], 4, 'Helped me sleep better.'),
+    (user_ids[2], meditation_ids[2], 3, 'It was okay, could be better.')
+]
+c.executemany('''
+    INSERT INTO UserFeedback (UserID, MeditationID, Rating, Comments)
+    VALUES (%s, %s, %s, %s)
+''', feedback_data)
+
+# Insert dummy data into UsageReports
+usage_reports_data = [
+    (user_ids[0], meditation_ids[0], '2023-07-01', 'High'),
+    (user_ids[1], meditation_ids[1], '2023-07-02', 'Medium'),
+    (user_ids[2], meditation_ids[2], '2023-07-03', 'Low')
+]
+c.executemany('''
+    INSERT INTO UsageReports (UserID, MeditationID, SessionDate, EngagementLevel)
+    VALUES (%s, %s, %s, %s)
+''', usage_reports_data)
+
+# Insert dummy data into Achievements
+achievements_data = [
+    (user_ids[0], 'Milestone', 'Completed 10 meditation sessions.'),
+    (user_ids[1], 'Consistency', 'Meditated every day for a week.'),
+    (user_ids[2], 'Stress Free', 'Reduced stress levels significantly.')
+]
+c.executemany('''
+    INSERT INTO Achievements (UserID, Type, Description)
+    VALUES (%s, %s, %s)
+''', achievements_data)
+
+# Insert dummy data into Subscriptions
+subscriptions_data = [
+    (user_ids[0], 'Monthly', '2023-06-01', '2023-07-01', 'Active'),
+    (user_ids[1], 'Annual', '2023-01-01', '2024-01-01', 'Active'),
+    (user_ids[2], 'Monthly', '2023-07-01', '2023-08-01', 'Inactive')
+]
+c.executemany('''
+    INSERT INTO Subscriptions (UserID, PlanType, StartDate, EndDate, Status)
+    VALUES (%s, %s, %s, %s, %s)
+''', subscriptions_data)
+
+# Insert dummy data into Payments
+payments_data = [
+    (user_ids[0], 9.99, 'Credit Card', '2023-06-01', 'Completed'),
+    (user_ids[1], 99.99, 'PayPal', '2023-01-01', 'Completed'),
+    (user_ids[2], 9.99, 'Credit Card', '2023-07-01', 'Failed')
+]
+c.executemany('''
+    INSERT INTO Payments (UserID, Amount, PaymentMethod, PaymentDate, Status)
+    VALUES (%s, %s, %s, %s, %s)
+''', payments_data)
 
 # Commit the transaction
 conn.commit()
