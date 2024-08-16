@@ -2,6 +2,7 @@ from flask import Flask, render_template,request
 from mod_prepare_meditation import prepare_meditation
 from mod_feedback import feedback
 from mod_register import register
+from mod_login_logout import login
 
 app = Flask(__name__)
 

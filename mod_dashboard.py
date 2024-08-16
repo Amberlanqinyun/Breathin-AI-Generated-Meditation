@@ -4,7 +4,7 @@
 from mod_utilize import current_date, app, flash, session, redirect, url_for, render_template
 from db_baseOperation import execute_query
 from mod_db_orders import getFinishedOrderNumber,getOngoingOrderNumber,getOrderNumberByCustomerId
-from mod_db_customer_queries import getQueryNumber,getQueryNumberByCustomerId
+from mod_db_user_queries import getQueryNumber,getQueryNumberByCustomerId
 from mod_db_notification import getUnreadNotificationCount, getNotificationCount
 # Define a route for displaying the dashboard
 @app.route('/dashboard')
