@@ -1,4 +1,3 @@
-
 -- Drop existing database if it exists
 DROP DATABASE IF EXISTS meditation_app;
 
@@ -9,8 +8,8 @@ CREATE DATABASE meditation_app;
 USE meditation_app;
 
 -- Drop existing tables if they exist to avoid conflicts
-DROP TABLE IF EXISTS User;
-DROP TABLE IF EXISTS Admin;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Admins;
 DROP TABLE IF EXISTS Categories;
 DROP TABLE IF EXISTS Meditations;
 DROP TABLE IF EXISTS UserFeedback;
@@ -30,22 +29,22 @@ CREATE TABLE Roles (
 -- Insert roles into Roles table
 INSERT INTO Roles (RoleName) VALUES ('Admin'), ('User');
 
--- Create User table (formerly Customers)
-CREATE TABLE User (
+-- Create Users table (formerly User)
+CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
-    Firstname VARCHAR(50) NOT NULL,
-    Lastname VARCHAR(50) NOT NULL,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
     RoleID INT NOT NULL,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
--- Create Admin table (formerly Staff)
-CREATE TABLE Admin (
+-- Create Admins table (formerly Admin)
+CREATE TABLE Admins (
     AdminID INT AUTO_INCREMENT PRIMARY KEY,
-    Firstname VARCHAR(50) NOT NULL,
-    Lastname VARCHAR(50) NOT NULL,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
     RoleID INT NOT NULL,
@@ -69,7 +68,7 @@ CREATE TABLE Meditations (
     VisualContentPath VARCHAR(255),
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
 
@@ -79,7 +78,7 @@ CREATE TABLE MeditationSessions (
     UserID INT NOT NULL,
     MeditationID INT NOT NULL,
     SessionDate DATE NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID),
     UNIQUE (UserID, SessionDate) -- Ensures one session per day per user
 );
@@ -92,7 +91,7 @@ CREATE TABLE UserFeedback (
     Rating INT, -- (Rating BETWEEN 1 AND 5) -- To be handled by application logic
     Comments TEXT,
     SubmittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID)
 );
 
@@ -103,7 +102,7 @@ CREATE TABLE UsageReports (
     MeditationID INT NOT NULL,
     SessionDate TIMESTAMP,
     EngagementLevel VARCHAR(50),
-    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID)
 );
 
@@ -114,7 +113,7 @@ CREATE TABLE Achievements (
     Type VARCHAR(50),
     Description TEXT,
     AchievedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES User(UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 -- Create Subscriptions table
@@ -125,7 +124,7 @@ CREATE TABLE Subscriptions (
     StartDate TIMESTAMP,
     EndDate TIMESTAMP,
     Status VARCHAR(50),
-    FOREIGN KEY (UserID) REFERENCES User(UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 -- Create Payments table
@@ -136,7 +135,7 @@ CREATE TABLE Payments (
     PaymentMethod VARCHAR(50),
     PaymentDate TIMESTAMP,
     Status VARCHAR(50),
-    FOREIGN KEY (UserID) REFERENCES User(UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 -- Indexing
@@ -146,3 +145,7 @@ CREATE INDEX idx_user_id_usagereports ON UsageReports(UserID);
 CREATE INDEX idx_user_id_achievements ON Achievements(UserID);
 CREATE INDEX idx_user_id_subscriptions ON Subscriptions(UserID);
 CREATE INDEX idx_user_id_payments ON Payments(UserID);
+
+ALTER TABLE Users
+ADD COLUMN reset_token VARCHAR(255),
+ADD COLUMN reset_token_expiration DATETIME;

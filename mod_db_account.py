@@ -1,94 +1,178 @@
 from db_baseOperation import execute_query
-from datetime import datetime
+from datetime import datetime, timedelta
 import hashlib
+import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 def searchAdmin(email):
-    query = "SELECT * FROM Admin WHERE Email = %s"
+    query = "SELECT * FROM Admins WHERE Email = %s"
     result = execute_query(query, (email,), fetchone=True)
     return result
 
-def searchAdminById(id):
-    query = "SELECT * FROM Admin LEFT JOIN Roles ON Roles.RoleID = Admin.RoleID WHERE AdminID = %s"
-    result = execute_query(query, (id,), fetchone=True)
+def searchAdminById(admin_id):
+    query = """
+    SELECT * FROM Admins 
+    LEFT JOIN Roles ON Roles.RoleID = Admins.RoleID 
+    WHERE AdminID = %s
+    """
+    result = execute_query(query, (admin_id,), fetchone=True)
     return result
 
 def listAllAdmins(condition=""):
-    query = "SELECT * FROM Admin LEFT JOIN Roles ON Roles.RoleID = Admin.RoleID"
-    if condition != "":
+    query = """
+    SELECT * FROM Admins 
+    LEFT JOIN Roles ON Roles.RoleID = Admins.RoleID
+    """
+    if condition:
         query += " " + condition
     result = execute_query(query)
     return result
 
 def listAllUsers(condition=""):
-    query = "SELECT * FROM User"
-    if condition != "":
+    query = "SELECT * FROM Users"
+    if condition:
         query += " " + condition
     result = execute_query(query)
     return result
 
 def searchUser(email):
-    query = "SELECT * FROM User WHERE Email = %s"
+    query = "SELECT * FROM Users WHERE Email = %s"
     result = execute_query(query, (email,), fetchone=True)
     return result
 
-def searchUserById(id):
-    query = "SELECT * FROM User LEFT JOIN Roles ON Roles.RoleID = User.RoleID WHERE UserID = %s"
-    result = execute_query(query, (id,), fetchone=True)
+def searchUserById(user_id):
+    query = """
+    SELECT * FROM Users 
+    LEFT JOIN Roles ON Roles.RoleID = Users.RoleID 
+    WHERE UserID = %s
+    """
+    result = execute_query(query, (user_id,), fetchone=True)
     return result
 
 def insertUser(first_name, last_name, email, password, role_id='2'):
-    query = "INSERT INTO User (Firstname, Lastname, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s, %s)"
-    data = (first_name, last_name, email, password, role_id)
+    query = """
+    INSERT INTO Users (FirstName, LastName, Email, PasswordHash, RoleID) 
+    VALUES (%s, %s, %s, %s, %s)
+    """
+    password_hash = hash_password(password)
+    data = (first_name, last_name, email, password_hash, role_id)
     result = execute_query(query, data)
     return result
 
-def insertAdmin(role_id, first_name, last_name, email, password, employment_start_date=datetime.now().date()):
-    query = "INSERT INTO Admin (RoleID, Firstname, Lastname, Email, PasswordHash, EmploymentStartDate) VALUES (%s, %s, %s, %s, %s, %s)"
-    data = (role_id, first_name, last_name, email, password, employment_start_date)
+def insertAdmin(first_name, last_name, email, password, role_id='1'):
+    query = """
+    INSERT INTO Admins (FirstName, LastName, Email, PasswordHash, RoleID) 
+    VALUES (%s, %s, %s, %s, %s)
+    """
+    password_hash = hash_password(password)
+    data = (first_name, last_name, email, password_hash, role_id)
     result = execute_query(query, data)
     return result
 
 def deactivateUser(user_id):
-    query = "UPDATE User SET Banned='1' WHERE UserID = %s"
+    query = "UPDATE Users SET banned = '1' WHERE UserID = %s"
     result = execute_query(query, (user_id,), fetchone=True)
     return result
 
 def activateUser(user_id):
-    query = "UPDATE User SET Banned='0' WHERE UserID = %s"
+    query = "UPDATE Users SET banned = '0' WHERE UserID = %s"
     result = execute_query(query, (user_id,), fetchone=True)
     return result
 
 def update_admin_details(first_name, last_name, email, admin_id):
-    query = "UPDATE Admin SET Firstname = %s, Lastname = %s, Email = %s WHERE AdminID = %s"
+    query = """
+    UPDATE Admins 
+    SET FirstName = %s, LastnNme = %s, Email = %s 
+    WHERE AdminID = %s
+    """
     data = (first_name, last_name, email, admin_id)
     result = execute_query(query, data)
     return result
 
 def update_user_details(first_name, last_name, email, user_id):
-    query = "UPDATE User SET Firstname = %s, Lastname = %s, Email = %s WHERE UserID = %s"
+    query = """
+    UPDATE Users 
+    SET FirstName = %s, LastName = %s, Email = %s 
+    WHERE UserID = %s
+    """
     data = (first_name, last_name, email, user_id)
     result = execute_query(query, data)
     return result
 
-def update_user_password(user_id, new_password):
-    query = "UPDATE User SET PasswordHash = %s WHERE UserID = %s"
-    data = (new_password, user_id)
-    execute_query(query, data)
-
-def update_admin_password(admin_id, new_password):
-    query = "UPDATE Admin SET PasswordHash = %s WHERE AdminID = %s"
-    data = (new_password, admin_id)
-    execute_query(query, data)
 
 def hash_password(password):
     return hashlib.md5(password.encode()).hexdigest()
 
 def deleteAdmin(admin_id):
-    query = "DELETE FROM Admin WHERE AdminID = %s"
+    query = "DELETE FROM Admins WHERE AdminID = %s"
     result = execute_query(query, (admin_id,), fetchone=True)
     return result
 
 def deleteUser(user_id):
-    query = "DELETE FROM User WHERE UserID = %s"
+    query = "DELETE FROM Users WHERE UserID = %s"
     result = execute_query(query, (user_id,), fetchone=True)
     return result
+
+
+def generate_reset_token(user_id):
+    # Set token expiration to 1 hour from now
+    expiration = datetime.now() + timedelta(hours=1)  # Token valid for 1 hour
+    # Generate token logic here
+    token = f"{user_id}-{int(expiration.timestamp())}"
+    return token
+
+def save_reset_token(user_id, token):
+    query = "UPDATE Users SET reset_token = %s, token_expiry = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE UserID = %s"
+    execute_query(query, (token, user_id))
+
+
+def verify_reset_token(token):
+    query = "SELECT * FROM Users WHERE reset_token = %s AND token_expiry > NOW()"
+    return execute_query(query, (token,), fetchone=True)
+
+def update_user_password(user_id, new_password):
+    query = "UPDATE Users SET PasswordHash = %s WHERE UserID = %s"
+    password_hash = hash_password(new_password)
+    data = (password_hash, user_id)
+    execute_query(query, data)
+
+def update_admin_password(admin_id, new_password):
+    query = "UPDATE Admins SET PasswordHash = %s WHERE AdminID = %s"
+    password_hash = hash_password(new_password)
+    data = (password_hash, admin_id)
+    execute_query(query, data)
+    
+    
+
+def send_reset_email(email, token):
+    sender_email = "amber.lan.breath.in@gmail.com"
+    receiver_email = email
+    password = os.getenv("EMAIL_PASSWORD")
+
+    # Create the email content
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Password Reset Request"
+    message["From"] = sender_email
+    message["To"] = receiver_email
+
+    reset_url = f"http://localhost:5000/reset_password?token={token}"
+
+    text = f"""\
+    Hi,
+    To reset your password, please click the link below:
+    {reset_url}
+    If you did not request a password reset, please ignore this email.
+    """
+    part = MIMEText(text, "plain")
+    message.attach(part)
+
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+        print("Email sent successfully")
+    except Exception as e:
+        print(f"Failed to send email: {e}")

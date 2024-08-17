@@ -7,51 +7,35 @@
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.gif') }}" type="image/gif">
-<!-- Favicon -->
-<link rel="icon" type="image/gif" href="{{ url_for('static', filename='images/favicon.gif') }}">
 </head>
 <body>
-    <header>
-        <!-- Hamburger Menu -->
-        <div class="hamburger-menu">
-            <div class="menu-icon" id="menu-icon">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
-            <nav id="menu-content" class="hidden">
-                <ul>
-                    <li><a href="/login">login</a></li>
-                    <li><a href="#">my profile</a></li>
-                    <li><a href="#">design principles</a></li>
-                    <li><a href="#">wish list</a></li>
-                    <li><a href="#">contact</a></li>
-                    <li><a href="#">dashboard</a></li>
-                </ul>
-                <div class="close-menu" id="close-menu">✕</div>
-            </nav>
-        </div>
-    </header>
 
     <main>
         {% block content %}{% endblock %}
    
-    <div id="error-modal" class="modal hidden">
-        <div class="modal-content">
-            <p id="modal-message"></p>
-            <button id="modal-close" class="modal-close-button">OK</button>
+        <div id="error-modal" class="modal hidden">
+            <div class="modal-content">
+                <p id="modal-message"></p>
+                <button id="modal-close" class="modal-close-button">OK</button>
+            </div>
         </div>
-    </div>
     </main>
-
+    
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
 
     <footer>
         <!-- Optional: Add a footer here -->
     </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <!-- Modal Structure -->
-
-
 </body>
 </html>

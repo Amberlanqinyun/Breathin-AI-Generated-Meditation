@@ -1,17 +1,12 @@
-
 # Import necessary modules and functions
-from mod_utilize import  app, flash, session, redirect, url_for, render_template, request, datetime, relativedelta
-# PythonAnywhere won't allow these ones to be imported like the above ones
-import os
+from mod_utilize import app, flash, session, redirect, url_for, render_template, request
 import hashlib
-from PIL import Image
-from db_account import searchCustomer, searchStaff,insertCustomer
-
+from mod_db_account import searchUser, insertUser
 
 # Define the route for user registration with HTTP methods GET and POST
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    # Ensure no one logged in
+    # Ensure no one is logged in
     if 'user_id' in session:
         return redirect(url_for('login'))
     
@@ -21,43 +16,36 @@ def register():
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['new_password']
-        confirmPassword = request.form['new_password_confirm']
+        confirm_password = request.form['new_password_confirm']
 
-        # # Check password strength
+        # Check password strength
         if len(password) < 6 or not any(character.isdigit() for character in password) or not any(character.isalpha() for character in password):
             flash('INVALID password. Must be at least 6 characters and include both letters and numbers.')
-            # Redirect back to registration
-            return render_template('register.html')
-        if password != confirmPassword:
-            flash('Mismatched password and comfirmPassword. ')
-            # Redirect back to registration
             return render_template('register.html')
         
-        # Check if the email exists in either staff or customer tables
-        existing_email = searchStaff(email)
-        if existing_email:
-            flash('Email taken, sorry. Please use a different email.')
+        if password != confirm_password:
+            flash('Mismatched password and confirm password.')
             return render_template('register.html')
-
+        
+        # Check if the email exists in the Users table
+        existing_email = searchUser(email)
+        if existing_email:
+            flash('Email is already taken. Please use a different email.')
+            return render_template('register.html')
         else:
-            existing_email = searchCustomer(email)
-            if existing_email:
-                flash('Email taken, sorry. Please use a different email.')
-                return render_template('register.html')
-
+            # Encrypt the password using MD5 (or your preferred hashing mechanism)
+            pwd_hash = hashlib.md5(password.encode()).hexdigest()
+            
+            # Insert user data into the Users table
+            result = insertUser(first_name, last_name, email, pwd_hash)
+            
+            # Check if the user was successfully inserted
+            if result:
+                flash('Registration successful! You may now log in.')
+                return redirect(url_for('login'))
             else:
-                # encrypt the password using bcrypt
-                pwd = hashlib.md5(password.encode()).hexdigest()
-                # Insert customer data into the customers table
-                result = insertCustomer(first_name,last_name,email,pwd)
-                # Display success message and redirect
-                result = searchCustomer(email)
-                if result:
-                    flash('registeration successful! You may now log in.')
-                    return redirect(url_for('login'))
-                else:
-                    flash('Create account failed, please contact for help')
-                    return render_template('register.html')
-                
+                flash('Account creation failed. Please contact support for help.')
+                return render_template('register.html')
+    
     # Render the registration form template if method is GET or registration fails
-    return render_template('register.html', )
+    return render_template('register.html')

@@ -1,76 +1,83 @@
-
-# Import various modules created for and used in this python script
 from mod_utilize import app, session, redirect, url_for, request, flash, render_template
 import hashlib
 from mod_db_account import *
 from mod_db_notification import *
 
+def hash_password(password):
+    """Returns the MD5 hash of the given password."""
+    return hashlib.md5(password.encode()).hexdigest()
+
+def authenticate_user(email, password):
+    """Authenticate the user by checking both Admin and User tables."""
+    pwd_hash = hash_password(password)
+    
+    # Check if user exists in Admin table
+    user = searchAdmin(email)
+    if user and user['PasswordHash'] == pwd_hash:
+        return user, True  # Admin user
+
+    # Check if user exists in User table
+    user = searchUser(email)
+    if user and user['PasswordHash'] == pwd_hash and not user['banned']:
+        return user, False  # Regular user
+    
+    return None, None  # User not found or password incorrect
+
 ### LOG IN/OUT FUNCTIONS ###
-# Function for user login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # If the user is already logged in, redirect to the dashboard
     if 'user_id' in session:
         return redirect(url_for('dashboard'))
     
-    # If the request method is POST, process the login attempt
     if request.method == 'POST':
-        # Get email and password from the login form
         email = request.form['email']
-        password = request.form['password']
-        pwd = hashlib.md5(password.encode()).hexdigest()  # Encrypt the password
-
-        # Check if the user exists in the Admin table
-        user = searchAdmin(email)
-        if user:
-            if user['PasswordHash'] == pwd:
-                notification_count = getNotificationCount()
-                count = notification_count['count'] if notification_count['count'] else 0
-
-                # Store user's ID and role_id in the session
-                session['user_id'] = user['AdminID']
-                session['role_id'] = user['RoleID']
-                session['notification_number'] = count
-
-                # If the admin is logging in for the first time, redirect to change password page
-                if pwd == hashlib.md5('1'.encode()).hexdigest():
-                    session['change_password'] = True
-                    return redirect(url_for('change_password'))
-                return redirect(url_for('dashboard'))
-            else:
-                flash('Invalid email or password. Please try again.')
-                return redirect(url_for('login'))
-        
-        # If the user is not found in the Admin table, check in the User table
+        if email:
+            session['email'] = email
+            return redirect(url_for('enter_password'))  # Ensure this matches the actual route name
         else:
-            user = searchUser(email)
-            if user and user['PasswordHash'] == pwd and not user['banned']:
-                notification_count = getUnreadNotificationCount(user['UserID'])
-                send_overdue_notifications()  # Check for overdue notifications
+            flash('Please enter a valid email address', 'danger')
+            return redirect(url_for('login'))
 
-                count = notification_count['count'] if notification_count else 0
-
-                # Store user's ID and role_id in the session
-                session['user_id'] = user['UserID']
-                session['role_id'] = user['RoleID']
-                session['notification_number'] = count
-
-                # If the user is logging in for the first time, redirect to change password page
-                if pwd == hashlib.md5('123456'.encode()).hexdigest():
-                    session['change_password'] = True
-                    return redirect(url_for('change_password'))
-                return redirect(url_for('dashboard'))
-            else:
-                flash('Invalid email or password. Please try again.')
-                return redirect(url_for('login'))
-
-    # Display the login form
     return render_template('login.html')
 
-# Function to log out
+
+@app.route('/enter_password', methods=['GET', 'POST'])
+def enter_password():
+    email = session.get('email')
+    if not email:
+        flash('Please enter your email first.', 'danger')
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        password = request.form['password']
+        user, is_admin = authenticate_user(email, password)
+        
+        if user:
+            if is_admin:
+                notification_count = getNotificationCount()
+            else:
+                notification_count = getUnreadNotificationCount(user['UserID'])
+                send_overdue_notifications()
+            
+            count = notification_count['count'] if notification_count and notification_count['count'] else 0
+
+            session['user_id'] = user['AdminID'] if is_admin else user['UserID']
+            session['role_id'] = user['RoleID']
+            session['notification_number'] = count
+
+            if password in ['1', '123456']:
+                session['change_password'] = True
+                return redirect(url_for('change_password'))
+
+            return redirect(url_for('dashboard'))
+        
+        flash('Invalid password. Please try again.')
+        return redirect(url_for('enter_password'))
+
+    return render_template('password.html', email=email)
+
 @app.route('/logout')
 def logout():
-    # Clear the user_id from the session to log out the user
     session.pop('user_id', None)
-    # Redirect to the homepage
+    session.pop('email', None)  # Clear the email from the session
     return redirect(url_for('index'))

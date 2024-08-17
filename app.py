@@ -1,10 +1,15 @@
 from flask import Flask, render_template,request
+from mod_utilize import flash, render_template, request, app
+from mod_login_logout import login, logout
+from mod_reset_password import update_user_password,update_admin_password
+from mod_register import register
 from mod_prepare_meditation import prepare_meditation
 from mod_feedback import feedback
-from mod_register import register
-from mod_login_logout import login
+from mod_forgot_password import forgot_password
+from mod_reset_password import reset_password
+import mod_prepare_meditation
+import os
 
-app = Flask(__name__)
 
 @app.route('/')
 def index():
@@ -20,10 +25,6 @@ def start_meditation():
 @app.route('/meditation_end')
 def meditation_end():
     return render_template('meditation_end.html')
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-      return render_template('register.html' )
 
 if __name__ == '__main__':
     app.run(debug=True)

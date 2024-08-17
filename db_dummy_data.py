@@ -21,20 +21,20 @@ roles_data = [
 ]
 c.executemany('INSERT IGNORE INTO Roles (RoleName) VALUES (%s)', roles_data)
 
-# Insert dummy data into User
+# Insert dummy data into Users
 users_data = [
     ('John', 'Doe', 'john@example.com', 'hashed_password1', 2),  # User role
     ('Jane', 'Smith', 'jane@example.com', 'hashed_password2', 2),  # User role
     ('Admin', 'User', 'admin@example.com', 'hashed_password3', 1)  # Admin role
 ]
-c.executemany('INSERT INTO User (Firstname, Lastname, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s, %s)', users_data)
+c.executemany('INSERT INTO Users (FirstName, LastName, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s, %s)', users_data)
 
-# Insert dummy data into Admin
+# Insert dummy data into Admins
 admins_data = [
     ('Alice', 'Admin', 'alice.admin@example.com', 'hashed_password4', 1),
     ('Bob', 'Admin', 'bob.admin@example.com', 'hashed_password5', 1)
 ]
-c.executemany('INSERT INTO Admin (Firstname, Lastname, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s, %s)', admins_data)
+c.executemany('INSERT INTO Admins (FirstName, LastName, Email, PasswordHash, RoleID) VALUES (%s, %s, %s, %s, %s)', admins_data)
 
 # Insert dummy data into Categories
 categories_data = [
@@ -44,8 +44,8 @@ categories_data = [
 ]
 c.executemany('INSERT INTO Categories (Name, Description) VALUES (%s, %s)', categories_data)
 
-# Retrieve UserID and CategoryID values from the User and Categories tables
-c.execute('SELECT UserID FROM User')
+# Retrieve UserID and CategoryID values from the Users and Categories tables
+c.execute('SELECT UserID FROM Users')
 user_ids = [row[0] for row in c.fetchall()]
 
 c.execute('SELECT CategoryID FROM Categories')

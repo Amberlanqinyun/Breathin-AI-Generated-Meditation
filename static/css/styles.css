@@ -619,3 +619,301 @@ body, p, .form-control, .btn {
   background-color: var(--main);
   color: var(--background);
 }
+
+/* Navigation Bar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: var(--element-background); /* Matches the general element background */
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* Adds a slight shadow */
+  position: relative; /* Ensure it's positioned properly */
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--main); /* Use the main color for the brand */
+  text-decoration: none;
+  font-family: var(--font-primary); /* Use the primary font */
+}
+
+.navbar-right {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-decoration: none;
+  font-family: var(--font-primary); /* Consistent with the primary font */
+}
+
+.btn-primary {
+  background-color: var(--header); /* Use the header color */
+  color: var(--background); /* Text color matches the background */
+  border: 1px solid var(--header); /* Border matches the header color */
+}
+
+.btn-outline-primary {
+  background-color: transparent;
+  color: var(--header); /* Matches the header color */
+  border: 1px solid var(--header); /* Border matches the header color */
+}
+
+.btn-primary:hover, .btn-outline-primary:hover {
+  background-color: var(--main); /* Hover color matches the main color */
+  color: var(--background);
+  border-color: var(--main); /* Border color changes on hover */
+}
+
+/* Container and Centering */
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: var(--background);
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    color: var(--element-main);
+}
+
+/* Header Styles */
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 50px;
+    margin-bottom: 20px;
+}
+
+.login-title {
+    font-family: var(--font-primary);
+    font-size: 24px;
+    color: var(--element-main);
+}
+
+/* Form Styles */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--element-placeholder);
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--element-placeholder);
+    border-radius: 8px;
+    background-color: var(--element-background);
+    color: var(--element-main);
+}
+
+.form-control:focus {
+    border-color: var(--main);
+    outline: none;
+}
+
+/* Button Styles */
+.btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--header);
+    color: var(--background);
+    border: none;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: var(--main);
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Signup Link */
+.signup-link {
+    text-align: center;
+    font-size: 14px;
+}
+
+.signup-link a {
+    color: var(--header);
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Separator */
+.separator {
+    text-align: center;
+    margin: 20px 0;
+    color: var(--element-placeholder);
+    position: relative;
+}
+
+.separator::before, .separator::after {
+    content: '';
+    width: 45%;
+    height: 1px;
+    background-color: var(--element-placeholder);
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.separator::before {
+    left: 0;
+}
+
+.separator::after {
+    right: 0;
+}
+
+/* Social Login Buttons */
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-google, .btn-microsoft, .btn-apple {
+    background-color: var(--element-background);
+    color: var(--element-main);
+    border: 1px solid var(--element-placeholder);
+    text-align: left;
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.btn-google:hover, .btn-microsoft:hover, .btn-apple:hover {
+    background-color: var(--main);
+    color: var(--background);
+}
+
+/* Social Buttons Icons */
+.btn-google::before, .btn-microsoft::before, .btn-apple::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
+    background-size: contain;
+}
+
+.btn-google::before {
+    background-image: url('path-to-google-icon.png');
+}
+
+.btn-microsoft::before {
+    background-image: url('path-to-microsoft-icon.png');
+}
+
+.btn-apple::before {
+    background-image: url('path-to-apple-icon.png');
+}
+
+
+/* Improve visibility of links */
+.edit-email, .forgot-password {
+  color: var(--header);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.edit-email:hover, .forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Align edit link with email */
+.form-group .edit-email {
+  font-size: 0.9rem;
+  margin-left: 10px; /* Spacing to keep distance from the email */
+}
+
+.form-group .forgot-password {
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 5px; /* More space below the password field */
+  text-align: right;
+}
+
+.alert {
+  max-width: 400px; /* Set a maximum width for the alert box */
+  margin: 20px auto; /* Center horizontally and add some margin for spacing */
+  padding: 15px; /* Add some padding for better readability */
+  border-radius: 8px; /* Add rounded corners */
+  text-align: center; /* Center the text inside the alert */
+  font-size: 1rem; /* Adjust font size */
+}
+
+.alert-danger {
+  color: var(--main-color) ; /* Ensure text is readable against the background */
+ 
+}
+
+/* Separator Line */
+.separator-line {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 0.9rem; /* Slightly smaller font size for the text */
+  color: var(--element-placeholder); /* Matches the placeholder color */
+}
+
+.separator-line::before,
+.separator-line::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background: var(--element-placeholder); /* Matches the placeholder color */
+  margin: 0 10px; /* Spacing on either side of the text */
+}
+
+.separator-line a {
+  color: var(--header); /* Matches the header color for the link */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.separator-line a:hover {
+  text-decoration: underline;
+}
+
+.instructions {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #555;
+}
