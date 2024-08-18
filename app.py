@@ -4,10 +4,13 @@ from mod_login_logout import login, logout
 from mod_reset_password import update_user_password,update_admin_password
 from mod_register import register
 from mod_prepare_meditation import prepare_meditation
-from mod_feedback import feedback
+from mod_contact_us import contact_us
 from mod_forgot_password import forgot_password
 from mod_reset_password import reset_password
 import mod_prepare_meditation
+from mod_view_users import view_users
+from mod_view_profile import view_profile, view_user_profile, view_admin_profile
+from mod_dashboard import dashboard
 import os
 
 

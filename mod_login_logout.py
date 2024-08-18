@@ -57,7 +57,6 @@ def enter_password():
                 notification_count = getNotificationCount()
             else:
                 notification_count = getUnreadNotificationCount(user['UserID'])
-                send_overdue_notifications()
             
             count = notification_count['count'] if notification_count and notification_count['count'] else 0
 
@@ -78,6 +77,7 @@ def enter_password():
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
-    session.pop('email', None)  # Clear the email from the session
+    session.clear()  # Clears the entire session, not just specific keys
+    flash('You have been logged out.', 'success')
     return redirect(url_for('index'))
+

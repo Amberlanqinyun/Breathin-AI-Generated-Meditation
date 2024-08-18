@@ -1,47 +1,44 @@
+from datetime import datetime
 from db_baseOperation import execute_query
-from datetime import datetime, date
 
-def addANewQueries(first_name, last_name, email, message, preferred_contact_type='email'):
-    dateNow = datetime.now()
-    current_day = dateNow.strftime('%Y-%m-%d %H:%M:%S')
-    contact_us_query = """INSERT INTO contact_us (contact_time, first_name, last_name, email, contact_message, preferred_contact_type)
-                          VALUES (%s, %s, %s, %s, %s, %s)"""
-    execute_query(contact_us_query, (current_day, first_name, last_name, email, message, preferred_contact_type))
+# Function to add a new query to the ContactUs table
+def addANewQueries(first_name, last_name, email, message):
+    contact_us_query = """INSERT INTO ContactUs (FirstName, LastName, Email, Message)
+                          VALUES (%s, %s, %s, %s)"""
+    execute_query(contact_us_query, (first_name, last_name, email, message))
 
-
+# Function to retrieve user queries with an optional condition
 def getUserQueries(condition=""):
-    query = """SELECT message_id, contact_time, contact_us.first_name, contact_us.last_name, 
-                      contact_us.email, contact_message, contact_us.admin_id, 
-                      admin.first_name AS admin_first_name, response_message, response_time 
-               FROM contact_us 
-               LEFT JOIN admin ON contact_us.admin_id = admin.admin_id"""
+    query = """SELECT ContactID, SubmittedAt, ContactUs.FirstName, ContactUs.LastName, 
+                      ContactUs.Email, Message, ContactUs.AdminID, 
+                      Admins.FirstName AS AdminFirstName, ResponseMessage, ResponseTime 
+               FROM ContactUs 
+               LEFT JOIN Admins ON ContactUs.AdminID = Admins.AdminID"""
     if condition != "":
         query = query + " WHERE " + condition
     result = execute_query(query)
     return result
 
-
-def replyAQuery(admin_id, response_message, message_id):
-    dateNow = datetime.now()
-    current_day = dateNow.strftime('%Y-%m-%d %H:%M:%S')
-    query = "UPDATE contact_us SET response_time = %s, response_message = %s, admin_id = %s WHERE message_id = %s"
-    data = (current_day, response_message, admin_id, message_id)
+# Function to reply to a user query by updating the ContactUs table
+def replyAQuery(admin_id, response_message, contact_id):
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    query = "UPDATE ContactUs SET ResponseTime = %s, ResponseMessage = %s, AdminID = %s WHERE ContactID = %s"
+    data = (current_time, response_message, admin_id, contact_id)
     result = execute_query(query, data)
     return result
 
-
-def getQueryDetails(message_id):
-    query = "SELECT * FROM contact_us WHERE message_id = %s"
-    data = (message_id,)
+# Function to get the details of a specific query by its ID
+def getQueryDetails(contact_id):
+    query = "SELECT * FROM ContactUs WHERE ContactID = %s"
+    data = (contact_id,)
     result = execute_query(query, data, fetchone=True)
     return result
 
-
-
+# Function to get the number of queries submitted by a specific user
 def getQueryNumberByUserId(user_id):
-    query = """SELECT COUNT(user.user_id) AS count 
-               FROM contact_us 
-               JOIN user ON contact_us.email = user.email 
-               WHERE user.user_id = {}""".format(user_id)
-    result = execute_query(query, None, fetchone=True)
+    query = """SELECT COUNT(Users.UserID) AS count 
+               FROM ContactUs 
+               JOIN Users ON ContactUs.Email = Users.Email 
+               WHERE Users.UserID = %s"""
+    result = execute_query(query, (user_id,), fetchone=True)
     return result

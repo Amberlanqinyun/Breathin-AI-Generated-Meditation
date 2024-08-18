@@ -58,8 +58,13 @@ def insertUser(first_name, last_name, email, password, role_id='2'):
     """
     password_hash = hash_password(password)
     data = (first_name, last_name, email, password_hash, role_id)
-    result = execute_query(query, data)
-    return result
+    try:
+        execute_query(query, data)
+        return True  # Indicating success
+    except Exception as e:
+        print(f"Error inserting user: {e}")
+        return False  # Indicating failure
+
 
 def insertAdmin(first_name, last_name, email, password, role_id='1'):
     query = """
@@ -144,35 +149,3 @@ def update_admin_password(admin_id, new_password):
     data = (password_hash, admin_id)
     execute_query(query, data)
     
-    
-
-def send_reset_email(email, token):
-    sender_email = "amber.lan.breath.in@gmail.com"
-    receiver_email = email
-    password = os.getenv("EMAIL_PASSWORD")
-
-    # Create the email content
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "Password Reset Request"
-    message["From"] = sender_email
-    message["To"] = receiver_email
-
-    reset_url = f"http://localhost:5000/reset_password?token={token}"
-
-    text = f"""\
-    Hi,
-    To reset your password, please click the link below:
-    {reset_url}
-    If you did not request a password reset, please ignore this email.
-    """
-    part = MIMEText(text, "plain")
-    message.attach(part)
-
-    try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message.as_string())
-        print("Email sent successfully")
-    except Exception as e:
-        print(f"Failed to send email: {e}")

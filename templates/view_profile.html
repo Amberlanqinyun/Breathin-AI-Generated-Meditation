@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mb-3">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="page-container">
+                <!-- User section -->
+                {% if user_details %}
+                <h4 class="page-heading">{{ user_details.FirstName }} {{ user_details.LastName }}'s Profile</h4>
+                <p><strong>ID:</strong> {{ user_details.UserID }}</p>
+                <p><strong>Email:</strong> {{ user_details.Email }}</p>
+                <p><strong>Role:</strong> User</p>
+                <!-- Display dashboard and update profile buttons for users -->
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm mt-2">Dashboard</a>
+                {% if isAdmin == 1 %}
+                <a href="{{ url_for('view_users') }}" class="btn btn-dark btn-sm mt-2">Back to Users</a>
+                {% endif %}
+                <a href="{{ url_for('update_user', user_id=user_details.UserID) }}" class="btn btn-primary btn-sm mt-2">Update Profile</a>
+
+                <!-- Admin section -->
+                {% elif admin_details %}
+
+                <h4 class="page-heading">{{ admin_details.FirstName }} {{ admin_details.LastName }}'s Profile</h4>
+                <p><strong>ID:</strong> {{ admin_details.AdminID }}</p>
+                <p><strong>Email:</strong> {{ admin_details.Email }}</p>
+                <p><strong>Role:</strong> Admin</p>
+                <!-- Display dashboard and update profile buttons for admins -->
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm mt-2">Dashboard</a>
+                {% if isAdmin == 1 %}
+                <a href="{{ url_for('view_admins') }}" class="btn btn-dark btn-sm mt-2">Back to Admins</a>
+                {% endif %}
+                <a href="{{ url_for('update_admin', admin_id=admin_details.AdminID) }}" class="btn btn-primary btn-sm mt-2">Update Profile</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

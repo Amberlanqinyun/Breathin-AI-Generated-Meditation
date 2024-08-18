@@ -33,11 +33,8 @@ def register():
             flash('Email is already taken. Please use a different email.')
             return render_template('register.html')
         else:
-            # Encrypt the password using MD5 (or your preferred hashing mechanism)
-            pwd_hash = hashlib.md5(password.encode()).hexdigest()
-            
             # Insert user data into the Users table
-            result = insertUser(first_name, last_name, email, pwd_hash)
+            result = insertUser(first_name, last_name, email,password)
             
             # Check if the user was successfully inserted
             if result:

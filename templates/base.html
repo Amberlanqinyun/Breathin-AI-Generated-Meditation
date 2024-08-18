@@ -9,6 +9,39 @@
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.gif') }}" type="image/gif">
 </head>
 <body>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Hamburger Menu Icon -->
+    <div class="hamburger-menu" id="hamburger-menu">
+        <div class="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Menu Content -->
+    <nav id="menu-content" class="hidden">
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('view_profile') }}">My Profile</a></li>
+            <li><a href="{{ url_for('dashboard') }}">My Dashboard</a></li>
+            <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+        
+        <div class="close-menu" id="close-menu">✕</div>
+    </nav>
 
     <main>
         {% block content %}{% endblock %}
@@ -21,17 +54,6 @@
         </div>
     </main>
     
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div class="container mt-3">
-            {% for message in messages %}
-                <div class="alert alert-danger">{{ message }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    {% endwith %}
-
     <footer>
         <!-- Optional: Add a footer here -->
     </footer>

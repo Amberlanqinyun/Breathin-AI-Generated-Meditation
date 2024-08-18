@@ -13,8 +13,11 @@
             <i class="icon-login"></i> Log in
         </a>
     </div>
-    <div class="give-feedback">
-        <a href="{{ url_for('login') }}"> Give Feedback</a>
+    <div class="feedback-link">
+        <a href="#" class="text-light">
+            <img src="{{ url_for('static', filename='images/feedback-icon-small.svg') }}" alt="Feedback Icon" class="feedback-icon">
+            Give Feedback
+        </a>
     </div>
 </div>
 {% endblock %}

@@ -1,12 +1,64 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - StillMe Meditation{% endblock %}
-
 {% block content %}
-<h2>Welcome Back</h2>
-<p>Select a meditation category or talk to AI for a personalized experience.</p>
-<div class="d-flex flex-row">
-    <a href="{{ url_for('explore') }}" class="btn btn-primary me-2">Explore Categories</a>
-    <a href="{{ url_for('custom_meditation') }}" class="btn btn-secondary">Talk to AI</a>
+<div class="container mb-3">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="page-container">
+                <!-- Welcome Message -->
+                <h4 class="page-heading">Welcome, {{ user_details.FirstName }}!</h4>
+
+                <!-- Meditation History Section -->
+                <div class="card mb-4">
+                    <div class="card-header">Meditation History</div>
+                    <div class="card-body">
+                        <div id="meditation-heatmap"></div>
+                        <!-- Include your heatmap JS library and initialize it here -->
+                    </div>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="card mb-4">
+                    <div class="card-header">Your Achievements</div>
+                    <div class="card-body">
+                        {% if achievements %}
+                            {% for achievement in achievements %}
+                                <div class="achievement-item">
+                                    <h5 class="font-weight-bold">{{ achievement.Type }}</h5>
+                                    <p>{{ achievement.Description }}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No achievements yet. Keep meditating!</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="card mb-4">
+                    <div class="card-header">Notifications</div>
+                    <div class="card-body">
+                        {% if streak_notifications %}
+                            <div class="alert alert-warning">
+                                {{ streak_notifications.message }}
+                            </div>
+                        {% else %}
+                            <p>No new notifications.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Profile Management -->
+                <div class="text-center">
+                    <a href="{{ url_for('view_profile', user_id=user_details.UserID) }}" class="btn btn-primary">View Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="{{ url_for('static', filename='js/heatmap.js') }}"></script>
+<script>
+// Initialize the heatmap or any other visualization scripts here
+</script>
 {% endblock %}

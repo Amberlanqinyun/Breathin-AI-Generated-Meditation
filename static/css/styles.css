@@ -232,7 +232,7 @@ body {
 }
 
 .menu-icon:hover .bar {
-  background-color: var(--header); /* Changes color on hover */
+  background-color: var(--header);
 }
 
 /* Menu Content */
@@ -240,7 +240,7 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  width: 100%; /* Full width menu */
+  width: 100%;
   max-width: 300px;
   height: auto;
   background-color: var(--background);
@@ -252,8 +252,8 @@ body {
   transition: transform 0.4s ease, opacity 0.4s ease;
   transform: translateX(100%);
   opacity: 0;
-  border-radius: 10px; /* Optional: Rounds the whole menu */
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Adds a slight shadow for depth */
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 #menu-content.show {
@@ -283,21 +283,14 @@ body {
   font-size: 1rem;
   padding: 0.75rem 1rem;
   transition: background-color 0.3s ease, color 0.3s ease;
-  border-radius: 8px; /* Slight rounding for a smooth appearance */
+  border-radius: 8px;
 }
 
 #menu-content ul li a:hover {
-  background-color: transparent; /* No hover effect on individual items */
-  color: var(--header); /* Change text color on hover */
+  background-color: transparent;
+  color: var(--header);
 }
 
-#menu-content ul li a .icon {
-  margin-left: auto;
-  font-size: 1rem;
-  color: var(--main);
-}
-
-/* Close Menu Button */
 .close-menu {
   font-size: 1.5rem;
   color: var(--main);
@@ -306,46 +299,6 @@ body {
   align-self: flex-end;
 }
 
-/* Adjustments for the 'back to app' button */
-#back-to-app {
-  display: inline-block;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: rgba(231, 235, 178, 0.1);
-  color: var(--main);
-  border-radius: 12px;
-  text-decoration: none;
-  font-size: 1rem;
-  font-family: var(--font-primary);
-  transition: background-color 0.3s ease;
-}
-
-#back-to-app:hover {
-  background-color: rgba(231, 235, 178, 0.2);
-}
-
-/* Additional Responsive Tweaks */
-@media(max-width: 480px) {
-  .hamburger-menu {
-    top: 15px;
-    right: 15px;
-  }
-
-  #menu-content {
-    width: 100%;
-    max-width: 250px;
-    padding: 1.5rem;
-  }
-
-  #menu-content ul li a {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.9rem;
-  }
-
-  .close-menu {
-    font-size: 1.2rem;
-  }
-}
 
 @media(min-width: 1024px) {
   #menu-content {
@@ -358,9 +311,17 @@ body {
   }
 }
 
+/* Hidden class should hide the menu */
 .hidden {
   display: none;
 }
+
+/* Show class should make it visible */
+.show {
+  display: flex;
+  /* Additional styles for the menu when visible */
+}
+
 
 /*meditation page*/
 .content-center {
@@ -916,4 +877,52 @@ body, p, .form-control, .btn {
   margin-top: 20px;
   margin-bottom: 20px;
   color: #555;
+}
+
+
+
+/* Dashboard Page Specific Styles */
+.page-container {
+  background-color: var(--element-background);
+  border-radius: 12px;
+  padding: 25px;
+  color: var(--main);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Added shadow for depth */
+  margin-bottom: 30px;
+}
+
+.page-heading {
+  font-size: 2rem;
+  font-family: var(--font-primary);
+  color: var(--main);
+  text-align: center;
+  margin-bottom: 20px; /* Add some space below the heading */
+}
+
+.card {
+  margin-bottom: 30px; /* Increased space between cards */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: var(--header);
+  color: var(--background);
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.achievement-item {
+  margin-bottom: 15px; /* Increased space between achievements */
+}
+
+.text-center {
+  text-align: center;
+  margin-top: 30px; /* Space above the button */
 }

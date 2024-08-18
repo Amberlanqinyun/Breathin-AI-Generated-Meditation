@@ -1,77 +1,69 @@
 from db_baseOperation import execute_query
-from datetime import datetime, date
+from datetime import datetime
 
+# Search notifications by UserID
+def searchNotificationById(user_id, condition=""):
+    query = """
+        SELECT * 
+        FROM Notifications 
+        LEFT JOIN Users ON Notifications.UserID = Users.UserID 
+        WHERE Notifications.UserID = %s
+    """
+    if condition:
+        query += " AND " + condition
+    result = execute_query(query, (user_id,), fetchone=False)
+    return result
 
-#seachNotification by cutomer_id
-def searchNotificationById(customer_id, condition=""):
-    query = "SELECT * FROM notification left join customers on notification.customer_id = customers.customer_id WHERE notification.customer_id = '{}' ".format(customer_id)
-    if condition !="":
-        query = query +" and "+condition
+# List all notifications with an optional condition
+def searchNotification(condition=""):
+    query = """
+        SELECT * 
+        FROM Notifications 
+        LEFT JOIN Users ON Notifications.UserID = Users.UserID
+    """
+    if condition:
+        query += " WHERE " + condition
     result = execute_query(query, fetchone=False)
     return result
 
-#list all the notification
-def searchNotification( condition=""):
-    query = "SELECT * FROM notification left join customers on notification.customer_id = customers.customer_id "
-    if condition !="":
-        query = query +" where "+condition
-    result = execute_query(query, fetchone=False)
+# Get unread notification count for a specific user
+def getUnreadNotificationCount(user_id):
+    query = """
+        SELECT COUNT(*) AS count 
+        FROM Notifications 
+        WHERE UserID = %s AND Status = 0  -- Assuming Status 0 means unread
+    """
+    result = execute_query(query, (user_id,), fetchone=True)
     return result
 
-#get unread notificationcount
-def getUnreadNotificationCount(customer_id):
-    query = "SELECT count(*) as count FROM notification WHERE customer_id = %s group by customer_id "
-    result = execute_query(query, (customer_id,), fetchone=True)
-    print(result)
-    return result
-    
-
-#get the totle number of notification
+# Get the total number of notifications
 def getNotificationCount():
-    query = "SELECT count(*) as count FROM notification"
+    query = "SELECT COUNT(*) AS count FROM Notifications"
     result = execute_query(query, fetchone=True)
     return result
 
-#insert one record into notification table
-def InsertNotification(notification_time, customer_id, details):
-    query = "INSERT INTO notification ( notification_time, customer_id, details) VALUES (%s, %s, %s)"
-    data = (notification_time, customer_id, details)         
+# Insert a new notification record
+def InsertNotification(notification_time, user_id, details):
+    query = """
+        INSERT INTO Notifications (NotificationTime, UserID, Details) 
+        VALUES (%s, %s, %s)
+    """
+    data = (notification_time, user_id, details)
     result = execute_query(query, data)
     return result
 
-def markNotificationReaded(notification_id):
-    query = "UPDATE customers SET status='1' where notification_id = %s"
-    result = execute_query(query, (notification_id,), fetchone=True)
+# Mark a notification as read
+def markNotificationRead(notification_id):
+    query = "UPDATE Notifications SET Status = 1 WHERE NotificationID = %s"
+    result = execute_query(query, (notification_id,))
     return result
 
-def searchNotificationByDetails(customer_id, details):
-    query = "select * from notification where customer_id ='{}' and details = '{}' ".format(customer_id, details)
-    result = execute_query(query)
-    return result
-
-
-def send_overdue_notifications():
-    # 1. Identify all the overdue hireages.
-    overdue_hireages = get_overdue_hireages()
-    
-    for hireage in overdue_hireages:
-        customer_id = hireage['customer_id']
-        # Constructing the overdue notification message.
-        details = "Your hireage with order ID {} is overdue! Please return the items or contact us for assistance.".format(hireage['order_id'])
-        notification_time = datetime.now()
-
-        # 2. Insert the notification into the database.
-        result = searchNotificationByDetails(customer_id,details)
-        if not result:
-            InsertNotification(notification_time, customer_id, details)
-       
-
-def get_overdue_hireages():
-    current_time = datetime.now()
+# Search for a notification by user_id and details
+def searchNotificationByDetails(user_id, details):
     query = """
-    SELECT order_id, customer_id FROM orders 
-    WHERE return_due_time < %s AND order_status_id != 3 
-    """ 
-    result = execute_query(query, (current_time,), fetchone=False)
+        SELECT * 
+        FROM Notifications 
+        WHERE UserID = %s AND Details = %s
+    """
+    result = execute_query(query, (user_id, details), fetchone=True)
     return result
-

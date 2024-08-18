@@ -149,3 +149,41 @@ CREATE INDEX idx_user_id_payments ON Payments(UserID);
 ALTER TABLE Users
 ADD COLUMN reset_token VARCHAR(255),
 ADD COLUMN reset_token_expiration DATETIME;
+
+
+-- Drop existing ContactUs table if it exists
+DROP TABLE IF EXISTS ContactUs;
+
+-- Create the new ContactUs table
+CREATE TABLE ContactUs (
+    ContactID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Message TEXT NOT NULL,
+    SubmittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Modify Users table to add a banned column
+ALTER TABLE Users
+ADD COLUMN banned TINYINT(1) DEFAULT 0;
+
+-- Modify Admins table to add a banned column
+ALTER TABLE Admins
+ADD COLUMN banned TINYINT(1) DEFAULT 0;
+
+-- Drop existing Notifications table if it exists
+DROP TABLE IF EXISTS Notifications;
+
+-- Create the new Notifications table
+CREATE TABLE Notifications (
+    NotificationID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    Details TEXT NOT NULL,
+    NotificationTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Status TINYINT(1) DEFAULT 0, -- 0 for unread, 1 for read
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- Indexing for Notifications table
+CREATE INDEX idx_user_id_notifications ON Notifications(UserID);
