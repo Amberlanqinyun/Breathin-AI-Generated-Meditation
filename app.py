@@ -11,6 +11,7 @@ import mod_prepare_meditation
 from mod_view_users import view_users
 from mod_view_profile import view_profile, view_user_profile, view_admin_profile
 from mod_dashboard import dashboard
+from mod_meditation_category import select_category
 import os
 
 

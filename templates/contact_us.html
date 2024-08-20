@@ -44,10 +44,6 @@
         </div>
         <!-- Submit button -->
         <button type="submit" class="btn btn-primary btn-block mt-3">Contact Us</button>
-        {% if 'user_id' in session %}
-        <!-- Show return to dashboard button -->
-        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-block mt-2">Dashboard</a>
-        {% endif %}
     </form>
 </div>
 {% endblock %}

@@ -66,3 +66,15 @@ def getUserMeditations(user_id):
     """
     result = execute_query(query, (user_id,))
     return result
+
+# Function to get all meditation categories
+def getMeditationCategories():
+    query = """
+    SELECT CategoryID, Name, Description
+    FROM Categories
+    ORDER BY Name ASC
+    """
+    result = execute_query(query)
+    return result
+
+
