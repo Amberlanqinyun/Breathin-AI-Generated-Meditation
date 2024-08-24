@@ -1,12 +1,18 @@
 window.addEventListener('load', function() {
-    // Declare landingPage and other elements once at the start
+    // Declare elements once at the start
     const introSection = document.getElementById('intro-section');
     const landingPage = document.getElementById('landing-page');
     const startButton = document.getElementById('start-button');
     const inputPage = document.getElementById('input-page');
     const breathingOverlay = document.getElementById('breathing-overlay');
-
-    // Transition from intro to landing page after 1.5 seconds
+    const menuIcon = document.getElementById('hamburger-menu');
+    const menuContent = document.getElementById('menu-content');
+    const closeMenu = document.getElementById('close-menu');
+    const userInput = document.getElementById('user-input');
+    const submitButton = document.getElementById('submit-button');
+    const categoryContainer = document.querySelector('.category-cards');
+    
+    // Intro to landing page transition
     setTimeout(() => {
         if (introSection && landingPage) {
             introSection.style.display = 'none';
@@ -14,7 +20,7 @@ window.addEventListener('load', function() {
         }
     }, 1500);
 
-    // Transition from landing page to input page
+    // Landing page to input page transition
     if (startButton) {
         startButton.addEventListener('click', function(event) {
             event.preventDefault();
@@ -27,54 +33,46 @@ window.addEventListener('load', function() {
 
     // Handle form submission and breathing overlay
     if (breathingOverlay) {
-        document.getElementById('input-form').onsubmit = function(event) {
-            event.preventDefault();
+        const inputForm = document.getElementById('input-form');
+        if (inputForm) {
+            inputForm.onsubmit = function(event) {
+                event.preventDefault();
+                breathingOverlay.classList.remove('hidden');
+                breathingOverlay.classList.add('fade-in');
 
-            // Show the breathing overlay with a fade-in effect
-            breathingOverlay.classList.remove('hidden');
-            breathingOverlay.classList.add('fade-in');
-
-            // Simulate a delay for the breathing exercise before redirecting
-            setTimeout(() => {
-                fetch('{{ url_for("prepare_meditation") }}', {
-                    method: 'POST',
-                    body: new FormData(document.getElementById('input-form'))
-                })
-                .then(response => response.json())
-                .then(data => {
-                    breathingOverlay.classList.remove('fade-in');
-                    breathingOverlay.classList.add('fade-out');
-                    setTimeout(() => {
-                        window.location.href = "{{ url_for('start_meditation') }}?audio_file=" + data.audio_file_url;
-                    }, 500);
-                })
-                .catch(error => {
-                    console.error('Error generating audio:', error);
-                });
-            }, 5000); // Adjust this timing if needed
-        };
+                setTimeout(() => {
+                    fetch('{{ url_for("prepare_meditation") }}', {
+                        method: 'POST',
+                        body: new FormData(inputForm)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        breathingOverlay.classList.remove('fade-in');
+                        breathingOverlay.classList.add('fade-out');
+                        setTimeout(() => {
+                            window.location.href = "{{ url_for('start_meditation') }}?audio_file=" + data.audio_file_url;
+                        }, 500);
+                    })
+                    .catch(error => {
+                        console.error('Error generating audio:', error);
+                    });
+                }, 5000);
+            };
+        }
     }
 
     // Handle menu interactions
-    const menuIcon = document.getElementById('hamburger-menu');
-    const menuContent = document.getElementById('menu-content');
-    const closeMenu = document.getElementById('close-menu');
-
     if (menuIcon && menuContent && closeMenu) {
         menuIcon.addEventListener('click', () => menuContent.classList.add('show'));
         closeMenu.addEventListener('click', () => menuContent.classList.remove('show'));
     }
 
-    const userInput = document.getElementById('user-input');
-    const submitButton = document.getElementById('submit-button');
-
+    // Handle user input validation and modal display
     if (userInput && submitButton) {
         submitButton.disabled = true; // Initially disable the submit button
 
-        // Function to count words efficiently
         const countWords = str => str.trim().split(/\s+/).filter(Boolean).length;
 
-        // Enable or disable the submit button based on input
         userInput.addEventListener('input', () => {
             const wordCount = countWords(userInput.value);
             submitButton.disabled = wordCount === 0;
@@ -98,8 +96,6 @@ window.addEventListener('load', function() {
 
                 if (!validationResult.isValid) {
                     event.preventDefault();
-
-                    // Position the modal under the submit button
                     const submitButtonRect = submitButton.getBoundingClientRect();
                     modal.style.top = `${submitButtonRect.bottom + window.scrollY}px`;
                     modalMessage.textContent = validationResult.message;
@@ -114,8 +110,19 @@ window.addEventListener('load', function() {
 
             modalClose.addEventListener('click', () => {
                 modal.classList.remove('show');
-                setTimeout(() => modal.classList.add('hidden'), 400); // Match the transition duration
+                setTimeout(() => modal.classList.add('hidden'), 400);
             });
         }
+    }
+
+    // Handle scrollable category cards
+    if (categoryContainer) {
+        categoryContainer.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            categoryContainer.scrollBy({
+                top: event.deltaY,
+                behavior: 'smooth'
+            });
+        });
     }
 });

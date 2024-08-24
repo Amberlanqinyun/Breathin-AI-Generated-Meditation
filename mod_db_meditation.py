@@ -77,4 +77,21 @@ def getMeditationCategories():
     result = execute_query(query)
     return result
 
+def get_meditation_by_id(category_id):
+    query = "SELECT * FROM Meditations WHERE CategoryID = %s"
+    result = execute_query(query, (category_id,))
+    if result:
+        return result[0]
+    return None
 
+def getMeditationCategories():
+    query = 'SELECT * FROM Categories ORDER BY Name ASC'
+    return execute_query(query)
+
+def get_meditation_by_category(category_id):
+    query = 'SELECT * FROM Meditations WHERE CategoryID = %s'
+    return execute_query(query, data=(category_id,), fetchone=True)
+
+def insert_user_feedback(user_id, meditation_id, rating, comments):
+    query = 'INSERT INTO UserFeedback (UserID, MeditationID, Rating, Comments) VALUES (%s, %s, %s, %s)'
+    execute_query(query, data=(user_id, meditation_id, rating, comments))

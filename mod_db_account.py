@@ -6,6 +6,31 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from flask import session
+
+def get_user_session_info():
+    """Retrieve UserID and RoleID from the session."""
+    user_id = session.get('user_id')
+    role_id = session.get('role_id')
+    if user_id and role_id:
+        return {'user_id': user_id, 'role_id': role_id}
+    return None
+
+def is_user_logged_in():
+    """Check if the user is logged in by verifying UserID in the session."""
+    return 'user_id' in session
+
+def is_admin():
+    """Check if the logged-in user is an Admin based on RoleID."""
+    session_info = get_user_session_info()
+    return session_info and session_info['role_id'] == 1
+
+def is_user():
+    """Check if the logged-in user is a regular user based on RoleID."""
+    session_info = get_user_session_info()
+    return session_info and session_info['role_id'] == 2
+
+
 def searchAdmin(email):
     query = "SELECT * FROM Admins WHERE Email = %s"
     result = execute_query(query, (email,), fetchone=True)

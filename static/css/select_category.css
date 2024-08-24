@@ -1,0 +1,121 @@
+/* General Container */
+.container-fluid {
+  background-color: #1C1D25; /* Slightly deeper background for a richer look */
+  padding: 60px 20px; /* Increased padding for better spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo and Title */
+.logo {
+  width: 90px; /* Slightly larger for emphasis */
+  height: auto;
+  margin-bottom: 25px;
+}
+
+.meditation-title {
+  font-family: 'Comfortaa', open-sans;
+  font-size: 2rem; /* Increased size for a more prominent title */
+  color: #F3EED9;
+  margin-bottom: 50px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle text shadow for depth */
+}
+
+/* Category Grid Layout */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Slightly wider columns */
+  gap: 25px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px; /* Additional padding for spacing */
+}
+
+/* Category Card Styles */
+.category-card {
+  background: linear-gradient(145deg, #2A2B37, #1A1B25); /* Richer gradient for depth */
+  border: none;
+  border-radius: 20px; /* Increased border radius for a smoother look */
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Deeper shadow for a floating effect */
+  color: #F3EED9;
+  cursor: pointer;
+  width: 100%; /* Ensuring all cards have the same width */
+  max-width: 280px; /* Setting a max width */
+  height: 180px; /* Fixed height for all cards */
+}
+
+.category-card:hover {
+  transform: scale(1.08); /* Slightly more pronounced scale on hover */
+  box-shadow: 0 15px 35px rgba(211, 134, 56, 0.7); /* Enhanced glowing shadow */
+  background-color: rgba(255, 255, 255, 0.1); /* Light background change on hover */
+}
+
+.category-card:active {
+  transform: scale(0.96); /* Clear press effect */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Reduced shadow on press */
+}
+
+/* Category Icon */
+.category-icon {
+  width: 70px; /* Slightly larger icons */
+  height: 70px;
+  margin-bottom: 20px;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-icon {
+  transform: translateY(-8px); /* Enhanced lift on hover */
+}
+
+/* Category Name */
+.category-name {
+  font-family: 'Comfortaa', open-sans;
+  font-size: 1rem; /* Slightly larger font size for readability */
+  font-weight: 600;
+  color: #F3EED9;
+  margin-top: 15px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle text shadow for better contrast */
+}
+
+/* Accessibility Focus States */
+.category-card:focus {
+  outline: 3px solid #D38638; /* Enhanced focus state */
+  outline-offset: 6px;
+}
+
+/* Smooth Page Transitions */
+body {
+  transition: background-color 0.6s ease, color 0.6s ease; /* Smooth transition for theme changes */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .category-grid {
+      grid-template-columns: 1fr; /* Single column on smaller screens */
+  }
+
+  .logo {
+      width: 70px; /* Smaller logo on mobile */
+  }
+
+  .meditation-title {
+      font-size: 2.4rem; /* Slightly smaller title on mobile */
+      margin-bottom: 30px;
+  }
+
+  .category-card {
+      padding: 25px;
+  }
+
+  .category-name {
+      font-size: 1.5rem; /* Adjusted text size for mobile readability */
+  }
+}

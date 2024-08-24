@@ -27,6 +27,7 @@ def authenticate_user(email, password):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'user_id' in session:
+        
         return redirect(url_for('dashboard'))
     
     if request.method == 'POST':

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100" id="meditation-page">
+    <!-- Meditation Animation -->
+    <div class="meditation-animation-container text-center mt-5">
+        <img src="{{ url_for('static', filename='images/meditation.gif') }}" alt="Breathing Meditation" id="meditation-animation">
+    </div>
+
+    <!-- Audio Player (hidden, auto-play) -->
+    <audio id="meditation-audio" src="{{ url_for('static', filename='music/' ~ category_id ~ '.mp3') }}" autoplay loop></audio>
+ 
+    <!-- Modal for Skip & Feedback Confirmation -->
+    <div id="skipFeedbackModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Skip & Feedback?</h2>
+            <p>Would you like to provide feedback on this session?</p>
+            <button id="yes-button" class="modal-confirm-button">Yes</button>
+            <button id="no-button" class="modal-cancel-button">No</button>
+        </div>
+    </div>
+
+    <!-- Feedback Form Modal -->
+    <div id="feedbackFormModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Provide Feedback</h2>
+            <form id="feedback-form" method="post" action="{{ url_for('submit_feedback') }}">
+                <!-- Hidden field to pass meditation_id -->
+                <input type="hidden" name="meditation_id" value="{{ meditation.MeditationID }}">
+                
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating">
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="1">1 - Very Poor</option>
+                </select>
+
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="4" placeholder="Enter your comments here..."></textarea>
+
+                <button type="submit" class="modal-submit-button">Submit Feedback</button>
+                <button type="button" id="close-feedback" class="modal-close-button">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Thank You Modal -->
+    <div id="thankYouModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Thank You!</h2>
+            <p>Your feedback has been submitted successfully.</p>
+            <button type="button" id="close-thank-you" class="modal-close-button">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        const homepageUrl = "{{ url_for('index') }}";
+
+        // Declare elements once at the start
+        const meditationPage = document.getElementById('meditation-page');
+        const meditationAudio = document.getElementById('meditation-audio');
+        const skipFeedbackModal = document.getElementById('skipFeedbackModal');
+        const feedbackFormModal = document.getElementById('feedbackFormModal');
+        const thankYouModal = document.getElementById('thankYouModal');
+        const yesButton = document.getElementById('yes-button');
+        const noButton = document.getElementById('no-button');
+        const closeFeedbackButton = document.getElementById('close-feedback');
+        const closeThankYouButton = document.getElementById('close-thank-you');
+        const feedbackForm = document.getElementById('feedback-form');
+
+        let isAudioPausedByUser = false;
+
+        function showModal(modal) {
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('show');
+            }
+        }
+
+        function hideModal(modal) {
+            if (modal) {
+                modal.classList.remove('show');
+                modal.classList.add('hidden');
+            }
+        }
+
+        if (meditationPage) {
+            meditationPage.addEventListener('click', function() {
+                if (meditationAudio && !meditationAudio.paused) {
+                    meditationAudio.pause();
+                    isAudioPausedByUser = true;
+                }
+                showModal(skipFeedbackModal);
+            });
+        }
+
+        if (yesButton) {
+            yesButton.addEventListener('click', function() {
+                hideModal(skipFeedbackModal);
+                showModal(feedbackFormModal);
+            });
+        }
+
+        if (noButton) {
+            noButton.addEventListener('click', function() {
+                hideModal(skipFeedbackModal);
+                if (meditationAudio && isAudioPausedByUser) {
+                    meditationAudio.play().then(() => {
+                        isAudioPausedByUser = false;
+                    }).catch(error => {
+                        console.error('Error playing audio:', error);
+                    });
+                }
+            });
+        }
+
+        if (closeFeedbackButton) {
+            closeFeedbackButton.addEventListener('click', function() {
+                hideModal(feedbackFormModal);
+                window.location.href = homepageUrl; // Redirect to homepage on close
+            });
+        }
+
+        if (closeThankYouButton) {
+            closeThankYouButton.addEventListener('click', function() {
+                hideModal(thankYouModal);
+                window.location.href = homepageUrl;
+            });
+        }
+
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                console.log("Feedback submitted:", {
+                    rating: feedbackForm.rating.value,
+                    comments: feedbackForm.comments.value
+                });
+
+                fetch("{{ url_for('submit_feedback') }}", {
+                    method: 'POST',
+                    body: new FormData(feedbackForm)
+                }).then(response => response.json())
+                  .then(data => {
+                      if (data.message) {
+                          console.log('Feedback successfully submitted:', data);
+                          hideModal(feedbackFormModal);
+                          showModal(thankYouModal);
+                      } else if (data.error) {
+                          console.error('Error submitting feedback:', data.error);
+                          alert(data.error);
+                      }
+                  })
+                  .catch(error => console.error('Error submitting feedback:', error));
+            });
+        }
+    });
+</script>
+
+{% endblock %}

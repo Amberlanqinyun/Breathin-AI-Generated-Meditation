@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Breathe In{% endblock %}</title>
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select_category.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.gif') }}" type="image/gif">
 </head>
 <body>
@@ -34,13 +35,14 @@
         <ul>
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('login') }}">Login</a></li>
-            <li><a href="{{ url_for('view_profile') }}">My Profile</a></li>
+            <li><a href="{{ url_for('select_category') }}">Meditation</a></li>
             <li><a href="{{ url_for('dashboard') }}">My Dashboard</a></li>
             <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
         
         <div class="close-menu" id="close-menu">✕</div>
+        
     </nav>
 
     <main>

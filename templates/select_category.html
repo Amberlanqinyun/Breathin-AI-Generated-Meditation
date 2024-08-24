@@ -1,48 +1,28 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Select Meditation Category{% endblock %}
-
-{% block content %}
-<div class="container">
-    <div class="content">
-        <h2 class="text-center mb-4">Choose a style for your meditation</h2>
-        <form method="POST" action="{{ url_for('select_category') }}">
-            <div class="row justify-content-center">
-                {% for category in categories %}
-                <div class="col-md-3">
-                    <button type="submit" name="category" value="{{ category }}" class="category-button">
-                        {{ category }}
-                    </button>
-                </div>
-                {% endfor %}
-            </div>
-        </form>
-    </div>
-</div>
+{% block title %}
+    Select Meditation Style - Breathe In
 {% endblock %}
 
-{% block styles %}
-<style>
-    .container {
-        margin-top: 50px;
-        text-align: center;
-    }
+{% block content %}
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <!-- Header Section -->
+    <aside class="text-center mb-5">
+        <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Meditation App Logo" class="logo mb-3">
+        <h1 class="meditation-title">Choose a Style for Your Meditation</h1>
+    </aside>
 
-    .category-button {
-        background-color: #2d3143;
-        color: #f4e3b2;
-        border: 2px solid #d38638;
-        border-radius: 30px;
-        padding: 1rem 2rem;
-        margin: 10px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+    <!-- Category Cards Section -->
+    <section class="category-grid">
+        {% for category in categories %}
+        <form method="GET" action="{{ url_for('meditation_category', category_id=category.CategoryID) }}" class="category-card-form">
+            <button type="submit" class="category-card d-flex align-items-center" aria-label="Select {{ category.Name }} meditation">
+                <img src="{{ url_for('static', filename='css/icons/' ~ category.CategoryID ~ '.png') }}" alt="{{ category.Name }} Icon" class="category-icon" loading="lazy">
+                <span class="category-name">{{ category.Name }}</span>
+            </button>
 
-    .category-button:hover {
-        background-color: #d38638;
-        color: #21232F;
-    }
-</style>
+        </form>
+        {% endfor %}
+    </section>
+</div>
 {% endblock %}
