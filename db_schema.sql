@@ -19,6 +19,8 @@ DROP TABLE IF EXISTS Subscriptions;
 DROP TABLE IF EXISTS Payments;
 DROP TABLE IF EXISTS Roles;
 DROP TABLE IF EXISTS MeditationSessions;
+DROP TABLE IF EXISTS Notifications;
+DROP TABLE IF EXISTS ContactUs;
 
 -- Create Roles table
 CREATE TABLE Roles (
@@ -29,7 +31,7 @@ CREATE TABLE Roles (
 -- Insert roles into Roles table
 INSERT INTO Roles (RoleName) VALUES ('Admin'), ('User');
 
--- Create Users table (formerly User)
+-- Create Users table
 CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(50) NOT NULL,
@@ -37,10 +39,13 @@ CREATE TABLE Users (
     Email VARCHAR(100) UNIQUE NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
     RoleID INT NOT NULL,
+    banned TINYINT(1) DEFAULT 0,
+    reset_token VARCHAR(255),
+    reset_token_expiration DATETIME,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
--- Create Admins table (formerly Admin)
+-- Create Admins table
 CREATE TABLE Admins (
     AdminID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(50) NOT NULL,
@@ -48,6 +53,7 @@ CREATE TABLE Admins (
     Email VARCHAR(100) UNIQUE NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
     RoleID INT NOT NULL,
+    banned TINYINT(1) DEFAULT 0,
     FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
@@ -58,17 +64,15 @@ CREATE TABLE Categories (
     Description TEXT
 );
 
--- Create Meditations table
+-- Create Meditations table (no UserID needed)
 CREATE TABLE Meditations (
     MeditationID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT NOT NULL,
-    CategoryID INT,
+    CategoryID INT NOT NULL,
     TextContent TEXT,
     AudioFilePath VARCHAR(255),
     VisualContentPath VARCHAR(255),
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
 
@@ -80,7 +84,7 @@ CREATE TABLE MeditationSessions (
     SessionDate DATE NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID),
-    UNIQUE (UserID, SessionDate) -- Ensures one session per day per user
+    UNIQUE (UserID, SessionDate)
 );
 
 -- Create UserFeedback table
@@ -88,7 +92,7 @@ CREATE TABLE UserFeedback (
     FeedbackID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     MeditationID INT NOT NULL,
-    Rating INT, -- (Rating BETWEEN 1 AND 5) -- To be handled by application logic
+    Rating INT,
     Comments TEXT,
     SubmittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
@@ -138,23 +142,7 @@ CREATE TABLE Payments (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- Indexing
-CREATE INDEX idx_user_id_meditations ON Meditations(UserID);
-CREATE INDEX idx_user_id_userfeedback ON UserFeedback(UserID);
-CREATE INDEX idx_user_id_usagereports ON UsageReports(UserID);
-CREATE INDEX idx_user_id_achievements ON Achievements(UserID);
-CREATE INDEX idx_user_id_subscriptions ON Subscriptions(UserID);
-CREATE INDEX idx_user_id_payments ON Payments(UserID);
-
-ALTER TABLE Users
-ADD COLUMN reset_token VARCHAR(255),
-ADD COLUMN reset_token_expiration DATETIME;
-
-
--- Drop existing ContactUs table if it exists
-DROP TABLE IF EXISTS ContactUs;
-
--- Create the new ContactUs table
+-- Create ContactUs table
 CREATE TABLE ContactUs (
     ContactID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(50) NOT NULL,
@@ -164,26 +152,20 @@ CREATE TABLE ContactUs (
     SubmittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Modify Users table to add a banned column
-ALTER TABLE Users
-ADD COLUMN banned TINYINT(1) DEFAULT 0;
-
--- Modify Admins table to add a banned column
-ALTER TABLE Admins
-ADD COLUMN banned TINYINT(1) DEFAULT 0;
-
--- Drop existing Notifications table if it exists
-DROP TABLE IF EXISTS Notifications;
-
--- Create the new Notifications table
+-- Create Notifications table
 CREATE TABLE Notifications (
     NotificationID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     Details TEXT NOT NULL,
     NotificationTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Status TINYINT(1) DEFAULT 0, -- 0 for unread, 1 for read
+    Status TINYINT(1) DEFAULT 0,
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- Indexing for Notifications table
+-- Indexes
+CREATE INDEX idx_user_id_userfeedback ON UserFeedback(UserID);
+CREATE INDEX idx_user_id_usagereports ON UsageReports(UserID);
+CREATE INDEX idx_user_id_achievements ON Achievements(UserID);
+CREATE INDEX idx_user_id_subscriptions ON Subscriptions(UserID);
+CREATE INDEX idx_user_id_payments ON Payments(UserID);
 CREATE INDEX idx_user_id_notifications ON Notifications(UserID);

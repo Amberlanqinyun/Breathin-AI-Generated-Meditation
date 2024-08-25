@@ -16,26 +16,34 @@ INSERT IGNORE INTO Admins (FirstName, LastName, Email, PasswordHash, RoleID) VAL
 
 -- Insert dummy data into Categories
 -- Insert dummy data into Categories
-INSERT IGNORE INTO Categories (Name, Description) VALUES 
-('Mindfulness', 'Meditations focused on mindfulness practices and awareness.'),
-('Relaxation', 'Meditations aimed at relaxation and stress relief.'),
-('Sleep', 'Meditations designed to aid sleep.'),
-('Breathing', 'Meditations focused on breathwork for relaxation and focus.'),
-('Focus', 'Meditations aimed at improving concentration and clarity.'),
-('Gratitude', 'Meditations that cultivate gratitude and positive feelings.'),
-('Visualization', 'Meditations that involve visualizing peaceful and calming scenarios.'),
-('Stress Relief', 'Meditations to help manage and reduce stress.');
+INSERT INTO Categories (Name, Description) VALUES 
+('Mindfulness', 'Meditations for mindfulness and being present.'),
+('Relaxation', 'Relaxation techniques to relieve stress.'),
+('Sleep', 'Guided meditations for better sleep.'),
+('Breathing', 'Breathing exercises to calm the mind.'),
+('Focus', 'Meditations to improve concentration.'),
+('Gratitude', 'Practices to cultivate gratitude.'),
+('Visualization', 'Guided imagery for relaxation.'),
+('Stress Relief', 'Meditations to reduce stress.');
 
 -- Insert dummy data into Meditations
-INSERT INTO Meditations (UserID, CategoryID, TextContent, AudioFilePath, VisualContentPath) VALUES 
-(1, 1, 'Mindfulness Peace Within', 'static/music/mindfulness_peace_within.mp3', NULL),
-(2, 2, 'Relaxation Calm Waters', 'static/music/relaxation_calm_waters.mp3', NULL),
-(3, 3, 'Sleep Dreamland', 'static/music/sleep_dreamland.mp3', NULL),
-(1, 4, 'Breathing Deep Inhale', 'static/music/breathing_deep_inhale.mp3', NULL),
-(2, 5, 'Focus Clarity Flow', 'static/music/focus_clarity_flow.mp3', NULL),
-(3, 6, 'Gratitude Grateful Heart', 'static/music/gratitude_grateful_heart.mp3', NULL),
-(1, 7, 'Visualization Mountain Path', 'static/music/visualization_mountain_path.mp3', NULL),
-(2, 8, 'Stress Relief Soothing Sounds', 'static/music/stress_relief_soothing_sounds.mp3', NULL);
+INSERT INTO Meditations (CategoryID, TextContent, AudioFilePath, VisualContentPath) VALUES 
+(1, 'Mindfulness Peace Within', 'static/music/mindfulness_peace_within.mp3', NULL),
+(1, 'Mindfulness Serenity Now', 'static/music/mindfulness_serenity_now.mp3', NULL),
+(2, 'Relaxation Calm Waters', 'static/music/relaxation_calm_waters.mp3', NULL),
+(2, 'Relaxation Ocean Breeze', 'static/music/relaxation_ocean_breeze.mp3', NULL),
+(3, 'Sleep Dreamland', 'static/music/sleep_dreamland.mp3', NULL),
+(3, 'Sleep Night Sky', 'static/music/sleep_night_sky.mp3', NULL),
+(4, 'Breathing Deep Inhale', 'static/music/breathing_deep_inhale.mp3', NULL),
+(4, 'Breathing Slow Exhale', 'static/music/breathing_slow_exhale.mp3', NULL),
+(5, 'Focus Clarity Flow', 'static/music/focus_clarity_flow.mp3', NULL),
+(5, 'Focus Mindful Attention', 'static/music/focus_mindful_attention.mp3', NULL),
+(6, 'Gratitude Grateful Heart', 'static/music/gratitude_grateful_heart.mp3', NULL),
+(6, 'Gratitude Warmth', 'static/music/gratitude_warmth.mp3', NULL),
+(7, 'Visualization Mountain Path', 'static/music/visualization_mountain_path.mp3', NULL),
+(7, 'Visualization Sunset Beach', 'static/music/visualization_sunset_beach.mp3', NULL),
+(8, 'Stress Relief Soothing Sounds', 'static/music/stress_relief_soothing_sounds.mp3', NULL),
+(8, 'Stress Relief Forest Rain', 'static/music/stress_relief_forest_rain.mp3', NULL);
 
 -- Insert dummy data into MeditationSessions
 INSERT INTO MeditationSessions (UserID, MeditationID, SessionDate) VALUES 

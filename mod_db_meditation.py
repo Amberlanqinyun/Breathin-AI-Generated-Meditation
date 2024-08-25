@@ -83,15 +83,24 @@ def get_meditation_by_id(category_id):
     if result:
         return result[0]
     return None
-
 def getMeditationCategories():
     query = 'SELECT * FROM Categories ORDER BY Name ASC'
     return execute_query(query)
 
 def get_meditation_by_category(category_id):
     query = 'SELECT * FROM Meditations WHERE CategoryID = %s'
-    return execute_query(query, data=(category_id,), fetchone=True)
+    # Fetch all meditations for the given category
+    return execute_query(query, data=(category_id,), fetchone=False)  # Set fetchone to False to fetch all records
 
 def insert_user_feedback(user_id, meditation_id, rating, comments):
     query = 'INSERT INTO UserFeedback (UserID, MeditationID, Rating, Comments) VALUES (%s, %s, %s, %s)'
     execute_query(query, data=(user_id, meditation_id, rating, comments))
+    
+def get_meditation_by_id(meditation_id):
+    query = "SELECT * FROM Meditations WHERE MeditationID = %s"
+    result = execute_query(query, (meditation_id,), fetchone=True)  # Ensure fetchone is True here
+
+    if result:
+        return result  # Fetch one meditation, return directly
+    else:
+        return None

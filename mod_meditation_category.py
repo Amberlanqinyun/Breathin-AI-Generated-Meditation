@@ -1,10 +1,6 @@
-from flask import render_template, request, redirect, url_for, flash, session, Response
-import json
-from mod_utilize import app
-from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from mod_utilize import app
-from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback
+from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback, get_meditation_by_id
 
 @app.route('/select_category', methods=['GET', 'POST'])
 def select_category():
@@ -32,32 +28,36 @@ def meditation_category(category_id):
         flash("No meditation found for the selected category.", "error")
         return redirect(url_for('select_category'))
     
-    return render_template('meditation_page.html', meditations=meditations, category_id=category_id)
+    # Render the meditation selection page
+    return render_template('select_meditation.html', meditations=meditations, category_id=category_id)
+
+@app.route('/meditation_details/<int:meditation_id>')
+def meditation_details(meditation_id):
+    # Fetch details for a specific meditation
+    meditation = get_meditation_by_id(meditation_id)
+    
+    if not meditation:
+        flash("Meditation not found.", "error")
+        return redirect(url_for('select_category'))
+
+    return render_template('meditation_page.html', meditation=meditation)
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
     rating = request.form.get('rating')
     comments = request.form.get('comments')
     meditation_id = request.form.get('meditation_id')
-    
-    # Assuming user_id is stored in session
     user_id = session.get('user_id')
-    
+
     if not user_id:
         flash("Please log in to submit feedback.", "error")
-        return redirect(url_for('login'))
+        return jsonify({'error': 'User not logged in'}), 400
 
-    # Validate if meditation_id is provided and is a valid integer
     if not meditation_id or not meditation_id.isdigit():
-        flash("Invalid meditation session. Please try again.", "error")
-        return redirect(url_for('index'))
+        return jsonify({'error': 'Invalid meditation session.'}), 400
 
     try:
-        # Insert feedback into the database
         insert_user_feedback(user_id, int(meditation_id), rating, comments)
-        flash("Feedback submitted successfully!", "success")
+        return jsonify({'message': 'Feedback submitted successfully!'}), 200
     except Exception as e:
-        flash(f"Error submitting feedback: {e}", "error")
-        return redirect(url_for('index'))
-
-    return redirect(url_for('index'))
+        return jsonify({'error': str(e)}), 500

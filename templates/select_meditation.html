@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Select Your Meditation - Breathe In
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <!-- Header Section -->
+    <aside class="text-center mb-5">
+        <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Meditation App Logo" class="logo mb-3">
+        <h1 class="meditation-title">Choose Your Meditation Session</h1>
+    </aside>
+
+    <!-- Meditation Cards Section -->
+    <section class="category-grid">
+        {% for meditation in meditations %}
+        <form method="GET" action="{{ url_for('meditation_details', meditation_id=meditation.MeditationID) }}" class="category-card-form">
+            <button type="submit" class="category-card d-flex align-items-center" aria-label="Select {{ meditation.TextContent }} meditation">
+                <!-- Use a meditation-specific icon or a placeholder -->
+                <img src="{{ url_for('static', filename='css/icons/' ~ meditation.CategoryID ~ '.png') }}" alt="{{ meditation.TextContent }} Icon" class="category-icon" loading="lazy">
+                <span class="category-name">{{ meditation.TextContent }}</span>
+            </button>
+        </form>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}
