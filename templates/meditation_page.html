@@ -61,18 +61,18 @@
 <script>
     window.addEventListener('load', function() {
         const homepageUrl = "{{ url_for('index') }}";
-    
+        
         const meditationID = {{ meditation.MeditationID }};
         const meditationPage = document.getElementById('meditation-page');
         const meditationAudio = document.getElementById(`meditation-audio-${meditationID}`);
-        const skipFeedbackModal = document.getElementById(`skipFeedbackModal`);
-        const feedbackFormModal = document.getElementById(`feedbackFormModal`);
-        const thankYouModal = document.getElementById(`thankYouModal`);
-        const yesButton = document.getElementById(`yes-button`);
-        const noButton = document.getElementById(`no-button`);
-        const closeFeedbackButton = document.getElementById(`close-feedback`);
-        const closeThankYouButton = document.getElementById(`close-thank-you`);
-        const feedbackForm = document.getElementById(`feedback-form`);
+        const skipFeedbackModal = document.getElementById('skipFeedbackModal');
+        const feedbackFormModal = document.getElementById('feedbackFormModal');
+        const thankYouModal = document.getElementById('thankYouModal');
+        const yesButton = document.getElementById('yes-button');
+        const noButton = document.getElementById('no-button');
+        const closeFeedbackButton = document.getElementById('close-feedback');
+        const closeThankYouButton = document.getElementById('close-thank-you');
+        const feedbackForm = document.getElementById('feedback-form');
     
         let isAudioPausedByUser = false;
     
@@ -80,6 +80,8 @@
             if (modal) {
                 modal.classList.remove('hidden');
                 modal.classList.add('show');
+            } else {
+                console.warn('Modal element not found to show:', modal);
             }
         }
     
@@ -87,40 +89,43 @@
             if (modal) {
                 modal.classList.remove('show');
                 modal.classList.add('hidden');
+            } else {
+                console.warn('Modal element not found to hide:', modal);
             }
         }
     
         // Attach event listener to the whole page to trigger the modal
         meditationPage.addEventListener('click', function(event) {
+            console.log('Page clicked');
             if (meditationAudio && !meditationAudio.paused) {
                 meditationAudio.pause();
                 isAudioPausedByUser = true;
+                console.log('Audio paused');
             }
             showModal(skipFeedbackModal);
         });
     
         yesButton.addEventListener('click', function() {
+            console.log('Yes button clicked');
             hideModal(skipFeedbackModal);
             showModal(feedbackFormModal);
         });
     
         noButton.addEventListener('click', function() {
+            console.log('No button clicked');
             hideModal(skipFeedbackModal);
-            if (meditationAudio && isAudioPausedByUser) {
-                meditationAudio.play().then(() => {
-                    isAudioPausedByUser = false;
-                }).catch(error => {
-                    console.error('Error playing audio:', error);
-                });
-            }
+            // Refresh the page to restart audio
+            location.reload();
         });
     
         closeFeedbackButton.addEventListener('click', function() {
+            console.log('Close feedback button clicked');
             hideModal(feedbackFormModal);
             window.location.href = homepageUrl; // Redirect to homepage on close
         });
     
         closeThankYouButton.addEventListener('click', function() {
+            console.log('Close thank you button clicked');
             hideModal(thankYouModal);
             window.location.href = homepageUrl;
         });
@@ -148,7 +153,7 @@
               })
               .catch(error => console.error('Error submitting feedback:', error));
         });
-    });    
-
+    });
+    
 </script>
 {% endblock %}

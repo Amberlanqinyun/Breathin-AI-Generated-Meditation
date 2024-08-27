@@ -1076,3 +1076,11 @@ body, p, .form-control, .btn {
     font-size: 1.4rem; /* Adjusted title size for mobile */
   }
 }
+
+.achievement-item {
+  margin-bottom: 20px;
+}
+
+#heatmap {
+  margin-top: 20px;
+}

@@ -1,64 +1,81 @@
 {% extends "base.html" %}
 
+{% block title %}
+    User Dashboard - Meditation App
+{% endblock %}
+
 {% block content %}
-<div class="container mb-3">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="page-container">
-                <!-- Welcome Message -->
-                <h4 class="page-heading">Welcome, {{ user_details.FirstName }}!</h4>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Heatmap Section -->
+        <div class="col-md-8">
+            <h2>Meditation Activity</h2>
+            <div id="heatmap"></div>
+        </div>
 
-                <!-- Meditation History Section -->
-                <div class="card mb-4">
-                    <div class="card-header">Meditation History</div>
-                    <div class="card-body">
-                        <div id="meditation-heatmap"></div>
-                        <!-- Include your heatmap JS library and initialize it here -->
+        <!-- Achievements Section -->
+        <div class="col-md-4">
+            <h2>Achievements</h2>
+            <div class="card">
+                <div class="card-body">
+                    {% for achievement in achievements %}
+                    <div class="achievement-item">
+                        <h5>{{ achievement.Type }}</h5>
+                        <p>{{ achievement.Description }}</p>
+                        <small>Achieved on {{ achievement.AchievedAt.strftime('%Y-%m-%d') }}</small>
                     </div>
-                </div>
-
-                <!-- Achievements Section -->
-                <div class="card mb-4">
-                    <div class="card-header">Your Achievements</div>
-                    <div class="card-body">
-                        {% if achievements %}
-                            {% for achievement in achievements %}
-                                <div class="achievement-item">
-                                    <h5 class="font-weight-bold">{{ achievement.Type }}</h5>
-                                    <p>{{ achievement.Description }}</p>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p>No achievements yet. Keep meditating!</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Notifications Section -->
-                <div class="card mb-4">
-                    <div class="card-header">Notifications</div>
-                    <div class="card-body">
-                        {% if streak_notifications %}
-                            <div class="alert alert-warning">
-                                {{ streak_notifications.message }}
-                            </div>
-                        {% else %}
-                            <p>No new notifications.</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Profile Management -->
-                <div class="text-center">
-                    <a href="{{ url_for('view_profile', user_id=user_details.UserID) }}" class="btn btn-primary">View Profile</a>
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="{{ url_for('static', filename='js/heatmap.js') }}"></script>
+    <!-- Meditation History Section -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2>Meditation History</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Meditation</th>
+                        <th>Duration</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in history %}
+                    <tr>
+                        <td>{{ session.SessionDate.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ session.MeditationName }}</td>
+                        <td>{{ session.Duration }}</td>
+                        <td>{{ session.Comments }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/cal-heatmap/cal-heatmap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cal-heatmap/cal-heatmap.css">
+
 <script>
-// Initialize the heatmap or any other visualization scripts here
+// JavaScript for Heatmap
+document.addEventListener('DOMContentLoaded', function() {
+    var data = {{ activity | tojson }};
+    // Generate heatmap using D3.js or a heatmap library
+    var heatmap = new CalHeatMap();
+    heatmap.init({
+        itemSelector: "#heatmap",
+        domain: "month",
+        subDomain: "day",
+        data: data,
+        start: new Date(),
+        cellSize: 15,
+        range: 12,
+        legend: [2, 4, 6, 8, 10]
+    });
+});
 </script>
 {% endblock %}
