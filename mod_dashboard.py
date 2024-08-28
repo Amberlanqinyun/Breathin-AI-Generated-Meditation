@@ -1,11 +1,7 @@
-# Import necessary modules and functions
-from mod_utilize import current_date, app, flash, session, redirect, url_for, render_template
-from db_baseOperation import execute_query
-from mod_db_meditation import getMeditationHistory, getMeditationAchievements, getStreakNotifications
-from mod_db_user_queries import getQueryNumberByUserId, getQueryDetails
-from mod_db_notification import getUnreadNotificationCount, getNotificationCount
-from mod_db_dashboard import get_user_meditation_history,get_user_achievements,get_user_meditation_activity
-
+from flask import render_template, request, redirect, url_for, flash, session, jsonify
+from mod_utilize import app
+from mod_db_dashboard import get_user_usage_reports, get_user_meditation_history
+from mod_db_achievements import get_user_achievements
 
 @app.route('/dashboard')
 def user_dashboard():
@@ -16,9 +12,14 @@ def user_dashboard():
         flash("Please log in to access the dashboard.", "error")
         return redirect(url_for('login'))
 
-    # Retrieve user meditation history, achievements, and activity data
+    # Retrieve user meditation history, achievements, and usage reports
     meditation_history = get_user_meditation_history(user_id)
     achievements = get_user_achievements(user_id)
-    meditation_activity = get_user_meditation_activity(user_id)
+    usage_reports = get_user_usage_reports(user_id)
 
-    return render_template('dashboard.html', history=meditation_history, achievements=achievements, activity=meditation_activity)
+    # Render the user dashboard with calculated data
+    return render_template('user_dashboard.html', 
+                           meditation_history=meditation_history,
+                           achievements=achievements,
+                           usage_reports=usage_reports
+)

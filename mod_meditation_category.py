@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
-from mod_utilize import app
-from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback, get_meditation_by_id
+from mod_utilize import app,datetime
+from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback, get_meditation_by_id, insert_meditation_session
 
 @app.route('/select_category', methods=['GET', 'POST'])
 def select_category():
@@ -35,6 +35,10 @@ def meditation_category(category_id):
 def meditation_details(meditation_id):
     # Fetch details for a specific meditation
     meditation = get_meditation_by_id(meditation_id)
+    user_id = session.get('user_id')
+    # Insert the meditation session at the start
+    session_date = datetime.now().date()  # Current date
+    insert_meditation_session(user_id, meditation_id, session_date)
     
     if not meditation:
         flash("Meditation not found.", "error")

@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Your Meditation Dashboard - Breathe In
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100 py-5">
+    <!-- Header Section -->
+    <aside class="text-center mb-5">
+        <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Meditation App Logo" class="logo mb-3">
+        <h1 class="dashboard-title">Your Meditation Dashboard</h1>
+    </aside>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content container">
+
+        <!-- Meditation Activity Heatmap -->
+        <section class="activity-section text-center mb-5">
+            <div class="heatmap-container">
+                <h2 class="section-title">Meditation Activity</h2>
+                <div class="heatmap d-flex flex-wrap justify-content-center mb-3">
+                    {% for day in range(30) %}
+                        {% if day in days_practiced %}
+                            <div class="heatmap-day practiced" title="Meditated"></div>
+                        {% else %}
+                            <div class="heatmap-day" title="No Meditation"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="text-muted">Your daily meditation progress over the past 30 days.</p>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="achievements-section mb-5">
+            <div class="achievements-container card shadow-sm">
+                <div class="card-header bg-success text-white text-center">
+                    <h2 class="section-title">Achievements</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for achievement in achievements %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ achievement['AchievementType'] }}
+                                <span class="badge badge-success badge-pill">{{ achievement['AchievedDate'] }}</span>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item text-center text-muted">No achievements yet. Keep meditating to unlock new milestones!</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meditation History -->
+        <section class="history-section mb-5">
+            <div class="history-container card shadow-sm">
+                <div class="card-header bg-info text-white text-center">
+                    <h2 class="section-title">Meditation History</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Meditation</th>
+                                <th>Listen Again</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for meditation in meditation_history %}
+                                <tr>
+                                    <td>{{ meditation['SessionDate'] }}</td>
+                                    <td>{{ meditation['MeditationName'] }}</td>
+                                    <td>
+                                        <a href="{{ url_for('meditation_details', meditation_id=meditation['MeditationID']) }}" 
+                                           class="btn btn-outline-info btn-sm listen-again-button">
+                                           <i class="fas fa-play-circle"></i> Listen Again
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No meditation history available. Start your journey today!</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notifications Section -->
+        <section class="notifications-section mb-5">
+            <div class="notifications-container card shadow-sm">
+                <div class="card-header bg-warning text-white text-center">
+                    <h2 class="section-title">Notifications</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for notification in notifications %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ notification['Details'] }}
+                                <small class="text-muted">{{ notification['NotificationTime'] }}</small>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item text-center text-muted">No notifications yet. Check back later for updates!</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+    /* General Container */
+    .container-fluid {
+        background-color: #1C1D25; /* Consistent background color */
+        padding: 60px 20px; /* Padding similar to other pages */
+    }
+
+    /* Header and Title */
+    .logo {
+        width: 90px;
+        height: auto;
+        margin-bottom: 25px;
+    }
+
+    .dashboard-title {
+        font-family: 'Comfortaa', sans-serif;
+        font-size: 1.8rem; /* Reduced size for better balance */
+        color: #D4D4D4; /* Softer color for reduced contrast */
+        margin-bottom: 50px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Section Titles */
+    .section-title {
+        font-size: 1.5rem;
+        color: #F3EED9;
+        margin-bottom: 20px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
+    }
+
+    /* Heatmap Styles */
+    .heatmap {
+        display: grid;
+        grid-template-columns: repeat(7, 35px);
+        gap: 7px;
+        justify-content: center;
+    }
+
+    .heatmap-day {
+        width: 35px;
+        height: 35px;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+        margin: 2px;
+        transition: background-color 0.3s ease;
+    }
+
+    .heatmap-day.practiced {
+        background-color: #4caf50;
+    }
+
+    .heatmap-day:hover {
+        background-color: #3e8e41;
+        cursor: pointer;
+    }
+
+    /* Card Styles */
+    .card-header {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        background: linear-gradient(145deg, #2A2B37, #1A1B25);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Button Styles */
+    .btn-outline-info {
+        color: #17a2b8;
+        border-color: #17a2b8;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-outline-info:hover {
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    /* Button Hover Effects */
+    .listen-again-button:hover {
+        background-color: #1C1D25; /* Background change on hover */
+        color: #F3EED9; /* Text color change */
+        transform: translateY(-2px); /* Slight lift on hover */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .heatmap {
+            grid-template-columns: repeat(5, 30px);
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+        }
+
+        .btn-outline-info {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+{% endblock %}

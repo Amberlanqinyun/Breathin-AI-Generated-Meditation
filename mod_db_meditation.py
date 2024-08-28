@@ -1,60 +1,6 @@
 from db_baseOperation import execute_query
 from datetime import datetime
 
-# Function to get meditation history for a specific user
-def getMeditationHistory(user_id):
-    query = """
-    SELECT SessionDate, COUNT(*) as SessionCount
-    FROM MeditationSessions
-    WHERE UserID = %s
-    GROUP BY SessionDate
-    ORDER BY SessionDate ASC
-    """
-    result = execute_query(query, (user_id,))
-    return result
-
-# Function to get meditation achievements for a specific user
-def getMeditationAchievements(user_id):
-    query = """
-    SELECT Type, Description, AchievedAt
-    FROM Achievements
-    WHERE UserID = %s
-    ORDER BY AchievedAt DESC
-    """
-    result = execute_query(query, (user_id,))
-    return result
-
-# Function to check if a user has not meditated for a certain number of days
-def getStreakNotifications(user_id, days_without_meditation=3):
-    query = """
-    SELECT MAX(SessionDate) as LastSessionDate
-    FROM MeditationSessions
-    WHERE UserID = %s
-    """
-    last_session = execute_query(query, (user_id,), fetchone=True)
-
-    if last_session and last_session['LastSessionDate']:
-        last_session_date = last_session['LastSessionDate']
-        days_since_last_session = (datetime.now().date() - last_session_date).days
-        if days_since_last_session >= days_without_meditation:
-            return {
-                'message': f"It has been {days_since_last_session} days since your last meditation session. Remember to meditate regularly for a better experience."
-            }
-    return None
-
-# Function to add a new meditation session
-def addMeditationSession(user_id, meditation_id, session_date=None):
-    if session_date is None:
-        session_date = datetime.now().date()
-
-    query = """
-    INSERT INTO MeditationSessions (UserID, MeditationID, SessionDate)
-    VALUES (%s, %s, %s)
-    ON DUPLICATE KEY UPDATE SessionDate = VALUES(SessionDate)
-    """
-    result = execute_query(query, (user_id, meditation_id, session_date))
-    return result
-
 # Function to retrieve all meditations for a user
 def getUserMeditations(user_id):
     query = """
@@ -83,9 +29,7 @@ def get_meditation_by_id(category_id):
     if result:
         return result[0]
     return None
-def getMeditationCategories():
-    query = 'SELECT * FROM Categories ORDER BY Name ASC'
-    return execute_query(query)
+
 
 def get_meditation_by_category(category_id):
     query = 'SELECT * FROM Meditations WHERE CategoryID = %s'
@@ -104,3 +48,29 @@ def get_meditation_by_id(meditation_id):
         return result  # Fetch one meditation, return directly
     else:
         return None
+
+
+def insert_meditation_session(user_id, meditation_id, session_date):
+    """
+    Insert a new meditation session into the database.
+    
+    Args:
+        user_id (int): The ID of the user.
+        meditation_id (int): The ID of the meditation.
+        session_date (str): The date of the session in 'YYYY-MM-DD' format.
+
+    Returns:
+        bool: True if the insertion was successful, False otherwise.
+    """
+    query = """
+    INSERT INTO MeditationSessions (UserID, MeditationID, SessionDate)
+    VALUES (%s, %s, %s);
+    """
+    try:
+        execute_query(query, (user_id, meditation_id, session_date))
+        return True
+    except Exception as e:
+        print(f"Error inserting meditation session: {e}")
+        return False
+
+
