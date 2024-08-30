@@ -48,29 +48,3 @@ def get_meditation_by_id(meditation_id):
         return result  # Fetch one meditation, return directly
     else:
         return None
-
-
-def insert_meditation_session(user_id, meditation_id, session_date):
-    """
-    Insert a new meditation session into the database.
-    
-    Args:
-        user_id (int): The ID of the user.
-        meditation_id (int): The ID of the meditation.
-        session_date (str): The date of the session in 'YYYY-MM-DD' format.
-
-    Returns:
-        bool: True if the insertion was successful, False otherwise.
-    """
-    query = """
-    INSERT INTO MeditationSessions (UserID, MeditationID, SessionDate)
-    VALUES (%s, %s, %s);
-    """
-    try:
-        execute_query(query, (user_id, meditation_id, session_date))
-        return True
-    except Exception as e:
-        print(f"Error inserting meditation session: {e}")
-        return False
-
-

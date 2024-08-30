@@ -76,16 +76,15 @@ CREATE TABLE Meditations (
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
 );
 
--- Create MeditationSessions table
 CREATE TABLE MeditationSessions (
     SessionID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     MeditationID INT NOT NULL,
-    SessionDate DATE NOT NULL,
+    SessionDateTime DATETIME NOT NULL,  -- Include time to track multiple sessions in a day
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID),
-    UNIQUE (UserID, SessionDate)
+    FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID)
 );
+
 
 -- Create UserFeedback table
 CREATE TABLE UserFeedback (

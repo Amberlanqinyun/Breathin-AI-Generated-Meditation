@@ -1,11 +1,10 @@
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from mod_utilize import app
-from mod_db_dashboard import get_user_usage_reports, get_user_meditation_history
-from mod_db_achievements import get_user_achievements
+from mod_db_achievements import get_user_achievements,get_user_usage_reports, get_user_meditation_history
 
 @app.route('/dashboard')
-def user_dashboard():
-    # Assuming user_id is stored in session
+def dashboard():
+        # Assuming user_id is stored in session
     user_id = session.get('user_id')
 
     if not user_id:
@@ -18,8 +17,7 @@ def user_dashboard():
     usage_reports = get_user_usage_reports(user_id)
 
     # Render the user dashboard with calculated data
-    return render_template('user_dashboard.html', 
+    return render_template('dashboard.html', 
                            meditation_history=meditation_history,
                            achievements=achievements,
-                           usage_reports=usage_reports
-)
+                           usage_reports=usage_reports)

@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from mod_utilize import app,datetime
-from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback, get_meditation_by_id, insert_meditation_session
+from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback, get_meditation_by_id
+from mod_db_achievements import calculate_consecutive_days_streak, calculate_sessions_per_day, award_achievement,get_user_meditation_history,insert_meditation_session
 
 @app.route('/select_category', methods=['GET', 'POST'])
 def select_category():
@@ -23,7 +24,6 @@ def select_category():
 def meditation_category(category_id):
     # Fetch meditation details for the given category_id
     meditations = get_meditation_by_category(category_id)
-
     if not meditations:
         flash("No meditation found for the selected category.", "error")
         return redirect(url_for('select_category'))
@@ -31,18 +31,52 @@ def meditation_category(category_id):
     # Render the meditation selection page
     return render_template('select_meditation.html', meditations=meditations, category_id=category_id)
 
-@app.route('/meditation_details/<int:meditation_id>')
+
+
+
+
+@app.route('/meditation_details/<int:meditation_id>', methods=['GET'])
 def meditation_details(meditation_id):
-    # Fetch details for a specific meditation
+    """
+    Display details of a specific meditation and handle meditation session start.
+    Automatically logs the session, checks for streaks, and awards achievements.
+    """
+    # Fetch details for the specific meditation
     meditation = get_meditation_by_id(meditation_id)
     user_id = session.get('user_id')
-    # Insert the meditation session at the start
-    session_date = datetime.now().date()  # Current date
-    insert_meditation_session(user_id, meditation_id, session_date)
-    
+
     if not meditation:
         flash("Meditation not found.", "error")
         return redirect(url_for('select_category'))
+
+    if not user_id:
+        flash("Please log in to start a meditation session.", "error")
+        return redirect(url_for('login'))
+
+    # Automatically log the meditation session
+    session_date = datetime.now().date()
+    success = insert_meditation_session(user_id, meditation_id, session_date)
+
+    if success:
+        # Fetch the user's meditation history to check for achievements
+        meditation_history = get_user_meditation_history(user_id)
+        
+        # Calculate the user's streak of consecutive meditation days
+        streak = calculate_consecutive_days_streak(meditation_history)
+        if streak >= 1:
+            award_achievement(user_id, 'First Meditation', 'Completed first meditation session')
+        if streak >= 3:
+            award_achievement(user_id, '3-Day Streak', 'Completed meditation for 3 consecutive days')
+
+        # Calculate sessions per day
+        sessions_per_day = calculate_sessions_per_day(meditation_history)
+        for date, count in sessions_per_day.items():
+            if count >= 3:
+                award_achievement(user_id, 'Triple Meditation Day', 'Completed 3 meditation sessions in one day')
+        
+        flash("Meditation session recorded successfully, achievements checked, and notifications sent!", "success")
+    else:
+        flash("Failed to record meditation session.", "error")
 
     return render_template('meditation_page.html', meditation=meditation)
 

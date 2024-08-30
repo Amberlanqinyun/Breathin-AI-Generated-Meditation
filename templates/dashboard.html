@@ -71,7 +71,7 @@
                         <tbody>
                             {% for meditation in meditation_history %}
                                 <tr>
-                                    <td>{{ meditation['SessionDate'] }}</td>
+                                    <td>{{ meditation['SessionDateTime'] }}</td>
                                     <td>{{ meditation['MeditationName'] }}</td>
                                     <td>
                                         <a href="{{ url_for('meditation_details', meditation_id=meditation['MeditationID']) }}" 

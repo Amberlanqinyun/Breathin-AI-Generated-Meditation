@@ -75,21 +75,3 @@ def custom_date_format(date_obj):
         date_obj = datetime(date_obj.year, date_obj.month, date_obj.day)
     return date_obj.strftime('%e %b %Y')
 
-# Function for formatting times properly and made directly available in the templates
-@app.template_filter('custom_time_format')
-def custom_time_format(td):
-    total_seconds = td.total_seconds()
-    hours, remainder = divmod(total_seconds, 3600)
-    minutes, _ = divmod(remainder, 60)
-    # Determine AM or PM
-    am_pm = "AM" if hours < 12 else "PM"
-    # Convert to 12-hour format
-    if hours == 0:
-        hours = 12
-    elif hours > 12:
-        hours -= 12
-    # Ensure time is formatted normally, so like 3:30 PM instead 03:30 PM or 14:30 PM
-    formatted_time = "{:2d}:{:02d}".format(int(hours), int(minutes))
-    # Add the AM or PM
-    formatted_time = formatted_time + " " + am_pm
-    return formatted_time
