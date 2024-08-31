@@ -105,7 +105,8 @@ def calculate_consecutive_days_streak(meditation_history):
     Returns:
         int: Number of consecutive days with meditation.
     """
-    dates = sorted(set(session['SessionDate'] for session in meditation_history))
+    # Extract and sort dates from the session history
+    dates = sorted(set(session['SessionDateTime'].date() for session in meditation_history))
     streak = 0
     current_streak = 0
     today = datetime.now().date()
@@ -138,7 +139,7 @@ def calculate_sessions_per_day(meditation_history):
     sessions_per_day = {}
     
     for session in meditation_history:
-        date = session['SessionDate']
+        date = session['SessionDateTime'].date()
         if date in sessions_per_day:
             sessions_per_day[date] += 1
         else:
@@ -157,49 +158,16 @@ def award_achievement(user_id, achievement_type, description):
         description (str): A description of the achievement.
     """
     # Check if the user already has this achievement
-    existing_achievements = get_user_achievements(user_id)
-    
-    if not any(ach['Type'] == achievement_type for ach in existing_achievements):
-        # If the user does not already have this achievement, insert it
-        insert_achievement(user_id, achievement_type, description)
-        # Insert a notification for the user about the new achievement
-        insert_notification(user_id, f"Congratulations! You've earned a new achievement: {achievement_type}")
-
-
-    """
-    Fetch the meditation history for a given user.
-    
-    Args:
-        user_id (int): The ID of the user.
-
-    Returns:
-        list: A list of dictionaries containing meditation session data.
-    """
-    query = """
-    SELECT 
-        DATE_FORMAT(m.SessionDateTime, '%%Y-%%m-%%d') AS SessionDate,  -- Correctly formatted to escape '%'
-        me.TextContent AS MeditationName,
-        me.AudioFilePath,
-        m.MeditationID
-    FROM MeditationSessions m
-    JOIN Meditations me ON m.MeditationID = me.MeditationID
-    WHERE m.UserID = %s
-    ORDER BY m.SessionDateTime DESC;
-    """
-    result = execute_query(query, (user_id,))
-
-    if result:
-        return [
-            {
-                'SessionDate': row['SessionDate'],
-                'MeditationName': row['MeditationName'],
-                'AudioFilePath': row['AudioFilePath'],
-                'MeditationID': row['MeditationID']
-            } for row in result
-        ]
-    else:
-        return []  # Ensure it returns a list, even if empty
-
+    try:
+        existing_achievements = get_user_achievements(user_id)
+        
+        if not any(ach['Type'] == achievement_type for ach in existing_achievements):
+            # If the user does not already have this achievement, insert it
+            insert_achievement(user_id, achievement_type, description)
+            # Insert a notification for the user about the new achievement
+            insert_notification(user_id, f"Congratulations! You've earned a new achievement: {achievement_type}")
+    except Exception as e:
+        print(f"Error awarding achievement: {e}")
 
 def get_user_meditation_history(user_id):
     """
@@ -213,7 +181,7 @@ def get_user_meditation_history(user_id):
     """
     query = """
     SELECT 
-        DATE_FORMAT(m.SessionDateTime, '%e/%c/%Y %l:%i:%s %p') AS SessionDateTime,  -- NZ date-time format with no leading zeros
+        m.SessionDateTime,
         me.TextContent AS MeditationName,
         me.AudioFilePath,
         m.MeditationID
@@ -224,53 +192,31 @@ def get_user_meditation_history(user_id):
     """
     
     try:
+        # Fetch results using the execute_query function
         result = execute_query(query, (user_id,))
 
         if not result:
             print(f"No meditation history found for user {user_id}.")
             return []
         
+        # Ensure correct data structure before processing
         formatted_result = []
         for row in result:
-            formatted_result.append({
-                'SessionDateTime': row['SessionDateTime'],  # Already formatted by SQL query
-                'MeditationName': row['MeditationName'],
-                'AudioFilePath': row['AudioFilePath'],
-                'MeditationID': row['MeditationID']
-            })
-        
+            try:
+                formatted_result.append({
+                    'SessionDateTime': row['SessionDateTime'],  # Use direct database column name
+                    'MeditationName': row['MeditationName'],
+                    'AudioFilePath': row['AudioFilePath'],
+                    'MeditationID': row['MeditationID']
+                })
+            except KeyError as e:
+                print(f"KeyError encountered: {e}. Row data: {row}")
+
         return formatted_result
 
     except Exception as e:
         print(f"Error occurred while fetching meditation history: {e}")
         return []
-
-
-
-def get_user_usage_reports(user_id):
-    """
-    Fetch the usage reports for a given user.
-    
-    Args:
-        user_id (int): The ID of the user.
-
-    Returns:
-        list: A list of dictionaries containing usage report data.
-    """
-    query = """
-    SELECT 
-        ReportID,
-        MeditationID,
-        DATE_FORMAT(SessionDate, '%%Y-%%m-%%d %%H:%%i:%%s') AS SessionDate,  -- Corrected to escape '%'
-        EngagementLevel
-    FROM UsageReports
-    WHERE UserID = %s
-    ORDER BY SessionDate DESC;
-    """
-    result = execute_query(query, (user_id,))
-    
-    return result if result else []
-
 
 def has_achievement(user_id, achievement_type):
     """
@@ -285,3 +231,23 @@ def has_achievement(user_id, achievement_type):
     """
     achievements = get_user_achievements(user_id)
     return any(ach['Type'] == achievement_type for ach in achievements)
+
+
+def prepare_heatmap_data(meditation_history):
+    """
+    Prepare data for heatmap visualization based on meditation history.
+
+    Args:
+        meditation_history (list): List of dictionaries containing meditation session data.
+
+    Returns:
+        dict: A dictionary with date keys and count of sessions per day for heatmap visualization.
+    """
+    heatmap_data = {}
+    for session in meditation_history:
+        session_date = session['SessionDateTime'].date()  # Extract the date part
+        if session_date in heatmap_data:
+            heatmap_data[session_date] += 1
+        else:
+            heatmap_data[session_date] = 1
+    return heatmap_data

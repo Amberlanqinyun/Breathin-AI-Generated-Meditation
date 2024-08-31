@@ -2,7 +2,7 @@
 
 # Import various modules created for and used in this python srcipt
 from mod_utilize import redirect, url_for, request, render_template, app, flash, session
-from mod_db_notification import *
+from mod_db_notifications import *
 
 
 @app.route('/view_notification', methods=['GET','POST'])

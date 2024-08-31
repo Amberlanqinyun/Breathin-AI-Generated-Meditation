@@ -5,16 +5,10 @@ INSERT IGNORE INTO Roles (RoleName) VALUES
 
 -- Insert dummy data into Users
 INSERT IGNORE INTO Users (FirstName, LastName, Email, PasswordHash, RoleID) VALUES 
-('John', 'Doe', 'john@example.com', 'hashed_password1', 2),  -- User role
-('Jane', 'Smith', 'jane@example.com', 'hashed_password2', 2),  -- User role
-('Admin', 'User', 'admin@example.com', 'hashed_password3', 1);  -- Admin role
+('John', 'Doe', 'john@example.com', '$2b$12$JxP1gD/J5vZjDHCmTVTnZ.eF1TV0QTFM.yjG3fxtKlzjY8Ph7G2LC', 2),  -- User role; Password: userpassword
+('Jane', 'Smith', 'jane@example.com', '$2b$12$aP3sLDaV3i7AUpiMaU89J.0PGft/0FH2nOK9e0Zy3K3AfzLx/dCnq', 2),  -- User role; Password: userpassword
+('Admin', 'User', 'admin@example.com', '$2b$12$GzP5tL3yV7zD/Cy1mA9eB.PjZfF2F1bS0UvxDbjlF8uP1U8jzGkXm', 1);  -- Admin role; Password: adminpassword
 
--- Insert dummy data into Admins
-INSERT IGNORE INTO Admins (FirstName, LastName, Email, PasswordHash, RoleID) VALUES 
-('Alice', 'Admin', 'alice.admin@example.com', 'hashed_password4', 1),
-('Bob', 'Admin', 'bob.admin@example.com', 'hashed_password5', 1);
-
--- Insert dummy data into Categories
 -- Insert dummy data into Categories
 INSERT INTO Categories (Name, Description) VALUES 
 ('Mindfulness', 'Meditations for mindfulness and being present.'),
@@ -46,10 +40,10 @@ INSERT INTO Meditations (CategoryID, TextContent, AudioFilePath, VisualContentPa
 (8, 'Stress Relief Forest Rain', 'static/music/stress_relief_forest_rain.mp3', NULL);
 
 -- Insert dummy data into MeditationSessions
-INSERT INTO MeditationSessions (UserID, MeditationID, SessionDate) VALUES 
-(1, 1, '2023-07-01'),
-(2, 2, '2023-07-02'),
-(3, 3, '2023-07-03');
+INSERT INTO MeditationSessions (UserID, MeditationID, SessionDateTime) VALUES 
+(1, 1, '2023-07-01 08:00:00'),
+(2, 2, '2023-07-02 09:00:00'),
+(3, 3, '2023-07-03 10:00:00');
 
 -- Insert dummy data into UserFeedback
 INSERT INTO UserFeedback (UserID, MeditationID, Rating, Comments) VALUES 
@@ -57,26 +51,14 @@ INSERT INTO UserFeedback (UserID, MeditationID, Rating, Comments) VALUES
 (2, 2, 4, 'Helped me sleep better.'),
 (3, 3, 3, 'It was okay, could be better.');
 
--- Insert dummy data into UsageReports
-INSERT INTO UsageReports (UserID, MeditationID, SessionDate, EngagementLevel) VALUES 
-(1, 1, '2023-07-01', 'High'),
-(2, 2, '2023-07-02', 'Medium'),
-(3, 3, '2023-07-03', 'Low');
-
 -- Insert dummy data into Achievements
 INSERT INTO Achievements (UserID, Type, Description) VALUES 
 (1, 'Milestone', 'Completed 10 meditation sessions.'),
 (2, 'Consistency', 'Meditated every day for a week.'),
 (3, 'Stress Free', 'Reduced stress levels significantly.');
 
--- Insert dummy data into Subscriptions
-INSERT INTO Subscriptions (UserID, PlanType, StartDate, EndDate, Status) VALUES 
-(1, 'Monthly', '2023-06-01', '2023-07-01', 'Active'),
-(2, 'Annual', '2023-01-01', '2024-01-01', 'Active'),
-(3, 'Monthly', '2023-07-01', '2023-08-01', 'Inactive');
+-- Insert dummy data into Notifications
+INSERT INTO Notifications (UserID, Details, NotificationTime, Status) VALUES 
+(1, 'Welcome to the meditation app! Your journey begins now.', CURRENT_TIMESTAMP, 0),
+(2, 'You have earned a new achievement: Consistency!', CURRENT_TIMESTAMP, 0);
 
--- Insert dummy data into Payments
-INSERT INTO Payments (UserID, Amount, PaymentMethod, PaymentDate, Status) VALUES 
-(1, 9.99, 'Credit Card', '2023-06-01', 'Completed'),
-(2, 99.99, 'PayPal', '2023-01-01', 'Completed'),
-(3, 9.99, 'Credit Card', '2023-07-01', 'Failed');

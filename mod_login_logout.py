@@ -1,7 +1,7 @@
 from mod_utilize import app, session, redirect, url_for, request, flash, render_template
 import hashlib
 from mod_db_account import *
-from mod_db_notification import *
+from mod_db_notifications import *
 
 def hash_password(password):
     """Returns the MD5 hash of the given password."""

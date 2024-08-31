@@ -1,4 +1,3 @@
-# Import necessary modules and functions
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 from flask_bcrypt import Bcrypt
@@ -22,25 +21,29 @@ def current_user_info():
     user_id = session.get('user_id')
     # Get the role ID from the session
     role_id = session.get('role_id')
-    notification_number = session.get('notification_number')
-    
+
     # Check if a user is logged in
     if user_id and role_id:
-        # Determine which table to query based on the user's role
-        if role_id == 1:  # Regular User
-            query = "SELECT * FROM Users WHERE UserID = %s"
-        elif role_id == 2:  # Admin
-            query = "SELECT * FROM Admins WHERE AdminID = %s"
+        # Query the Users table to get user details
+        query = "SELECT * FROM Users WHERE UserID = %s"
         
-        # Query the appropriate table for user details
+        # Execute the query to fetch user details
         user = execute_query(query, (user_id,), fetchone=True)
         
-        # If user is found, return a dictionary with the user details
+        # If user details are found
         if user:
+            # Check if the user is an Admin or Regular User
+            if role_id == 1:  # Admin
+                user['role'] = 'Admin'
+            elif role_id == 2:  # Regular User
+                user['role'] = 'User'
+            
+            # Return a dictionary with the user details, including their role
             return {'current_user': user}
     
     # Return an empty dictionary if user is not logged in or not found
     return {}
+
 
 # Create various variables used in multiple routes and templates
 current_date = datetime.now().date()
@@ -75,3 +78,20 @@ def custom_date_format(date_obj):
         date_obj = datetime(date_obj.year, date_obj.month, date_obj.day)
     return date_obj.strftime('%e %b %Y')
 
+# Function for formatting times properly and made directly available in the templates
+@app.template_filter('custom_time_format')
+def custom_time_format(td):
+    total_seconds = td.total_seconds()
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+    # Determine AM or PM
+    am_pm = "AM" if hours < 12 else "PM"
+    # Convert to 12-hour format
+    if hours == 0:
+        hours = 12
+    elif hours > 12:
+        hours -= 12
+    # Ensure time is formatted normally, so like 3:30 PM instead 03:30 PM or 14:30 PM
+    formatted_time = "{:2d}:{:02d}".format(int(hours), int(minutes))
+    # Add the AM or PM
+    formatted_time = formatted_time + " " + am_pm

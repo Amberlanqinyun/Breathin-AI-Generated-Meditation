@@ -20,12 +20,8 @@
             <div class="heatmap-container">
                 <h2 class="section-title">Meditation Activity</h2>
                 <div class="heatmap d-flex flex-wrap justify-content-center mb-3">
-                    {% for day in range(30) %}
-                        {% if day in days_practiced %}
-                            <div class="heatmap-day practiced" title="Meditated"></div>
-                        {% else %}
-                            <div class="heatmap-day" title="No Meditation"></div>
-                        {% endif %}
+                    {% for day in heatmap_data %}
+                        <div class="heatmap-day {% if day %}practiced{% else %}not-practiced{% endif %}" title="{% if day %}Meditated{% else %}No Meditation{% endif %}"></div>
                     {% endfor %}
                 </div>
                 <p class="text-muted">Your daily meditation progress over the past 30 days.</p>
@@ -35,7 +31,7 @@
         <!-- Achievements Section -->
         <section class="achievements-section mb-5">
             <div class="achievements-container card shadow-sm">
-                <div class="card-header bg-success text-white text-center">
+                <div class="card-header">
                     <h2 class="section-title">Achievements</h2>
                 </div>
                 <div class="card-body">
@@ -56,7 +52,7 @@
         <!-- Meditation History -->
         <section class="history-section mb-5">
             <div class="history-container card shadow-sm">
-                <div class="card-header bg-info text-white text-center">
+                <div class="card-header">
                     <h2 class="section-title">Meditation History</h2>
                 </div>
                 <div class="card-body">
@@ -94,7 +90,7 @@
         <!-- Notifications Section -->
         <section class="notifications-section mb-5">
             <div class="notifications-container card shadow-sm">
-                <div class="card-header bg-warning text-white text-center">
+                <div class="card-header">
                     <h2 class="section-title">Notifications</h2>
                 </div>
                 <div class="card-body">
@@ -113,112 +109,8 @@
         </section>
     </div>
 </div>
+{% endblock %}
 
-<style>
-    /* General Container */
-    .container-fluid {
-        background-color: #1C1D25; /* Consistent background color */
-        padding: 60px 20px; /* Padding similar to other pages */
-    }
-
-    /* Header and Title */
-    .logo {
-        width: 90px;
-        height: auto;
-        margin-bottom: 25px;
-    }
-
-    .dashboard-title {
-        font-family: 'Comfortaa', sans-serif;
-        font-size: 1.8rem; /* Reduced size for better balance */
-        color: #D4D4D4; /* Softer color for reduced contrast */
-        margin-bottom: 50px;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Section Titles */
-    .section-title {
-        font-size: 1.5rem;
-        color: #F3EED9;
-        margin-bottom: 20px;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
-    }
-
-    /* Heatmap Styles */
-    .heatmap {
-        display: grid;
-        grid-template-columns: repeat(7, 35px);
-        gap: 7px;
-        justify-content: center;
-    }
-
-    .heatmap-day {
-        width: 35px;
-        height: 35px;
-        background-color: #f1f1f1;
-        border-radius: 4px;
-        margin: 2px;
-        transition: background-color 0.3s ease;
-    }
-
-    .heatmap-day.practiced {
-        background-color: #4caf50;
-    }
-
-    .heatmap-day:hover {
-        background-color: #3e8e41;
-        cursor: pointer;
-    }
-
-    /* Card Styles */
-    .card-header {
-        font-weight: bold;
-        font-size: 1.2rem;
-    }
-
-    .card {
-        border: none;
-        border-radius: 20px;
-        overflow: hidden;
-        margin-bottom: 30px;
-        background: linear-gradient(145deg, #2A2B37, #1A1B25);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Button Styles */
-    .btn-outline-info {
-        color: #17a2b8;
-        border-color: #17a2b8;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .btn-outline-info:hover {
-        color: #fff;
-        background-color: #17a2b8;
-        border-color: #17a2b8;
-    }
-
-    /* Button Hover Effects */
-    .listen-again-button:hover {
-        background-color: #1C1D25; /* Background change on hover */
-        color: #F3EED9; /* Text color change */
-        transform: translateY(-2px); /* Slight lift on hover */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow effect */
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-        .heatmap {
-            grid-template-columns: repeat(5, 30px);
-        }
-
-        .dashboard-title {
-            font-size: 1.5rem;
-        }
-
-        .btn-outline-info {
-            font-size: 0.8rem;
-        }
-    }
-</style>
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}

@@ -67,3 +67,34 @@ def searchNotificationByDetails(user_id, details):
     """
     result = execute_query(query, (user_id, details), fetchone=True)
     return result
+
+
+
+
+
+def get_user_notifications(user_id):
+    """
+    Fetch notifications for a given user.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        list: A list of dictionaries containing notification data.
+    """
+    query = """
+    SELECT 
+        NotificationID,
+        Details,
+        NotificationTime,
+        Status
+    FROM Notifications
+    WHERE UserID = %s
+    ORDER BY NotificationTime DESC;
+    """
+    try:
+        result = execute_query(query, (user_id,))
+        return result if result else []
+    except Exception as e:
+        print(f"Error fetching notifications for user {user_id}: {e}")
+        return []

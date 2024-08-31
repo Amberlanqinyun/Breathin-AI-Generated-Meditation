@@ -1,13 +1,13 @@
-from flask import render_template, request, redirect, url_for, flash, session, jsonify
+from datetime import datetime, timedelta
+from flask import render_template, request, redirect, url_for, flash, session
 from mod_utilize import app
-from mod_db_achievements import get_user_achievements, get_user_usage_reports, get_user_meditation_history
+from mod_db_achievements import get_user_achievements, get_user_meditation_history
 
 @app.route('/dashboard')
 def dashboard():
     """
     Render the user dashboard page, displaying meditation history, achievements, and usage reports.
     """
-    # Assuming user_id is stored in session
     user_id = session.get('user_id')
 
     if not user_id:
@@ -15,15 +15,19 @@ def dashboard():
         return redirect(url_for('login'))
 
     try:
-        # Retrieve user meditation history, achievements, and usage reports
+        # Fetch user meditation history, achievements, and usage reports
         meditation_history = get_user_meditation_history(user_id)
         achievements = get_user_achievements(user_id)
-        usage_reports = get_user_usage_reports(user_id)
+
+        # Prepare data for heatmap (past year)
+        today = datetime.now().date()
+        start_date = today - timedelta(days=365)
+        days_practiced = {session['SessionDateTime'].date() for session in meditation_history}
+        heatmap_data = [(start_date + timedelta(days=i)) in days_practiced for i in range(365)]
 
         # Debugging information to check fetched data
         print(f"Meditation History: {meditation_history}")
         print(f"Achievements: {achievements}")
-        print(f"Usage Reports: {usage_reports}")
 
     except Exception as e:
         flash(f"An error occurred while fetching data: {str(e)}", "error")
@@ -33,4 +37,4 @@ def dashboard():
     return render_template('dashboard.html', 
                            meditation_history=meditation_history,
                            achievements=achievements,
-                           usage_reports=usage_reports)
+                           heatmap_data=heatmap_data)

@@ -32,7 +32,6 @@ def meditation_category(category_id):
     return render_template('select_meditation.html', meditations=meditations, category_id=category_id)
 
 
-
 @app.route('/meditation_details/<int:meditation_id>', methods=['GET'])
 def meditation_details(meditation_id):
     """
@@ -60,20 +59,22 @@ def meditation_details(meditation_id):
         
         # Calculate the user's streak of consecutive meditation days
         streak = calculate_consecutive_days_streak(meditation_history)
-        if streak >= 1:
+        
+        # Award achievements based on streak
+        if streak >= 1 and not has_achievement(user_id, 'First Meditation'):
             award_achievement(user_id, 'First Meditation', 'Completed first meditation session')
-        if streak >= 3:
+        if streak >= 3 and not has_achievement(user_id, '3-Day Streak'):
             award_achievement(user_id, '3-Day Streak', 'Completed meditation for 3 consecutive days')
 
         # Calculate sessions per day
         sessions_per_day = calculate_sessions_per_day(meditation_history)
         for date, count in sessions_per_day.items():
-            if count >= 3:
+            if count >= 3 and not has_achievement(user_id, 'Triple Meditation Day'):
                 award_achievement(user_id, 'Triple Meditation Day', 'Completed 3 meditation sessions in one day')
         
         flash("Meditation session recorded successfully, achievements checked, and notifications sent!", "success")
     else:
-        flash("Failed to record meditation session.", "error")
+        flash("Failed to record meditation session. Please try again later.", "error")
 
     return render_template('meditation_page.html', meditation=meditation)
 
