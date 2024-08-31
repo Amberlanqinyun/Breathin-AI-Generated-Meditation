@@ -26,24 +26,25 @@ def get_user_achievements(user_id):
     
     return result if result else []
 
-def insert_meditation_session(user_id, meditation_id, session_datetime):
+def insert_meditation_session(user_id, meditation_id):
     """
     Insert a new meditation session into the MeditationSessions table.
     
     Args:
         user_id (int): The ID of the user.
         meditation_id (int): The ID of the meditation.
-        session_datetime (datetime): The datetime of the session.
 
     Returns:
         bool: True if insertion is successful, False otherwise.
     """
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     query = """
     INSERT INTO MeditationSessions (UserID, MeditationID, SessionDateTime)
     VALUES (%s, %s, %s);
     """
     try:
-        execute_query(query, (user_id, meditation_id, session_datetime))
+        execute_query(query, (user_id, meditation_id, current_time))
         print(f"Meditation session for user {user_id} inserted successfully.")
         return True
     except Exception as e:
@@ -210,8 +211,7 @@ def get_user_meditation_history(user_id):
     Returns:
         list: A list of dictionaries containing meditation session data.
     """
-    # SQL query with DATE_FORMAT to format in NZ style without leading zeros
-    query = r"""
+    query = """
     SELECT 
         DATE_FORMAT(m.SessionDateTime, '%e/%c/%Y %l:%i:%s %p') AS SessionDateTime,  -- NZ date-time format with no leading zeros
         me.TextContent AS MeditationName,
@@ -223,19 +223,29 @@ def get_user_meditation_history(user_id):
     ORDER BY m.SessionDateTime DESC;
     """
     
-    result = execute_query(query, (user_id,))
+    try:
+        result = execute_query(query, (user_id,))
 
-    if result:
-        return [
-            {
+        if not result:
+            print(f"No meditation history found for user {user_id}.")
+            return []
+        
+        formatted_result = []
+        for row in result:
+            formatted_result.append({
                 'SessionDateTime': row['SessionDateTime'],  # Already formatted by SQL query
                 'MeditationName': row['MeditationName'],
                 'AudioFilePath': row['AudioFilePath'],
                 'MeditationID': row['MeditationID']
-            } for row in result
-        ]
-    else:
-        return []  # Ensure it returns a list, even if empty
+            })
+        
+        return formatted_result
+
+    except Exception as e:
+        print(f"Error occurred while fetching meditation history: {e}")
+        return []
+
+
 
 def get_user_usage_reports(user_id):
     """
@@ -260,3 +270,18 @@ def get_user_usage_reports(user_id):
     result = execute_query(query, (user_id,))
     
     return result if result else []
+
+
+def has_achievement(user_id, achievement_type):
+    """
+    Check if the user already has a specific achievement.
+    
+    Args:
+        user_id (int): The ID of the user.
+        achievement_type (str): The type of achievement to check.
+
+    Returns:
+        bool: True if the user has the achievement, False otherwise.
+    """
+    achievements = get_user_achievements(user_id)
+    return any(ach['Type'] == achievement_type for ach in achievements)

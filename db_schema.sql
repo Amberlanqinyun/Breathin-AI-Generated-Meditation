@@ -103,7 +103,7 @@ CREATE TABLE UsageReports (
     ReportID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     MeditationID INT NOT NULL,
-    SessionDate TIMESTAMP,
+    SessionDateTime TIMESTAMP,
     EngagementLevel VARCHAR(50),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (MeditationID) REFERENCES Meditations(MeditationID)

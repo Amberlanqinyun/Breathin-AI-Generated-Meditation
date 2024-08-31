@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from mod_utilize import app,datetime
 from mod_db_meditation import getMeditationCategories, get_meditation_by_category, insert_user_feedback, get_meditation_by_id
-from mod_db_achievements import calculate_consecutive_days_streak, calculate_sessions_per_day, award_achievement,get_user_meditation_history,insert_meditation_session
+from mod_db_achievements import calculate_consecutive_days_streak, calculate_sessions_per_day, award_achievement,get_user_meditation_history,insert_meditation_session, has_achievement
 
 @app.route('/select_category', methods=['GET', 'POST'])
 def select_category():
@@ -33,8 +33,6 @@ def meditation_category(category_id):
 
 
 
-
-
 @app.route('/meditation_details/<int:meditation_id>', methods=['GET'])
 def meditation_details(meditation_id):
     """
@@ -54,8 +52,7 @@ def meditation_details(meditation_id):
         return redirect(url_for('login'))
 
     # Automatically log the meditation session
-    session_date = datetime.now().date()
-    success = insert_meditation_session(user_id, meditation_id, session_date)
+    success = insert_meditation_session(user_id, meditation_id)  # Only two arguments now
 
     if success:
         # Fetch the user's meditation history to check for achievements
@@ -79,6 +76,7 @@ def meditation_details(meditation_id):
         flash("Failed to record meditation session.", "error")
 
     return render_template('meditation_page.html', meditation=meditation)
+
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
