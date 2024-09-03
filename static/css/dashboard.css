@@ -1,238 +1,122 @@
+/* General Styles */
+body {
+    background-color: #21232F;
+    font-family: 'Comfortaa', sans-serif;
+    color: #f4e3b2;
+}
 
-/* Import fonts */
-@font-face {
-    font-family: 'Comfortaa';
-    font-display: block;
-    src: url('fonts/Comfortaa-Regular.ttf') format('truetype');
-    font-weight: 400;
-  }
-  
-  @font-face {
-    font-family: 'Open Sans';
-    font-display: block;
-    src: url('fonts/OpenSans-Regular.ttf') format('truetype');
-    font-weight: 400;
-  }
-  
-  /* Define colors and fonts */
-  :root {
-    --background: #21232F;
-    --main: #f4e3b2;
-    --header: #d38638;
-    --element-background: #2d3143;
-    --element-placeholder: #5D605E;
-    --element-main: white;
-    --privacy-color: #848770;
-  
-    /* Font families */
-    --font-primary: 'Comfortaa', sans-serif;
-    --font-secondary: 'Open Sans', sans-serif;
-  }
-  
-  /* CSS reset */
-  html {
-    box-sizing: border-box;
-    font-size: 16px;
-    font-family: var(--font-primary);
-  }
-  
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-  
-  body,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  ol,
-  ul {
-    margin: 0;
-    padding: 0;
-    font-weight: normal;
-  }
-  
-  ol,
-  ul {
-    list-style: none;
-  }
-  
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  input,
-  select,
-  textarea {
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    font-family: inherit;
-    font-size: inherit;
-    cursor: inherit;
-    line-height: inherit;
-  }
-  
-  /* Body Styles */
-  body {
+.container-fluid.dashboard-container {
     background-color: var(--background);
-    width: 100vw;
-    height: 100vh;
-    overflow-x: hidden;
-  }
-  
-  /* Container Styles */
-  .container-fluid {
-    background-color: var(--background);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Header and Titles */
+.dashboard-title {
+    font-size: 2.5rem;
+    color: var(--main);
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #d38638;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Heatmap Styles */
+.heatmap-container {
+    overflow-x: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 60px 20px;
-  }
-  
-  /* Header and Logo */
-  .logo {
-    width: 90px;
-    height: auto;
-    margin-bottom: 25px;
-  }
-  
-  .dashboard-title {
-    font-family: var(--font-primary);
-    font-size: 2.5rem;
-    color: var(--main);
-    margin-bottom: 50px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Section Titles */
-  .section-title {
-    font-size: 1.8rem;
-    color: var(--main);
-    margin-bottom: 20px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    font-family: var(--font-primary);
-  }
-  
-  /* Heatmap Styles */
-  .heatmap-container {
-    overflow-x: auto;
-    display: flex;
-    flex-wrap: nowrap;
-    background-color: var(--element-background);
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .heatmap-year {
-    display: flex;
-  }
-  
-  .week {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .heatmap-day {
-    width: 20px;
-    height: 20px;
+}
+
+.heatmap-day {
+    width: 15px;
+    height: 15px;
     margin: 2px;
-    border-radius: 4px;
+    border-radius: 3px;
+    transition: transform 0.2s;
 }
 
-.practiced {
-    background-color: #42a5f5; /* Color for practiced days */
+.heatmap-day.practiced {
+    background-color: #d38638;
 }
 
-.not-practiced {
-    background-color: #e0e0e0; /* Color for non-practiced days */
+.heatmap-day.not-practiced {
+    background-color: #5D605E;
 }
 
-  .session-0 { background-color: #e0e0e0; } /* No session */
-  .session-1 { background-color: #90caf9; } /* 1 session */
-  .session-2 { background-color: #42a5f5; } /* 2 sessions */
-  .session-3 { background-color: #1976d2; } /* 3+ sessions */
-  
-  /* Card Styles */
-  .card {
-    background-color: var(--element-background);
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    margin-bottom: 30px;
-  }
-  
-  .card-header {
+.heatmap-day:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* Card Styles */
+.card-header {
     background-color: var(--header);
     color: var(--background);
     font-weight: bold;
-    font-size: 1.2rem;
     padding: 15px;
-    text-align: center;
-  }
-  
-  .card-body {
-    padding: 20px;
-    color: var(--element-main);
-  }
-  
-  /* Button Styles */
-  .btn-outline-info {
-    color: var(--main);
-    border-color: var(--main);
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .btn-outline-info:hover {
-    color: var(--background);
-    background-color: var(--main);
-    border-color: var(--main);
-  }
-  
-  /* Button Hover Effects */
-  .listen-again-button:hover {
+    border-radius: 8px 8px 0 0;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    background: var(--element-background);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Achievements and Notifications */
+.badge-success {
+    background-color: #d38638;
+    color: #21232F;
+}
+
+.list-group-item {
     background-color: var(--element-background);
     color: var(--main);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Notification and Achievements List */
-  .list-group-item {
-    background-color: transparent;
-    color: var(--element-main);
-    font-family: var(--font-secondary);
-  }
-  
-  .list-group-item span.badge {
-    background-color: var(--main);
+    border: none;
+    border-bottom: 1px solid #5D605E;
+    padding: 15px;
+}
+
+.list-group-item:hover {
+    background-color: #2d3143;
+}
+
+/* Buttons */
+.listen-again-button {
+    color: #d38638;
+    border-color: #d38638;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.listen-again-button:hover {
+    background-color: #d38638;
     color: var(--background);
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .heatmap {
-      grid-template-columns: repeat(5, 30px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .heatmap-container {
+        flex-direction: row;
+        flex-wrap: wrap;
     }
-  
+
     .dashboard-title {
-      font-size: 1.5rem;
+        font-size: 1.8rem;
     }
-  
-    .btn-outline-info {
-      font-size: 0.8rem;
+
+    .section-title {
+        font-size: 1.5rem;
     }
-  }
-  
+}

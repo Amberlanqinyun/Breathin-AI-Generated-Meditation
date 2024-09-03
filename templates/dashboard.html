@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100 py-5">
+<div class="container-fluid dashboard-container d-flex flex-column align-items-center justify-content-center min-vh-100 py-5">
     <!-- Header Section -->
     <aside class="text-center mb-5">
         <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Meditation App Logo" class="logo mb-3">
@@ -31,15 +31,15 @@
         <!-- Achievements Section -->
         <section class="achievements-section mb-5">
             <div class="achievements-container card shadow-sm">
-                <div class="card-header">
+                <div class="card-header bg-gradient text-white text-center">
                     <h2 class="section-title">Achievements</h2>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         {% for achievement in achievements %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ achievement['AchievementType'] }}
-                                <span class="badge badge-success badge-pill">{{ achievement['AchievedDate'] }}</span>
+                                <span class="achievement-title">{{ achievement['Type'] }}</span>
+                                <span class="badge badge-success badge-pill">{{ achievement['AchievedAt'].strftime('%Y-%m-%d') }}</span>
                             </li>
                         {% else %}
                             <li class="list-group-item text-center text-muted">No achievements yet. Keep meditating to unlock new milestones!</li>
@@ -52,7 +52,7 @@
         <!-- Meditation History -->
         <section class="history-section mb-5">
             <div class="history-container card shadow-sm">
-                <div class="card-header">
+                <div class="card-header bg-gradient text-white text-center">
                     <h2 class="section-title">Meditation History</h2>
                 </div>
                 <div class="card-body">
@@ -67,7 +67,7 @@
                         <tbody>
                             {% for meditation in meditation_history %}
                                 <tr>
-                                    <td>{{ meditation['SessionDateTime'] }}</td>
+                                    <td>{{ meditation['SessionDateTime'].strftime('%Y-%m-%d %H:%M:%S') }}</td>
                                     <td>{{ meditation['MeditationName'] }}</td>
                                     <td>
                                         <a href="{{ url_for('meditation_details', meditation_id=meditation['MeditationID']) }}" 
@@ -90,7 +90,7 @@
         <!-- Notifications Section -->
         <section class="notifications-section mb-5">
             <div class="notifications-container card shadow-sm">
-                <div class="card-header">
+                <div class="card-header bg-gradient text-white text-center">
                     <h2 class="section-title">Notifications</h2>
                 </div>
                 <div class="card-body">
@@ -98,7 +98,7 @@
                         {% for notification in notifications %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{ notification['Details'] }}
-                                <small class="text-muted">{{ notification['NotificationTime'] }}</small>
+                                <small class="text-muted">{{ notification['NotificationTime'].strftime('%Y-%m-%d %H:%M:%S') }}</small>
                             </li>
                         {% else %}
                             <li class="list-group-item text-center text-muted">No notifications yet. Check back later for updates!</li>
