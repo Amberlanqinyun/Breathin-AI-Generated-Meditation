@@ -2,33 +2,33 @@
 @font-face {
     font-family: 'Comfortaa';
     font-display: block;
-    src: url('fonts/Comfortaa-Regular.ttf') format('truetype');
+    src: url('{{ url_for('static', filename='fonts/Comfortaa-Regular.ttf') }}') format('truetype');
     font-weight: 400;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: 'Open Sans';
     font-display: block;
-    src: url('fonts/OpenSans-Regular.ttf') format('truetype');
+    src: url('{{ url_for('static', filename='fonts/OpenSans-Regular.ttf') }}') format('truetype');
     font-weight: 400;
-  }
-  
-  /* Define colors and fonts */
-  :root {
+}
+
+/* Define colors and fonts */
+:root {
     --background: #21232F;
     --main: #f4e3b2;
     --header: #d38638;
     --element-background: #2d3143;
     --element-placeholder: #5D605E;
     --element-main: white;
-  
+
     /* Font families */
     --font-primary: 'Comfortaa', sans-serif;
     --font-secondary: 'Open Sans', sans-serif;
-  }
-  
-  /* CSS reset */
-  html {
+}
+
+/* CSS reset */
+html {
     box-sizing: border-box;
     font-size: 16px;
     font-family: var(--font-primary);
@@ -38,15 +38,15 @@
     background-color: var(--background);
     cursor: default;
     overflow: hidden;
-  }
-  
-  *,
-  *:before,
-  *:after {
+}
+
+*,
+*:before,
+*:after {
     box-sizing: inherit;
-  }
-  
-  body {
+}
+
+body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -55,9 +55,9 @@
     align-items: center;
     justify-content: center;
     background-color: var(--background);
-  }
-  
-  main {
+}
+
+main {
     will-change: transform;
     transition: transform 0.5s;
     height: 100%;
@@ -66,18 +66,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-  
-  #main-view {
+}
+
+#main-view {
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-  
-  #sidebar {
+}
+
+#sidebar {
     position: absolute;
     background-color: var(--element-background);
     right: -15em;
@@ -87,43 +87,43 @@
     z-index: -1;
     overflow-x: hidden;
     overflow-y: scroll;
-  }
-  
-  #sidebar div {
+}
+
+#sidebar div {
     position: fixed;
     width: 100%;
     height: 3em;
     background-color: var(--header);
-  }
-  
-  #sidebar ul {
+}
+
+#sidebar ul {
     list-style: none;
     text-align: right;
     height: 100%;
     padding: 0;
     margin: 0;
     font-family: var(--font-primary);
-  }
-  
-  #sidebar li {
+}
+
+#sidebar li {
     padding: 1em 1em 0 0;
-  }
-  
-  #sidebar li:first-child {
+}
+
+#sidebar li:first-child {
     padding-top: 5em;
-  }
-  
-  #sidebar li:last-child {
+}
+
+#sidebar li:last-child {
     padding-bottom: 3em;
-  }
-  
-  #sidebar li a {
+}
+
+#sidebar li a {
     text-decoration: none;
     color: var(--element-main);
     cursor: pointer;
-  }
-  
-  #sidebar .checked:before {
+}
+
+#sidebar .checked:before {
     content: '';
     display: inline-block;
     width: 0.3em;
@@ -132,108 +132,112 @@
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
     margin: 0 0.7em 0.1em;
-  }
-  
-  #sidebar-toggle {
+}
+
+/* Customize Sidebar Toggle */
+#sidebar-toggle {
     color: var(--element-main);
     position: fixed;
-    outline: none;
-    right: 0;
-    margin: 0.5em;
-    height: 2em;
-    display: block;
-    opacity: 0.33;
-    transition: opacity 0.5s;
+    bottom: 20px; /* Position at the bottom */
+    right: 20px; /* Offset from the right */
+    padding: 10px 20px; /* Add padding for better click area */
+    background-color: var(--element-background);
+    border: 1px solid var(--header);
+    border-radius: 8px;
+    opacity: 0.7;
+    transition: opacity 0.5s, transform 0.3s ease;
     z-index: 1;
-  }
-  
-  #sidebar-toggle:hover,
-  #sidebar-toggle:focus-within,
-  #sidebar-toggle.open {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+}
+
+#sidebar-toggle:hover,
+#sidebar-toggle:focus-within,
+#sidebar-toggle.open {
     opacity: 1;
-  }
-  
-  #sidebar-toggle span {
+    transform: scale(1.05);
+}
+
+#sidebar-toggle span {
     display: block;
     width: 1em;
     height: 3px;
     background-color: var(--element-main);
     margin: 1em 0.5em;
-  }
-  
-  #sidebar-toggle span::before {
+}
+
+#sidebar-toggle span::before,
+#sidebar-toggle span::after {
+    content: '';
     display: block;
     position: absolute;
     background-color: var(--element-main);
-    content: '';
     width: 1em;
     height: 3px;
+    transition: all 0.3s;
+}
+
+#sidebar-toggle span::before {
     transform: translateY(-0.33em);
-  }
-  
-  #sidebar-toggle span::after {
-    display: block;
-    position: absolute;
-    background-color: var(--element-main);
-    content: '';
-    width: 1em;
-    height: 3px;
+}
+
+#sidebar-toggle span::after {
     transform: translateY(0.33em);
-  }
-  
-  #sidebar-toggle.open span {
+}
+
+#sidebar-toggle.open span {
     background-color: transparent;
-  }
-  
-  #sidebar-toggle.open span::before {
+}
+
+#sidebar-toggle.open span::before {
     transform: rotate(45deg);
-  }
-  
-  #sidebar-toggle.open span::after {
+}
+
+#sidebar-toggle.open span::after {
     transform: rotate(-45deg);
-  }
-  
-  #sidebar table {
+}
+
+#sidebar table {
     display: inline-block;
-  }
-  
-  tr:last-child {
+}
+
+tr:last-child {
     height: 3em;
     vertical-align: bottom;
-  }
-  
-  input {
+}
+
+input {
     font-size: 21px;
     background-color: var(--element-background);
     border: 1px solid var(--element-placeholder);
     color: var(--element-main);
     outline: none;
     padding: 0.33em;
-  }
-  
-  input:focus {
+}
+
+input:focus {
     outline: 1px solid var(--main);
-  }
-  
-  input[type='text'] {
+}
+
+input[type='text'] {
     width: 5em;
-  }
-  
-  input[type='number'] {
+}
+
+input[type='number'] {
     width: 2em;
-  }
-  
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-  
-  #circle circle {
+}
+
+#circle circle {
     fill: var(--header);
-  }
-  
-  #circle {
+}
+
+#circle {
     display: inline-block;
     width: 50vh;
     height: 50vh;
@@ -241,36 +245,35 @@
     will-change: transform;
     transform: scale(0.25);
     transition: all 4.0s ease-in-out;
-  }
-  
-  #text {
+}
+
+#text {
     color: var(--main);
     font-family: var(--font-primary);
     margin-top: 0; /* Removed top margin */
     text-align: center; /* Ensure text is centered */
     font-size: 2rem; /* Adjust font size as needed */
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Optional for added effect */
-  }
-  
-  @media screen and (max-width: 600px) {
+}
+
+@media screen and (max-width: 600px) {
     #circle {
-      width: 50vw;
-      height: 50vw;
+        width: 50vw;
+        height: 50vw;
     }
-  }
-  
-  @media screen and (orientation: portrait) {
+}
+
+@media screen and (orientation: portrait) {
     #circle {
-      margin-top: 20vh;
-      width: 50vw;
-      height: 50vw;
+        margin-top: 20vh;
+        width: 50vw;
+        height: 50vw;
     }
-  }
-  
-  @media screen and (orientation: landscape) {
+}
+
+@media screen and (orientation: landscape) {
     #circle {
-      width: 50vh;
-      height: 50vh;
+        width: 50vh;
+        height: 50vh;
     }
-  }
-  
+}
