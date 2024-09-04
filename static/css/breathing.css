@@ -1,17 +1,3 @@
-/* Import fonts */
-@font-face {
-    font-family: 'Comfortaa';
-    font-display: block;
-    src: url('{{ url_for('static', filename='fonts/Comfortaa-Regular.ttf') }}') format('truetype');
-    font-weight: 400;
-}
-
-@font-face {
-    font-family: 'Open Sans';
-    font-display: block;
-    src: url('{{ url_for('static', filename='fonts/OpenSans-Regular.ttf') }}') format('truetype');
-    font-weight: 400;
-}
 
 /* Define colors and fonts */
 :root {
