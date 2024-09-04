@@ -71,10 +71,8 @@ def meditation_details(meditation_id):
         for date, count in sessions_per_day.items():
             if count >= 3 and not has_achievement(user_id, 'Triple Meditation Day'):
                 award_achievement(user_id, 'Triple Meditation Day', 'Completed 3 meditation sessions in one day')
-        
-        flash("Meditation session recorded successfully, achievements checked, and notifications sent!", "success")
     else:
-        flash("Failed to record meditation session. Please try again later.", "error")
+        print("Failed to record meditation session. Please try again later.", "error")
 
     return render_template('meditation_page.html', meditation=meditation)
 

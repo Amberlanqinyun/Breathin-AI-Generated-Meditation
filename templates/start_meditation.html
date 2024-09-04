@@ -13,6 +13,28 @@
       <div id="play-pause-indicator" class="play-pause play-indicator"></div>
     </div>
   {% endif %}
+
+  <div class="feedback-container">
+    <h2>How was your session?</h2>
+    <div class="rating-stars">
+      <span class="star" data-rating="1">&#9733;</span>
+      <span class="star" data-rating="2">&#9733;</span>
+      <span class="star" data-rating="3">&#9733;</span>
+      <span class="star" data-rating="4">&#9733;</span>
+      <span class="star" data-rating="5">&#9733;</span>
+    </div>
+
+    <h3>What went wrong?</h3>
+    <div class="feedback-options">
+      <button class="feedback-option">Poor audio</button>
+      <button class="feedback-option">Not relaxing</button>
+      <button class="feedback-option">Too repetitive</button>
+      <button class="feedback-option">Distracting background</button>
+      <button class="feedback-option">Other</button>
+    </div>
+
+    <button class="submit-button">Submit</button>
+  </div>
 {% endblock %}
 
 {% block scripts %}
@@ -38,6 +60,110 @@
         playPauseIndicator.classList.add('pause-indicator');
       }
     });
+
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        let rating = this.getAttribute('data-rating');
+        stars.forEach(s => s.classList.remove('selected'));
+        for (let i = 0; i < rating; i++) {
+          stars[i].classList.add('selected');
+        }
+      });
+    });
   });
 </script>
+{% endblock %}
+
+{% block stylesheet %}
+<style>
+/* Feedback Container */
+.feedback-container {
+  max-width: 400px;
+  margin: 30px auto; /* Added some margin for better spacing */
+  padding: 20px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Rating Stars */
+.rating-stars {
+  margin: 20px 0;
+}
+
+.rating-stars .star {
+  font-size: 2rem;
+  color: #ccc;
+  cursor: pointer;
+  margin: 0 5px;
+  transition: color 0.2s ease-in-out;
+}
+
+.rating-stars .star.selected {
+  color: #ffd700;
+}
+
+/* Feedback Options */
+.feedback-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center; /* Center align the options */
+}
+
+.feedback-option {
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  flex: 1 1 calc(50% - 10px); /* Responsive flex sizing */
+  max-width: 120px; /* Set a max width for buttons */
+  box-sizing: border-box;
+}
+
+.feedback-option:hover {
+  background-color: #eee;
+}
+
+/* Submit Button */
+.submit-button {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.submit-button:hover {
+  background-color: #333;
+}
+
+/* Centering the logo */
+.logo-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  width: 60px; /* Adjust logo size if necessary */
+}
+
+/* Centering the play-pause indicator */
+#play-pause-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+</style>
 {% endblock %}

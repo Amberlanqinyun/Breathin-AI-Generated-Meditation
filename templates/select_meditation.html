@@ -13,7 +13,7 @@
     </aside>
 
     <!-- Meditation Cards Section -->
-    <section class="category-grid">
+    <section class="meditation-grid">
         {% for meditation in meditations %}
         <form method="GET" action="{{ url_for('meditation_details', meditation_id=meditation.MeditationID) }}" class="category-card-form">
             <button type="submit" class="category-card d-flex align-items-center" aria-label="Select {{ meditation.TextContent }} meditation">

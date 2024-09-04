@@ -6,12 +6,6 @@
   font-weight:00;
 }
 
-@font-face {
-  font-family: 'Open Sans';
-  font-display: block;
-  src: url('fonts/OpenSans-Regular.ttf') format('truetype');
-  font-weight: 400;
-}
 
 /* Define colors and fonts */
 :root {
@@ -25,7 +19,7 @@
 
   /* Font families */
   --font-primary: 'Comfortaa', sans-serif;
-  --font-secondary: 'Open Sans', sans-serif;
+  --font-secondary: 'Quicksand', sans-serif;
 }
 
 /* CSS reset */
@@ -1002,7 +996,7 @@ body, p, .form-control, .btn {
 
 .modal-content h2 {
   color:primary; /* Light text color for contrast */
-  font-family: 'Comfortaa', open-sans;
+  font-family: 'Comfortaa';
   font-size: 1.5rem; /* Slightly larger title for emphasis */
   margin-bottom: 15px;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle text shadow for depth */
@@ -1041,7 +1035,7 @@ body, p, .form-control, .btn {
   border: 1px solid #D38638; /* Matching border color */
   background-color: #1E1F29; /* Consistent dark background */
   color: #F3EED9; /* Light text color for readability */
-  font-family: 'Comfortaa', open-sans;
+  font-family: 'Comfortaa';
   font-size: 1rem;
 }
 

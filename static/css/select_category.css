@@ -6,6 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 100vh; /* Ensures the container takes up the full height of the viewport */
 }
 
 /* Logo and Title */
@@ -26,12 +27,26 @@
 /* Category Grid Layout */
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Slightly wider columns */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 25px;
   width: 100%;
   max-width: 1200px;
-  padding: 0 20px; /* Additional padding for spacing */
+  padding: 0 20px;
+
+  justify-content: center; /* Centers the entire grid within its parent container */
 }
+
+.meditation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  justify-items: center; /* Centers the items inside the grid cells */
+  justify-content: center; /* Centers the entire grid within its parent container */
+}
+
 
 /* Category Card Styles */
 .category-card {
