@@ -1,8 +1,8 @@
 from db_baseOperation import execute_query
 from datetime import datetime, timedelta
-import hashlib
 import os
 import smtplib
+import bcrypt
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -131,10 +131,6 @@ def update_user_details(first_name, last_name, email, user_id):
     result = execute_query(query, data)
     return result
 
-
-def hash_password(password):
-    return hashlib.md5(password.encode()).hexdigest()
-
 def deleteAdmin(admin_id):
     query = "DELETE FROM Admins WHERE AdminID = %s"
     result = execute_query(query, (admin_id,), fetchone=True)
@@ -162,15 +158,25 @@ def verify_reset_token(token):
     query = "SELECT * FROM Users WHERE reset_token = %s AND token_expiry > NOW()"
     return execute_query(query, (token,), fetchone=True)
 
-def update_user_password(user_id, new_password):
-    query = "UPDATE Users SET PasswordHash = %s WHERE UserID = %s"
-    password_hash = hash_password(new_password)
-    data = (password_hash, user_id)
-    execute_query(query, data)
+def get_user_profile(user_id):
+    query = "SELECT FirstName, LastName, Email, PasswordHash FROM Users WHERE UserID = %s"
+    return execute_query(query, (user_id,), fetchone=True)
 
-def update_admin_password(admin_id, new_password):
-    query = "UPDATE Admins SET PasswordHash = %s WHERE AdminID = %s"
-    password_hash = hash_password(new_password)
-    data = (password_hash, admin_id)
-    execute_query(query, data)
-    
+def update_user_profile(user_id, first_name, last_name, email):
+    query = "UPDATE Users SET FirstName = %s, LastName = %s, Email = %s WHERE UserID = %s"
+    execute_query(query, (first_name, last_name, email, user_id))
+
+def update_user_password(user_id, new_password_hash):
+    query = "UPDATE Users SET PasswordHash = %s WHERE UserID = %s"
+    execute_query(query, (new_password_hash, user_id))
+
+
+def hash_password(password):
+    """Hash a password using bcrypt."""
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
+
+def check_password(hashed_password, password):
+    """Check if the provided password matches the hashed password."""
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))

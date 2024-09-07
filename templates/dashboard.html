@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Your Meditation Dashboard - Breathe In
+    Meditation Dashboard - Breathe In
 {% endblock %}
 
 {% block content %}
@@ -14,6 +14,20 @@
 
     <!-- Dashboard Content -->
     <div class="dashboard-content container">
+        <!-- Profile Section -->
+        <section class="profile-section mb-5">
+            <div class="card profile-card shadow-sm">
+                <div class="card-header bg-gradient text-white text-center">
+                    <h2 class="section-title">Profile Information</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>First Name:</strong> {{ user_profile['FirstName'] }}</p>
+                    <p><strong>Last Name:</strong> {{ user_profile['LastName'] }}</p>
+                    <p><strong>Email:</strong> {{ user_profile['Email'] }}</p>
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-secondary">Edit Profile</a>
+                </div>
+            </div>
+        </section>
 
         <!-- Meditation Activity Heatmap -->
         <section class="activity-section text-center mb-5">
@@ -86,31 +100,139 @@
                 </div>
             </div>
         </section>
-
-        <!-- Notifications Section -->
-        <section class="notifications-section mb-5">
-            <div class="notifications-container card shadow-sm">
-                <div class="card-header bg-gradient text-white text-center">
-                    <h2 class="section-title">Notifications</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        {% for notification in notifications %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ notification['Details'] }}
-                                <small class="text-muted">{{ notification['NotificationTime'].strftime('%Y-%m-%d %H:%M:%S') }}</small>
-                            </li>
-                        {% else %}
-                            <li class="list-group-item text-center text-muted">No notifications yet. Check back later for updates!</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </section>
     </div>
 </div>
 {% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <style>
+        body {
+            background-color: #21232F;
+            font-family: 'Comfortaa', sans-serif;
+            color: #f4e3b2;
+        }
+
+        .container-fluid.dashboard-container {
+            background-color: #21232F;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            color: #f4e3b2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #d38638;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #2d3143;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: none;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background-color: #d38638;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .badge-success {
+            background-color: #d38638;
+            color: #21232F;
+        }
+
+        .list-group-item {
+            background-color: #2d3143;
+            color: #f4e3b2;
+            border: none;
+        }
+
+        .list-group-item:hover {
+            background-color: #404355;
+        }
+
+        .table {
+            color: #f4e3b2;
+        }
+
+        .heatmap-day {
+            width: 15px;
+            height: 15px;
+            margin: 2px;
+            border-radius: 3px;
+            transition: transform 0.2s;
+        }
+
+        .heatmap-day.practiced {
+            background-color: #d38638;
+        }
+
+        .heatmap-day.not-practiced {
+            background-color: #5D605E;
+        }
+
+        .heatmap-day:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #d38638;
+            border-color: #d38638;
+        }
+
+        .btn-primary:hover {
+            background-color: #d4a262;
+            border-color: #d4a262;
+        }
+
+        .btn-secondary {
+            background-color: #5D605E;
+            border-color: #5D605E;
+            color: #f4e3b2;
+        }
+
+        .btn-secondary:hover {
+            background-color: #757880;
+            border-color: #757880;
+        }
+
+        .btn-outline-info {
+            border-color: #d38638;
+            color: #d38638;
+        }
+
+        .btn-outline-info:hover {
+            background-color: #d38638;
+            color: #21232F;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-title {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .heatmap-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
 {% endblock %}

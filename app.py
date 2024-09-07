@@ -1,8 +1,7 @@
 from flask import Flask, render_template,request
 from mod_utilize import flash, render_template, request, app
 from mod_login_logout import login, logout
-from mod_reset_password import update_user_password,update_admin_password
-from mod_register import register
+from mod_reset_password import update_user_password
 from mod_prepare_meditation import prepare_meditation
 from mod_contact_us import contact_us
 from mod_forgot_password import forgot_password
@@ -13,6 +12,7 @@ from mod_view_profile import view_profile, view_user_profile, view_admin_profile
 from mod_dashboard import dashboard
 from mod_meditation_category import select_category,meditation_category, meditation_details, submit_feedback
 from mod_breathing import breathing_exercise
+from mod_edit_profile import edit_profile
 import os
 
 

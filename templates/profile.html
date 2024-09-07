@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <img src="{{ url_for('static', filename='images/profile_picture.png') }}" alt="Profile Picture" class="profile-picture">
+        <h2>{{ user.FirstName }} {{ user.LastName }}</h2>
+        <p>{{ user.Email }}</p>
+    </div>
+    
+    <div class="profile-details">
+        <h3>Achievements</h3>
+        <ul class="achievements-list">
+            {% for achievement in achievements %}
+            <li>
+                <strong>{{ achievement.Type }}:</strong> {{ achievement.Description }}
+                <br><small>{{ achievement.AchievedAt.strftime('%B %d, %Y') }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h3>Recent Meditation Sessions</h3>
+        <ul class="sessions-list">
+            {% for session in sessions %}
+            <li>
+                <strong>Meditation:</strong> {{ session.meditation.TextContent }} 
+                <br><small>Session on {{ session.SessionDateTime.strftime('%B %d, %Y at %H:%M') }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheet %}
+<style>
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .profile-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+    }
+    
+    .profile-details h3 {
+        margin-top: 20px;
+        font-size: 1.5rem;
+        color: #333;
+    }
+
+    .achievements-list, .sessions-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .achievements-list li, .sessions-list li {
+        background: #fff;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .achievements-list li strong, .sessions-list li strong {
+        color: #D38638;
+    }
+</style>
+{% endblock %}
