@@ -1,4 +1,4 @@
-# GROUP 2 PROJECT 2
+
 
 # Import necessary modules and functions
 from mod_utilize import  app, flash, session, redirect, url_for, render_template, request
