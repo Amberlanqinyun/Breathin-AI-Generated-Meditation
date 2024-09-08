@@ -13,6 +13,7 @@ from mod_dashboard import dashboard
 from mod_meditation_category import select_category,meditation_category, meditation_details, submit_feedback
 from mod_breathing import breathing_exercise
 from mod_edit_profile import edit_profile
+from mod_register import register
 import os
 
 

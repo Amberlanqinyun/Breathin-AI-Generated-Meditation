@@ -77,11 +77,13 @@ def searchUserById(user_id):
     return result
 
 def insertUser(first_name, last_name, email, password, role_id='2'):
+    # Hash the password once before storing
+    password_hash = hash_password(password)
+    
     query = """
     INSERT INTO Users (FirstName, LastName, Email, PasswordHash, RoleID) 
     VALUES (%s, %s, %s, %s, %s)
     """
-    password_hash = hash_password(password)
     data = (first_name, last_name, email, password_hash, role_id)
     try:
         execute_query(query, data)
@@ -91,15 +93,23 @@ def insertUser(first_name, last_name, email, password, role_id='2'):
         return False  # Indicating failure
 
 
+
 def insertAdmin(first_name, last_name, email, password, role_id='1'):
+    # Assume the password is not yet hashed, so we hash it here
+    password_hash = hash_password(password)
+    
     query = """
     INSERT INTO Admins (FirstName, LastName, Email, PasswordHash, RoleID) 
     VALUES (%s, %s, %s, %s, %s)
     """
-    password_hash = hash_password(password)
     data = (first_name, last_name, email, password_hash, role_id)
-    result = execute_query(query, data)
-    return result
+    try:
+        execute_query(query, data)
+        return True  # Indicating success
+    except Exception as e:
+        print(f"Error inserting admin: {e}")
+        return False  # Indicating failure
+
 
 def deactivateUser(user_id):
     query = "UPDATE Users SET banned = '1' WHERE UserID = %s"
@@ -177,6 +187,26 @@ def hash_password(password):
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password.decode('utf-8')
 
+
 def check_password(hashed_password, password):
     """Check if the provided password matches the hashed password."""
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+
+def authenticate_user(email, password):
+    """Authenticate the user by checking the Users table."""
+    user = searchUser(email)  # Retrieve the user by email from the Users table
+    
+    if user:
+        print(f"Hashed password in DB: '{user['PasswordHash']}'")
+        print(f"Password entered by user: '{password}'")
+        print(f"Password length: {len(password)}")
+        is_match = check_password(user['PasswordHash'], password.strip())
+        print(f"Bcrypt match result: {is_match}")  # Log bcrypt comparison result
+    
+    # Check if user exists and verify password using bcrypt
+    if user and is_match and not user['banned']:
+        return user  # Return the user if authentication is successful
+    
+    return None  # Return None if authentication fails
+
