@@ -1,238 +1,130 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Meditation Dashboard - Breathe In
-{% endblock %}
-
 {% block content %}
-<div class="container-fluid dashboard-container d-flex flex-column align-items-center justify-content-center min-vh-100 py-5">
-    <!-- Header Section -->
-    <aside class="text-center mb-5">
-        <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Meditation App Logo" class="logo mb-3">
-        <h1 class="dashboard-title">Your Meditation Dashboard</h1>
-    </aside>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Dashboard - Breathe In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon" />
+</head>
 
-    <!-- Dashboard Content -->
-    <div class="dashboard-content container">
-        <!-- Profile Section -->
-        <section class="profile-section mb-5">
-            <div class="card profile-card shadow-sm">
-                <div class="card-header bg-gradient text-white text-center">
-                    <h2 class="section-title">Profile Information</h2>
-                </div>
-                <div class="card-body">
-                    <p><strong>First Name:</strong> {{ user_profile['FirstName'] }}</p>
-                    <p><strong>Last Name:</strong> {{ user_profile['LastName'] }}</p>
-                    <p><strong>Email:</strong> {{ user_profile['Email'] }}</p>
-                    <a href="{{ url_for('edit_profile') }}" class="btn btn-secondary">Edit Profile</a>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="dashboard-header">
+            <h1> My Dashboard</h1>
+        </div>
+<form class="search-bar" method="GET" action="{{ url_for('dashboard') }}">
+    <input type="text" name="search_query" placeholder="Search meditations..." value="{{ search_query }}">
+    <button type="submit"><i class="fas fa-search"></i></button>
+</form>
+
+{% if search_results %}
+    <div class="search-results">
+        <h2>Search Results for "{{ search_query }}"</h2>
+        <ul>
+            {% for result in search_results %}
+                <li>
+                    <h3>{{ result['TextContent'] }}</h3>
+                    <audio controls>
+                        <source src="{{ url_for('static', filename=result['AudioFilePath']) }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </li>
+            {% else %}
+                <p>No meditations found matching "{{ search_query }}".</p>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+        <div class="profile-heatmap-container">
+            <!-- Profile Section -->
+            <div class="profile-summary">
+                <div class="profile-info">
+                    <a href="{{ url_for('edit_profile') }}">
+                        <img src="{{ url_for('static', filename='images/profile.png') }}" alt="Profile Picture" class="profile-picture">
+                    </a>
+                    <h2>{{ user_profile['FirstName'] }} {{ user_profile['LastName'] }}</h2>
+                    <div class="edit-profile">
+                        <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Meditation Activity Heatmap -->
-        <section class="activity-section text-center mb-5">
+        
+            <!-- Heatmap Section -->
             <div class="heatmap-container">
-                <h2 class="section-title">Meditation Activity</h2>
-                <div class="heatmap d-flex flex-wrap justify-content-center mb-3">
-                    {% for day in heatmap_data %}
-                        <div class="heatmap-day {% if day %}practiced{% else %}not-practiced{% endif %}" title="{% if day %}Meditated{% else %}No Meditation{% endif %}"></div>
+                <div class="heatmap-grid">
+                    <!-- Loop through heatmap_data and apply classes -->
+                    {% for practiced in heatmap_data %}
+                        <div class="heatmap-day {% if practiced %}practiced{% else %}not-practiced{% endif %}"></div>
                     {% endfor %}
                 </div>
-                <p class="text-muted">Your daily meditation progress over the past 30 days.</p>
-            </div>
-        </section>
+            </div>            
+        </div>
+        
 
-        <!-- Achievements Section -->
-        <section class="achievements-section mb-5">
-            <div class="achievements-container card shadow-sm">
-                <div class="card-header bg-gradient text-white text-center">
-                    <h2 class="section-title">Achievements</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        {% for achievement in achievements %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span class="achievement-title">{{ achievement['Type'] }}</span>
-                                <span class="badge badge-success badge-pill">{{ achievement['AchievedAt'].strftime('%Y-%m-%d') }}</span>
-                            </li>
-                        {% else %}
-                            <li class="list-group-item text-center text-muted">No achievements yet. Keep meditating to unlock new milestones!</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Meditation History -->
-        <section class="history-section mb-5">
-            <div class="history-container card shadow-sm">
-                <div class="card-header bg-gradient text-white text-center">
-                    <h2 class="section-title">Meditation History</h2>
-                </div>
-                <div class="card-body">
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Date</th>
-                                <th>Meditation</th>
-                                <th>Listen Again</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for meditation in meditation_history %}
-                                <tr>
-                                    <td>{{ meditation['SessionDateTime'].strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                                    <td>{{ meditation['MeditationName'] }}</td>
-                                    <td>
-                                        <a href="{{ url_for('meditation_details', meditation_id=meditation['MeditationID']) }}" 
-                                           class="btn btn-outline-info btn-sm listen-again-button">
-                                           <i class="fas fa-play-circle"></i> Listen Again
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted">No meditation history available. Start your journey today!</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+<!-- Achievements Section -->
+<div class="achievements-section">
+    <div class="achievements-container">
+        <h2>Achievements</h2>
+        <ul class="list-group list-group-flush">
+            {% for achievement in achievements %}
+                <li class="list-group-item">
+                    <!-- Use a badge icon or image -->
+                    <i class="fas fa-trophy"></i>
+                    <span>{{ achievement['Type'] }}</span>
+                    <span class="badge">{{ achievement['AchievedAt'].strftime('%Y-%m-%d') }}</span>
+                </li>
+            {% else %}
+                <li class="list-group-item">
+                    <!-- Show greyed-out achievements for those not unlocked -->
+                    <i class="fas fa-award fa-3x" style="color: #848770;"></i>
+                    <span>Achievement Locked</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <h6>{{ datetime.now().year }}</h6> <!-- Current year display -->
     </div>
 </div>
-{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <style>
-        body {
-            background-color: #21232F;
-            font-family: 'Comfortaa', sans-serif;
-            color: #f4e3b2;
-        }
 
-        .container-fluid.dashboard-container {
-            background-color: #21232F;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
+        <!-- Meditation History Section -->
+        <div class="history-section">
+            <div class="history-container">
+                <h2>Meditation History</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Meditation</th>
+                            <th>Play</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meditation in meditation_history %}
+                            <tr>
+                                <td>{{ meditation['SessionDateTime'].strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>{{ meditation['MeditationName'] }}</td>
+                                <td>
+                                    <a href="{{ url_for('meditation_details', meditation_id=meditation['MeditationID']) }}" class="play-button">
+                                        <i class="fas fa-play-circle"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3">No meditation history available. Start your journey today!</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
 
-        .dashboard-title {
-            font-size: 2.5rem;
-            color: #f4e3b2;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            color: #d38638;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background-color: #2d3143;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border: none;
-            margin-bottom: 30px;
-        }
-
-        .card-header {
-            background-color: #d38638;
-            color: #fff;
-            font-weight: bold;
-            text-align: center;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .badge-success {
-            background-color: #d38638;
-            color: #21232F;
-        }
-
-        .list-group-item {
-            background-color: #2d3143;
-            color: #f4e3b2;
-            border: none;
-        }
-
-        .list-group-item:hover {
-            background-color: #404355;
-        }
-
-        .table {
-            color: #f4e3b2;
-        }
-
-        .heatmap-day {
-            width: 15px;
-            height: 15px;
-            margin: 2px;
-            border-radius: 3px;
-            transition: transform 0.2s;
-        }
-
-        .heatmap-day.practiced {
-            background-color: #d38638;
-        }
-
-        .heatmap-day.not-practiced {
-            background-color: #5D605E;
-        }
-
-        .heatmap-day:hover {
-            transform: scale(1.1);
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: #d38638;
-            border-color: #d38638;
-        }
-
-        .btn-primary:hover {
-            background-color: #d4a262;
-            border-color: #d4a262;
-        }
-
-        .btn-secondary {
-            background-color: #5D605E;
-            border-color: #5D605E;
-            color: #f4e3b2;
-        }
-
-        .btn-secondary:hover {
-            background-color: #757880;
-            border-color: #757880;
-        }
-
-        .btn-outline-info {
-            border-color: #d38638;
-            color: #d38638;
-        }
-
-        .btn-outline-info:hover {
-            background-color: #d38638;
-            color: #21232F;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-title {
-                font-size: 1.8rem;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .heatmap-container {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-        }
-    </style>
 {% endblock %}

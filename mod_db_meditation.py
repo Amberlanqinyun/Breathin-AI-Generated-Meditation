@@ -48,3 +48,13 @@ def get_meditation_by_id(meditation_id):
         return result  # Fetch one meditation, return directly
     else:
         return None
+
+
+def search_meditations(query):
+    """
+    Search for meditations in the database based on a query.
+    """
+    search_query = f"%{query}%"
+    sql = "SELECT * FROM Meditations WHERE MeditationName LIKE %s"
+    result = execute_query(sql, (search_query,))
+    return result

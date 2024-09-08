@@ -62,3 +62,41 @@ INSERT INTO Notifications (UserID, Details, NotificationTime, Status) VALUES
 (1, 'Welcome to the meditation app! Your journey begins now.', CURRENT_TIMESTAMP, 0),
 (2, 'You have earned a new achievement: Consistency!', CURRENT_TIMESTAMP, 0);
 
+-- Insert mock meditation sessions for User 1
+INSERT INTO MeditationSessions (UserID, MeditationID, SessionDateTime) VALUES
+(1, 1, '2023-09-08 06:30:00'),
+(1, 2, '2023-09-15 07:00:00'),
+(1, 3, '2023-10-01 08:00:00'),
+(1, 1, '2023-10-15 09:30:00'),
+(1, 2, '2023-11-05 07:45:00'),
+(1, 3, '2023-11-20 06:50:00'),
+(1, 1, '2023-12-10 08:10:00'),
+(1, 2, '2024-01-05 09:05:00'),
+(1, 3, '2024-02-01 07:15:00'),
+(1, 1, '2024-03-10 08:25:00');
+
+-- Insert mock meditation sessions for User 2
+INSERT INTO MeditationSessions (UserID, MeditationID, SessionDateTime) VALUES
+(2, 1, '2023-09-09 06:15:00'),
+(2, 2, '2023-09-20 07:20:00'),
+(2, 3, '2023-10-05 07:45:00'),
+(2, 1, '2023-11-01 08:15:00'),
+(2, 2, '2023-12-05 09:00:00'),
+(2, 3, '2023-12-25 06:40:00'),
+(2, 1, '2024-01-10 08:30:00'),
+(2, 2, '2024-02-15 09:20:00'),
+(2, 3, '2024-03-05 07:00:00'),
+(2, 1, '2024-04-01 06:45:00');
+
+-- Insert mock meditation sessions for User 3
+INSERT INTO MeditationSessions (UserID, MeditationID, SessionDateTime) VALUES
+(3, 1, '2023-09-10 06:45:00'),
+(3, 2, '2023-09-25 07:30:00'),
+(3, 3, '2023-10-10 08:10:00'),
+(3, 1, '2023-10-25 08:50:00'),
+(3, 2, '2023-11-10 09:30:00'),
+(3, 3, '2023-12-10 06:55:00'),
+(3, 1, '2024-01-15 07:25:00'),
+(3, 2, '2024-02-10 08:00:00'),
+(3, 3, '2024-03-20 07:40:00'),
+(3, 1, '2024-04-15 09:15:00');

@@ -31,30 +31,6 @@ def is_user():
     return session_info and session_info['role_id'] == 2
 
 
-def searchAdmin(email):
-    query = "SELECT * FROM Admins WHERE Email = %s"
-    result = execute_query(query, (email,), fetchone=True)
-    return result
-
-def searchAdminById(admin_id):
-    query = """
-    SELECT * FROM Admins 
-    LEFT JOIN Roles ON Roles.RoleID = Admins.RoleID 
-    WHERE AdminID = %s
-    """
-    result = execute_query(query, (admin_id,), fetchone=True)
-    return result
-
-def listAllAdmins(condition=""):
-    query = """
-    SELECT * FROM Admins 
-    LEFT JOIN Roles ON Roles.RoleID = Admins.RoleID
-    """
-    if condition:
-        query += " " + condition
-    result = execute_query(query)
-    return result
-
 def listAllUsers(condition=""):
     query = "SELECT * FROM Users"
     if condition:
@@ -93,24 +69,6 @@ def insertUser(first_name, last_name, email, password, role_id='2'):
         return False  # Indicating failure
 
 
-
-def insertAdmin(first_name, last_name, email, password, role_id='1'):
-    # Assume the password is not yet hashed, so we hash it here
-    password_hash = hash_password(password)
-    
-    query = """
-    INSERT INTO Admins (FirstName, LastName, Email, PasswordHash, RoleID) 
-    VALUES (%s, %s, %s, %s, %s)
-    """
-    data = (first_name, last_name, email, password_hash, role_id)
-    try:
-        execute_query(query, data)
-        return True  # Indicating success
-    except Exception as e:
-        print(f"Error inserting admin: {e}")
-        return False  # Indicating failure
-
-
 def deactivateUser(user_id):
     query = "UPDATE Users SET banned = '1' WHERE UserID = %s"
     result = execute_query(query, (user_id,), fetchone=True)
@@ -121,30 +79,24 @@ def activateUser(user_id):
     result = execute_query(query, (user_id,), fetchone=True)
     return result
 
-def update_admin_details(first_name, last_name, email, admin_id):
-    query = """
-    UPDATE Admins 
-    SET FirstName = %s, LastnNme = %s, Email = %s 
-    WHERE AdminID = %s
-    """
-    data = (first_name, last_name, email, admin_id)
-    result = execute_query(query, data)
-    return result
 
-def update_user_details(first_name, last_name, email, user_id):
+def update_user_password(user_id, new_password):
+    # Hash the new password before storing it in the database
+    password_hash = hash_password(new_password)
+    
     query = """
     UPDATE Users 
-    SET FirstName = %s, LastName = %s, Email = %s 
+    SET PasswordHash = %s 
     WHERE UserID = %s
     """
-    data = (first_name, last_name, email, user_id)
-    result = execute_query(query, data)
-    return result
-
-def deleteAdmin(admin_id):
-    query = "DELETE FROM Admins WHERE AdminID = %s"
-    result = execute_query(query, (admin_id,), fetchone=True)
-    return result
+    data = (password_hash, user_id)
+    
+    try:
+        execute_query(query, data)
+        return True  # Indicating success
+    except Exception as e:
+        print(f"Error updating user password: {e}")
+        return False  # Indicating failure
 
 def deleteUser(user_id):
     query = "DELETE FROM Users WHERE UserID = %s"
@@ -172,13 +124,10 @@ def get_user_profile(user_id):
     query = "SELECT FirstName, LastName, Email, PasswordHash FROM Users WHERE UserID = %s"
     return execute_query(query, (user_id,), fetchone=True)
 
-def update_user_profile(user_id, first_name, last_name, email):
+def update_user_profile(first_name, last_name, email, user_id):
     query = "UPDATE Users SET FirstName = %s, LastName = %s, Email = %s WHERE UserID = %s"
     execute_query(query, (first_name, last_name, email, user_id))
 
-def update_user_password(user_id, new_password_hash):
-    query = "UPDATE Users SET PasswordHash = %s WHERE UserID = %s"
-    execute_query(query, (new_password_hash, user_id))
 
 
 def hash_password(password):

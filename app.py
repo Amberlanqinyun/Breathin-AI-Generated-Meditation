@@ -8,12 +8,14 @@ from mod_forgot_password import forgot_password
 from mod_reset_password import reset_password
 import mod_prepare_meditation
 from mod_view_users import view_users
-from mod_view_profile import view_profile, view_user_profile, view_admin_profile
+from mod_view_profile import view_profile, view_user_profile
 from mod_dashboard import dashboard
 from mod_meditation_category import select_category,meditation_category, meditation_details, submit_feedback
 from mod_breathing import breathing_exercise
 from mod_edit_profile import edit_profile
 from mod_register import register
+from mod_change_password import change_password
+from app_error_handling import *
 import os
 
 
