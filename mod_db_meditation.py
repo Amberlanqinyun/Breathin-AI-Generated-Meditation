@@ -52,9 +52,17 @@ def get_meditation_by_id(meditation_id):
 
 def search_meditations(query):
     """
-    Search for meditations in the database based on a query.
+    Search for meditations and include category names.
     """
     search_query = f"%{query}%"
-    sql = "SELECT * FROM Meditations WHERE MeditationName LIKE %s"
-    result = execute_query(sql, (search_query,))
+    sql = """
+    SELECT Meditations.MeditationID, Categories.Name AS CategoryName, Meditations.TextContent, Meditations.AudioFilePath, Meditations.VisualContentPath, Meditations.CreatedAt
+    FROM Meditations
+    LEFT JOIN Categories ON Meditations.CategoryID = Categories.CategoryID
+    WHERE Meditations.TextContent LIKE %s
+    ORDER BY Meditations.CreatedAt DESC
+    """
+    result = execute_query(sql, (search_query,), fetchone=False)  # Fetch all matching results
     return result
+
+
