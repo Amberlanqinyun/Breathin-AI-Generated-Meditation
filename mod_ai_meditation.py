@@ -62,12 +62,12 @@ def generate_meditation_text(user_input):
 
 # Add SSML tags for pauses after periods and commas
 def add_ssml_pauses(text):
-    text = text.replace('.', '<break time="1.2s"/>').replace(',', '<break time="0.8s"/>')
+    text = text.replace('.', '<break time="5s"/>').replace(',', '<break time="2s"/>')
     ssml_text = f"<speak>{text}</speak>"
     return ssml_text
 
 # Synthesize Voice with Google Cloud TTS using SSML for pauses
-def synthesize_voice(meditation_text, voice="en-US-Wavenet-D", language="en", speed=0.8, pitch=-3.0):
+def synthesize_voice(meditation_text, voice="en-US-Wavenet-D", language="en", speed=0.65, pitch=-10.0):
     client = texttospeech.TextToSpeechClient()
 
     # Convert the text to SSML with pauses
