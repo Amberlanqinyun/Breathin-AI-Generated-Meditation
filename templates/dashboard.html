@@ -17,30 +17,40 @@
         <div class="dashboard-header">
             <h1> My Dashboard</h1>
         </div>
-<form class="search-bar" method="GET" action="{{ url_for('dashboard') }}">
-    <input type="text" name="search_query" placeholder="Search meditations..." value="{{ search_query }}">
-    <button type="submit"><i class="fas fa-search"></i></button>
-</form>
 
-{% if search_results %}
-    <div class="search-results">
-        <h2>Search Results for "{{ search_query }}"</h2>
-        <ul>
-            {% for result in search_results %}
-                <li>
-                    <h3>{{ result['TextContent'] }}</h3>
-                    <audio controls>
-                        <source src="{{ url_for('static', filename=result['AudioFilePath']) }}" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                </li>
-            {% else %}
-                <p>No meditations found matching "{{ search_query }}".</p>
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
+        <!-- Search Bar Section -->
+        <form class="search-bar" method="GET" action="{{ url_for('dashboard') }}">
+            <input type="text" name="search_query" placeholder="Search meditations..." value="{{ search_query }}">
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
 
+        {% if search_results %}
+        <div class="search-results-container">
+            <h2>Search Results for "{{ search_query }}"</h2>
+            <ul class="search-results">
+                {% for result in search_results %}
+                    <li class="search-item">
+                        <div class="meditation-details">
+                            <h3>{{ result['TextContent'] }}</h3>
+                            <audio controls>
+                                <source src="{{ url_for('static', filename=result['AudioFilePath']) }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                        <!-- Play button links to details page instead of redundant play action -->
+                        <a href="{{ url_for('meditation_details', meditation_id=result['MeditationID']) }}" class="details-link">
+                            <i class="fas fa-info-circle"></i> Details
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="no-results">No meditations found matching "{{ search_query }}".</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        {% endif %}
+
+        <!-- Profile and Heatmap Section -->
         <div class="profile-heatmap-container">
             <!-- Profile Section -->
             <div class="profile-summary">
@@ -54,43 +64,37 @@
                     </div>
                 </div>
             </div>
-        
+
             <!-- Heatmap Section -->
             <div class="heatmap-container">
                 <div class="heatmap-grid">
-                    <!-- Loop through heatmap_data and apply classes -->
                     {% for practiced in heatmap_data %}
                         <div class="heatmap-day {% if practiced %}practiced{% else %}not-practiced{% endif %}"></div>
                     {% endfor %}
                 </div>
             </div>            
         </div>
-        
 
-<!-- Achievements Section -->
-<div class="achievements-section">
-    <div class="achievements-container">
-        <h2>Achievements</h2>
-        <ul class="list-group list-group-flush">
-            {% for achievement in achievements %}
-                <li class="list-group-item">
-                    <!-- Use a badge icon or image -->
-                    <i class="fas fa-trophy"></i>
-                    <span>{{ achievement['Type'] }}</span>
-                    <span class="badge">{{ achievement['AchievedAt'].strftime('%Y-%m-%d') }}</span>
-                </li>
-            {% else %}
-                <li class="list-group-item">
-                    <!-- Show greyed-out achievements for those not unlocked -->
-                    <i class="fas fa-award fa-3x" style="color: #848770;"></i>
-                    <span>Achievement Locked</span>
-                </li>
-            {% endfor %}
-        </ul>
-        <h6>{{ datetime.now().year }}</h6> <!-- Current year display -->
-    </div>
-</div>
-
+        <!-- Achievements Section -->
+        <div class="achievements-section">
+            <div class="achievements-container">
+                <h2>Achievements</h2>
+                <ul class="list-group list-group-flush">
+                    {% for achievement in achievements %}
+                        <li class="list-group-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>{{ achievement['Type'] }}</span>
+                            <span class="badge">{{ achievement['AchievedAt'].strftime('%Y-%m-%d') }}</span>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item">
+                            <i class="fas fa-award fa-3x" style="color: #848770;"></i>
+                            <span>Achievement Locked</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
 
         <!-- Meditation History Section -->
         <div class="history-section">
@@ -126,5 +130,4 @@
         </div>
     </div>
 </body>
-
 {% endblock %}

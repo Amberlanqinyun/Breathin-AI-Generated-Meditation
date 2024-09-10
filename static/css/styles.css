@@ -203,30 +203,48 @@ body {
 .user-input::placeholder {
   color: var(--element-placeholder);
 }
-
 /* Hamburger Menu Styles */
 .hamburger-menu {
   position: absolute;
   top: 20px;
   right: 20px;
   z-index: 1000;
+  cursor: pointer;
+  transition: transform 0.5s ease;
 }
 
 .menu-icon {
-  width: 30px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 .menu-icon .bar {
-  height: 3px;
+  height: 2px;
   background-color: var(--main);
-  margin: 5px 0;
+  margin: 4px 0;
   transition: all 0.3s ease;
 }
 
 .menu-icon:hover .bar {
   background-color: var(--header);
+  transform: scaleX(1.1);
+}
+
+.menu-icon.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-icon.active .bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menu-icon.active .bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 /* Menu Content */
@@ -235,19 +253,19 @@ body {
   top: 0;
   right: 0;
   width: 100%;
-  max-width: 300px;
-  height: auto;
-  background-color: var(--background);
-  padding: 1rem 1.5rem;
+  max-width: 320px;
+  height: 100vh;
+  background-color: #252837; /* Elegant semi-transparent background */
+  padding: 2rem 1.5rem;
   display: none;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
   transform: translateX(100%);
   opacity: 0;
-  border-radius: 10px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 10px 0 0 10px;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
 }
 
 #menu-content.show {
@@ -264,7 +282,7 @@ body {
 }
 
 #menu-content ul li {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   width: 100%;
 }
 
@@ -274,26 +292,32 @@ body {
   color: var(--main);
   text-decoration: none;
   font-family: var(--font-primary);
-  font-size: 1rem;
+  font-size: 1.1rem;
   padding: 0.75rem 1rem;
   transition: background-color 0.3s ease, color 0.3s ease;
   border-radius: 8px;
 }
 
 #menu-content ul li a:hover {
-  background-color: transparent;
-  color: var(--header);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--highlight); /* Use a highlight color */
 }
 
+/* Close Icon */
 .close-menu {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: var(--main);
   cursor: pointer;
   margin-top: 1rem;
   align-self: flex-end;
+  transition: transform 0.3s ease;
 }
 
+.close-menu:hover {
+  transform: rotate(90deg);
+}
 
+/* Media Query for Larger Screens */
 @media(min-width: 1024px) {
   #menu-content {
     width: 100%;
@@ -301,9 +325,21 @@ body {
   }
 
   #menu-content ul li a {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 }
+
+/* Hidden class should hide the menu */
+.hidden {
+  display: none;
+}
+
+/* Show class should make it visible */
+.show {
+  display: flex;
+  /* Additional styles for the menu when visible */
+}
+
 
 /* Hidden class should hide the menu */
 .hidden {
@@ -633,7 +669,7 @@ body, p, .form-control, .btn {
 /* Container and Centering */
 .login-container {
     max-width: 400px;
-    margin: 0 auto;
+    margin: 100px auto;
     padding: 40px;
     background-color: var(--background);
     border-radius: 12px;

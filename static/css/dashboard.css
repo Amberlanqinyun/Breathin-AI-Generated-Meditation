@@ -351,3 +351,166 @@ html {
     grid-template-columns: repeat(10, 1fr); /* Adjust for smaller screens */
   }
 }
+
+/* Search Results */
+.search-results-container {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: var(--background);
+  border-radius: 12px;
+}
+
+.search-results-container h2 {
+  font-family: var(--font-primary);
+  font-size: 1.6rem; /* Reduced font size for better balance */
+  color: var(--primary); 
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--element-background);
+  border-radius: 8px;
+  margin-bottom: 15px; /* Spacing between search results */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  transition: background-color 0.3s ease;
+}
+
+.search-item:hover {
+  background-color: rgba(255, 255, 255, 0.05); /* Subtle hover effect */
+}
+
+.meditation-details {
+  flex-grow: 1;
+  margin-right: 15px; /* Adds space between the audio and details link */
+}
+
+.meditation-details h3 {
+  font-family: var(--font-primary);
+  font-size: 1.2rem; /* Slightly reduced font size */
+  color: var(--text-light);
+  margin-bottom: 5px;
+}
+
+.meditation-details audio {
+  width: 100%;
+  max-width: 280px;
+  height: 30px;
+  border-radius: 6px;
+  background-color: var(--background); /* Background color for consistency */
+}
+
+.details-link {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: var(--primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+/* Achievements and Meditation History Alignment */
+.achievements-section, .history-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.achievements-container, .history-container {
+  flex: 1;
+  margin-right: 20px; /* Space between the achievements and history */
+  background-color: var(--secondary);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px var(--shadow-color);
+}
+
+.history-container {
+  margin-right: 0;
+}
+
+.achievements-container h2, .history-container h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  color: var(--primary);
+}
+
+.list-group-item {
+  background-color: var(--secondary);
+  color: var(--text-light);
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-group-item i {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+/* Adjust the size of the play button for consistency */
+.play-button {
+  color: var(--primary);
+  border-radius: 50%;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.5rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.play-button:hover {
+  transform: scale(1.1);
+}
+
+/* Table for meditation history */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+  background-color: var(--secondary);
+}
+
+.table th {
+  background-color: var(--secondary);
+  border-radius: 6px 6px 0 0;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .achievements-section, .history-section {
+      flex-direction: column;
+  }
+
+  .achievements-container, .history-container {
+      margin-right: 0;
+      margin-bottom: 20px;
+  }
+
+  .search-item {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .meditation-details audio {
+      max-width: 100%;
+  }
+}

@@ -242,6 +242,9 @@ input[type=number]::-webkit-outer-spin-button {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Optional for added effect */
 }
 
+
+
+
 @media screen and (max-width: 600px) {
     #circle {
         width: 50vw;

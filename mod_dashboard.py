@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from mod_utilize import app
 from mod_db_achievements import get_user_achievements, get_user_meditation_history
 from mod_db_account import get_user_profile
-from mod_db_meditation import search_meditations  # Assuming this is where your DB query is
+from mod_db_meditation import search_meditations 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
