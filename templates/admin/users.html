@@ -3,14 +3,16 @@
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Manage Users</h2>
-    <table class="user-table">
+    
+    <!-- User Table -->
+    <table class="table user-table">
         <thead>
             <tr>
                 <th>User ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
-                <th>Banned</th>
+                <th>Status</th> <!-- Renamed to Status for clarity -->
                 <th>Edit</th>
             </tr>
         </thead>
@@ -21,8 +23,14 @@
                 <td>{{ user.FirstName }}</td>
                 <td>{{ user.LastName }}</td>
                 <td>{{ user.Email }}</td>
-                <td>{{ 'Yes' if user.banned else 'No' }}</td>
-                <td><a href="{{ url_for('admin_edit_user', user_id=user.UserID) }}" class="edit-link">Edit</a></td>
+                <td class="status-cell">
+                    <span class="{{ 'status-active' if not user.banned else 'status-banned' }}">
+                        {{ 'Active' if not user.banned else 'Banned' }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{{ url_for('admin_edit_user', user_id=user.UserID) }}" class="edit-link">Edit</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

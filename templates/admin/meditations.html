@@ -3,12 +3,12 @@
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Manage Meditations</h2>
-    <table class="user-table">
+    <table class="table">
         <thead>
             <tr>
-                <th>Meditation ID</th>
+                <th>ID</th>
                 <th>Category</th>
-                <th>File Name</th>
+                <th>Meditation Name</th> <!-- Change from 'Text Content' to 'Meditation Name' -->
                 <th>Edit</th>
             </tr>
         </thead>
@@ -16,26 +16,26 @@
             {% for meditation in meditations %}
             <tr>
                 <td>{{ meditation.MeditationID }}</td>
-                <td>{{ meditation.category_name }}</td>
-                <td>{{ meditation.audio_file_path.split('/')[-1] if meditation.audio_file_path else 'No file uploaded'  }}</td>
-                <td><a href="{{ url_for('admin_edit_meditation', meditation_id=meditation.MeditationID) }}" class="edit-link">Edit</a></td>
+                <td>{{ meditation.Category }}</td> <!-- Display the category name -->
+                <td>{{ meditation.TextContent }}</td> <!-- Display the meditation name -->
+                <td><a href="{{ url_for('admin_edit_meditation', meditation_id=meditation.MeditationID) }}">Edit</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <form method="POST" action="{{ url_for('admin_meditations') }}" enctype="multipart/form-data">
-        <h3>Add New Meditation</h3>
+    <h3>Add New Meditation</h3>
+    <form method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="category_id">Category</label>
-            <select id="category_id" name="category_id">
-                {% for category in Categories %}
-                <option value="{{ category.CategoryID }}">{{ category.Name }}</option>
+            <select id="category_id" name="category_id" required>
+                {% for category in categories %}
+                    <option value="{{ category.CategoryID }}">{{ category.Name }}</option> <!-- List all categories -->
                 {% endfor %}
             </select>
         </div>
         <div class="form-group">
-            <label for="text_content">File Name</label>
+            <label for="text_content">Meditation Name</label> <!-- Change 'Text Content' to 'Meditation Name' -->
             <textarea id="text_content" name="text_content" required></textarea>
         </div>
         <div class="form-group">

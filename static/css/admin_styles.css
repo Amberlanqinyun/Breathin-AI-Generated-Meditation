@@ -103,7 +103,6 @@ a:hover {
     box-shadow: 0 0 10px var(--primary);
 }
 
-
 /* Admin Navbar */
 .navbar {
     display: flex;
@@ -236,7 +235,6 @@ input[type="submit"]:hover, .btn-submit:hover {
 .flash-message.error {
     background-color: #dc3545; /* Red for error */
 }
-
 
 /* Responsive Design */
 @media (max-width: 768px) {

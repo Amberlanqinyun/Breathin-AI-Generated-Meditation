@@ -38,8 +38,8 @@ def admin_edit_user(user_id):
 # Meditation Management
 @app.route('/admin/meditations', methods=['GET', 'POST'])
 def admin_meditations():
-    meditations = get_all_meditations()
-    categories = get_all_categories()
+    meditations = get_all_meditations()  # Fetch all meditations
+    categories = get_all_categories()  # Fetch all categories
 
     if request.method == 'POST':
         category_id = request.form.get('category_id')
@@ -52,19 +52,46 @@ def admin_meditations():
 
     return render_template('admin/meditations.html', meditations=meditations, categories=categories)
 
+
+import os
+from werkzeug.utils import secure_filename
+from flask import flash, request, redirect, url_for
+
+UPLOAD_FOLDER = 'static/music/'  # Set the upload folder path
+
 @app.route('/admin/meditation/<int:meditation_id>', methods=['GET', 'POST'])
 def admin_edit_meditation(meditation_id):
     meditation = get_meditation_by_id(meditation_id)
 
     if request.method == 'POST':
         text_content = request.form.get('text_content')
-        audio_file_path = request.form.get('audio_file_path')
+        
+        # Check if a file is included in the request
+        if 'audio_file_path' in request.files:
+            audio_file = request.files['audio_file_path']
 
-        update_meditation(meditation_id, text_content, audio_file_path)
-        flash('Meditation updated successfully!', 'success')
+            if audio_file.filename != '':
+                # Generate new file name based on the meditation name
+                filename = secure_filename(f"{text_content}.mp3")
+
+                # Save the file to the static/music/ directory
+                audio_file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+                # Store the file path in the database
+                audio_file_path = f"{UPLOAD_FOLDER}{filename}"
+                
+                # Update the database with the new audio file path
+                update_meditation(meditation_id, text_content, audio_file_path)
+                flash('Meditation updated successfully with new audio!', 'success')
+            else:
+                # If no new file is uploaded, just update the text content
+                update_meditation(meditation_id, text_content, meditation['AudioFilePath'])
+                flash('Meditation updated successfully!', 'success')
+
         return redirect(url_for('admin_meditations'))
 
     return render_template('admin/edit_meditation.html', meditation=meditation)
+
 
 @app.route('/admin/meditation/delete/<int:meditation_id>', methods=['POST'])
 def admin_delete_meditation(meditation_id):

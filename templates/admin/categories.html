@@ -1,8 +1,9 @@
 {% extends 'admin/base.html' %}
+
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Manage Categories</h2>
-    <table class="user-table">
+    <table class="table">
         <thead>
             <tr>
                 <th>Category ID</th>
@@ -15,25 +16,28 @@
             {% for category in categories %}
             <tr>
                 <td>{{ category.CategoryID }}</td>
-                <td>{{ category.name }}</td>
-                <td>{{ category.description | truncate(50) }}</td>
-                <td><a href="{{ url_for('admin_edit_category', category_id=category.CategoryID) }}" class="edit-link">Edit</a></td>
+                <td>{{ category.Name }}</td>
+                <td>{{ category.Description | truncate(50) }}</td>
+                <td>
+                    <a href="{{ url_for('admin_edit_category', category_id=category.CategoryID) }}" class="edit-link">Edit</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <form method="POST" action="{{ url_for('admin_categories') }}">
-        <h3>Add New Category</h3>
+    <!-- Add New Category Section -->
+    <form method="POST" action="{{ url_for('admin_categories') }}" class="form-container">
+        <h3 class="form-title">Add New Category</h3>
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea id="description" name="description" required></textarea>
+            <textarea id="description" name="description" class="form-control" required></textarea>
         </div>
-        <button type="submit" class="cta-button">Add Category</button>
+        <button type="submit" class="btn-submit">Add Category</button>
     </form>
 </div>
 {% endblock %}

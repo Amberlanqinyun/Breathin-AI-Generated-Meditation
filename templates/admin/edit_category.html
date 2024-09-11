@@ -3,14 +3,14 @@
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Edit Category</h2>
-    <form method="POST" action="{{ url_for('admin_edit_category', category_id=category.CategoryID) }}">
+    <form method="POST" action="{{ url_for('admin_edit_category', category_id=category.CategoryID) }}" class="form-container">
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" value="{{ category.name }}" required>
+            <input type="text" id="name" name="name" value="{{ category.Name }}" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea id="description" name="description" required>{{ category.description }}</textarea>
+            <textarea id="description" name="description" class="form-control" required>{{ category.Description }}</textarea>
         </div>
         <button type="submit" class="btn">Update Category</button>
     </form>

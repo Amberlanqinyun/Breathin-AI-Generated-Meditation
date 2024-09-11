@@ -5,8 +5,8 @@
     <h2 class="dashboard-title">Edit Meditation</h2>
     <form method="POST" action="{{ url_for('admin_edit_meditation', meditation_id=meditation.MeditationID) }}" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="text_content">Text Content</label>
-            <textarea id="text_content" name="text_content" required>{{ meditation.text_content }}</textarea>
+            <label for="text_content">Meditation Name</label>
+            <textarea id="text_content" name="text_content" required>{{ meditation.TextContent }}</textarea>
         </div>
         <div class="form-group">
             <label for="audio_file_path">Audio File</label>
