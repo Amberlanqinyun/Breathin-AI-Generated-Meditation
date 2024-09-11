@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="dashboard-title">Admin Dashboard</h2>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('admin_users') }}" class="cta-button">Manage Users</a>
+        <a href="{{ url_for('admin_meditations') }}" class="cta-button">Manage Meditations</a>
+        <a href="{{ url_for('admin_categories') }}" class="cta-button">Manage Categories</a>
+    </div>
+</div>
+{% endblock %}

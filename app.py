@@ -15,6 +15,7 @@ from mod_edit_profile import edit_profile
 from mod_register import register
 from mod_change_password import change_password
 from app_error_handling import *
+from mod_admin import *
 import os
 
 

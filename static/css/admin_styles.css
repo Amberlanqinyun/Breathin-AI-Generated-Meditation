@@ -1,0 +1,266 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap'); /* Secondary font */
+
+/* Define color scheme and typography */
+:root {
+    --background: #21232F;
+    --main: #f4e3b2;
+    --header: #d38638;
+    --element-background: #2d3143;
+    --element-placeholder: #5D605E;
+    --element-main: #FFFFFF;
+    --text-light: #F5F5F7;
+    --primary: #FF9F29; /* Vibrant orange */
+    --secondary: #2B2E31;
+    --accent: #FFB72B; /* Accent color */
+    --border-color: #404040;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --font-primary: 'Comfortaa', sans-serif; /* Main font */
+    --font-secondary: 'Inter', sans-serif; /* Secondary font */
+}
+
+/* General Styling */
+body {
+    background-color: var(--background);
+    color: var(--text-light);
+    font-family: var(--font-primary);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: var(--element-background);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5 {
+    color: var(--primary);
+    font-family: var(--font-primary);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+/* Links and Buttons */
+a, .btn {
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+a {
+    color: var(--primary);
+}
+
+a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* Button Styles */
+.btn {
+    background-color: var(--primary);
+    color: var(--background);
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn:hover {
+    background-color: var(--accent);
+    color: var(--background);
+    transform: scale(1.02);
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+
+/* Admin Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--element-background);
+    box-shadow: 0 4px 10px var(--shadow-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.navbar-right {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-link {
+    color: var(--text-light);
+    font-size: 1rem;
+    padding: 10px 20px;
+}
+
+.nav-link:hover {
+    background-color: var(--primary);
+    color: var(--background);
+    border-radius: 6px;
+}
+
+/* Tables */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+.table th, .table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.table th {
+    background-color: var(--secondary);
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+.table td {
+    background-color: var(--element-background);
+    color: var(--element-main);
+}
+
+.table tr:hover {
+    background-color: var(--secondary);
+}
+
+.banned-status {
+    color: #ff4d4d; /* Red for banned users */
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: var(--element-background);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+input, select, textarea {
+    padding: 12px;
+    background-color: var(--secondary);
+    color: var(--element-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: var(--font-secondary);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    height: 150px;
+}
+
+input[type="submit"], .btn-submit {
+    background-color: var(--primary);
+    color: var(--background);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+input[type="submit"]:hover, .btn-submit:hover {
+    background-color: var(--accent);
+    transform: scale(1.05);
+}
+
+/* Flash Messages */
+.flash-message {
+    padding: 15px 20px;
+    background-color: var(--primary);
+    color: var(--secondary);
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    margin-bottom: 20px;
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+}
+
+.flash-message.success {
+    background-color: var(--main); /* Green for success */
+}
+
+.flash-message.error {
+    background-color: #dc3545; /* Red for error */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 10px;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    form {
+        gap: 15px;
+    }
+}
