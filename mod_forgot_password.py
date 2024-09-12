@@ -6,38 +6,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
-
-def send_reset_email(email, token):
-    sender_email = "amber.lan.breath.in@gmail.com"
-    receiver_email = email
-    password = os.getenv("EMAIL_PASSWORD")
-
-
-    # Create the email content
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "Password Reset Request"
-    message["From"] = sender_email
-    message["To"] = receiver_email
-
-    reset_url = f"http://localhost:5000/reset_password?token={token}"
-
-    text = f"""\
-    Hi,
-    To reset your password, please click the link below:
-    {reset_url}
-    If you did not request a password reset, please ignore this email.
-    """
-    part = MIMEText(text, "plain")
-    message.attach(part)
-
-    try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message.as_string())
-        print("Email sent successfully")
-    except Exception as e:
-        print(f"Failed to send email: {e}")
+from mod_db_account import send_reset_email, generate_random_password   
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():

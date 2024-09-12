@@ -14,11 +14,17 @@
         <button type="submit" class="btn btn-primary btn-block">Continue</button>
     </form>
 
+    <!-- Google Login Button -->
+    <div class="google-login">
+        <a href="{{ url_for('google_login') }}" class="btn btn-google btn-block">
+            <img src="{{ url_for('static', filename='images/google_logo.png') }}" alt="Google Logo" class="google-logo" style="width: 20px; height: 20px;">
+            Login with Google
+        </a>
+    </div>
+
     <!-- Separator Line -->
     <div class="separator-line">
         <span>Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a></span>
     </div>
-    
 </div>
 {% endblock %}
-

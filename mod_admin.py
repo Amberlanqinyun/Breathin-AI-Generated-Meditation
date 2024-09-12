@@ -127,3 +127,4 @@ def admin_edit_category(category_id):
         return redirect(url_for('admin_categories'))
 
     return render_template('admin/edit_category.html', category=category)
+
