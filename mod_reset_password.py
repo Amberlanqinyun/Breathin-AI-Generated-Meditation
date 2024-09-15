@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from flask import render_template, request, redirect, url_for, flash
 from mod_utilize import app
 from mod_db_user_management import get_user_by_email, update_user_password, verify_reset_token, generate_reset_token, searchUser
-from mod_db_account import send_reset_email, generate_random_password   
+from mod_db_account import send_reset_email, generate_random_password,hash_password
 
 
 @app.route('/reset_password', methods=['GET', 'POST'])
@@ -26,7 +26,7 @@ def reset_password():
             flash('Invalid or expired token.')
             return redirect(url_for('login'))
         
-        hashed_password = hashlib.sha256(new_password.encode()).hexdigest()
+        hashed_password = hash_password(new_password)
         update_user_password(user['UserID'], hashed_password)
         
         flash('Your password has been updated successfully.')

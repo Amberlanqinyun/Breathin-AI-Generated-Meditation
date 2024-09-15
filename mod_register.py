@@ -1,6 +1,6 @@
 # Import necessary modules and functions
 from mod_utilize import app, flash, session, redirect, url_for, render_template, request
-from mod_db_account import searchUser, insertUser, hash_password
+from mod_db_account import search_user, hash_password, create_user
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -17,12 +17,15 @@ def register():
             return render_template('register.html')
         
         # Check if email already exists
-        if searchUser(email):
+        if search_user(email):
             flash('Email is already registered. Please log in or use another email.', 'danger')
             return render_template('register.html')
 
-        # Insert the new user into the database (password is passed as raw string)
-        if insertUser(first_name, last_name, email, password):
+        # Hash the password
+        password_hash = hash_password(password)
+
+        # Insert the new user into the database
+        if create_user(first_name, last_name, email, password_hash, None, 2):
             flash('Registration successful! You can now log in.', 'success')
             return redirect(url_for('login'))
         else:

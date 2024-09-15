@@ -793,51 +793,53 @@ body, p, .form-control, .btn {
     right: 0;
 }
 
-/* Social Login Buttons */
-.social-login {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* Add some margin to the form and buttons */
+/* Add some margin to the form and buttons */
+.login-form {
+  margin-bottom: 20px;
 }
 
-.btn-google, .btn-microsoft, .btn-apple {
-    background-color: var(--element-background);
-    color: var(--element-main);
-    border: 1px solid var(--element-placeholder);
-    text-align: left;
-    padding: 12px;
-    font-size: 14px;
-    border-radius: 8px;
+.separator-heading {
+  text-align: center;
+  margin: 20px 0;
 }
 
-.btn-google:hover, .btn-microsoft:hover, .btn-apple:hover {
-    background-color: var(--main);
-    color: var(--background);
+.separator-heading h2 {
+  display: inline-block;
+  background: #1C1D25; /* Match the background color */
+  padding: 0 10px;
+  color: #F3EED9; /* Match the text color */
 }
 
-/* Social Buttons Icons */
-.btn-google::before, .btn-microsoft::before, .btn-apple::before {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    vertical-align: middle;
-    background-size: contain;
+.google-login {
+  margin-bottom: 20px;
 }
 
-.btn-google::before {
-    background-image: url('path-to-google-icon.png');
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color:  var(--header);
+  color: #fff;
+  border: none;
+  padding: 12px 20px; /* Match the padding of other buttons */
+  border-radius: 8px; /* Match the border radius of other buttons */
+  text-decoration: none;
+  font-size: 16px; /* Match the font size of other buttons */
+  font-family: var(--font-primary); /* Match the font family */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Add transition for hover effect */
 }
 
-.btn-microsoft::before {
-    background-image: url('path-to-microsoft-icon.png');
+.btn-google:hover {
+  background-color:  var(--header);
+  transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
-.btn-apple::before {
-    background-image: url('path-to-apple-icon.png');
+.google-logo {
+  margin-right: 10px;
+  width: 20px; /* Set to a comfortable viewing size */
+  height: 20px; /* Keep it proportional */
 }
-
 
 /* Improve visibility of links */
 .edit-email, .forgot-password {

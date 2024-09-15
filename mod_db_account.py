@@ -1,3 +1,5 @@
+import secrets
+import string
 from db_baseOperation import execute_query
 from datetime import datetime, timedelta
 import os
@@ -5,8 +7,10 @@ import smtplib
 import bcrypt
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
-from flask import session
+import pymysql
+from db_credentials import *
+from flask import session, url_for
+from flask_mail import Mail, Message
 
 def get_user_session_info():
     """Retrieve UserID and RoleID from the session."""
@@ -38,10 +42,9 @@ def listAllUsers(condition=""):
     result = execute_query(query)
     return result
 
-def searchUser(email):
+def search_user(email):
     query = "SELECT * FROM Users WHERE Email = %s"
-    result = execute_query(query, (email,), fetchone=True)
-    return result
+    return execute_query(query, (email,), fetchone=True)
 
 def searchUserById(user_id):
     query = """
@@ -52,22 +55,22 @@ def searchUserById(user_id):
     result = execute_query(query, (user_id,), fetchone=True)
     return result
 
-def insertUser(first_name, last_name, email, password, role_id='2'):
-    # Hash the password once before storing
-    password_hash = hash_password(password)
-    
-    query = """
-    INSERT INTO Users (FirstName, LastName, Email, PasswordHash, RoleID) 
-    VALUES (%s, %s, %s, %s, %s)
-    """
-    data = (first_name, last_name, email, password_hash, role_id)
-    try:
-        execute_query(query, data)
-        return True  # Indicating success
-    except Exception as e:
-        print(f"Error inserting user: {e}")
-        return False  # Indicating failure
-
+def create_user(first_name, last_name, email, password_hash=None, google_id=None, role_id=2):
+    if google_id:
+        # User is created via Google authentication
+        query = """
+        INSERT INTO Users (FirstName, LastName, Email, GoogleID, RoleID)
+        VALUES (%s, %s, %s, %s, %s)
+        """
+        data = (first_name, last_name, email, google_id, role_id)
+    else:
+        # User is created via regular registration
+        query = """
+        INSERT INTO Users (FirstName, LastName, Email, PasswordHash, RoleID)
+        VALUES (%s, %s, %s, %s, %s)
+        """
+        data = (first_name, last_name, email, password_hash, role_id)
+    return execute_query(query, data, is_insert=True)
 
 def deactivateUser(user_id):
     query = "UPDATE Users SET banned = '1' WHERE UserID = %s"
@@ -129,7 +132,6 @@ def update_user_profile(first_name, last_name, email, user_id):
     execute_query(query, (first_name, last_name, email, user_id))
 
 
-
 def hash_password(password):
     """Hash a password using bcrypt."""
     salt = bcrypt.gensalt()
@@ -144,7 +146,7 @@ def check_password(hashed_password, password):
 
 def authenticate_user(email, password):
     """Authenticate the user by checking the Users table."""
-    user = searchUser(email)  # Retrieve the user by email from the Users table
+    user = search_user(email)  # Retrieve the user by email from the Users table
     
     if user:
         print(f"Hashed password in DB: '{user['PasswordHash']}'")
@@ -165,33 +167,40 @@ def generate_random_password(length=12):
     password = ''.join(secrets.choice(characters) for i in range(length))
     return password
 
-def send_reset_email(email, token):
-    sender_email = "your_email@gmail.com"
-    receiver_email = email
-    password = os.getenv("EMAIL_PASSWORD")
+def send_reset_email(user_email, token):
+    msg = Message('Password Reset Request',
+                  recipients=[user_email])
+    msg.body = f'''To reset your password, visit the following link:                
+{url_for('reset_token', token=token, _external=True)}
 
-    # Create the email content
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "Password Reset Request"
-    message["From"] = sender_email
-    message["To"] = receiver_email
+If you did not make this request then simply ignore this email and no changes will be made.
+'''
+    Mail.send(msg)      
 
-    reset_url = f"http://localhost:5000/reset_password?token={token}"
 
-    text = f"""\
-    Hi,
-    To reset your password, please click the link below:
-    {reset_url}
-    If you did not request a password reset, please ignore this email.
-    """
-    part = MIMEText(text, "plain")
-    message.attach(part)
 
-    try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message.as_string())
-        print("Email sent successfully")
-    except Exception as e:
-        print(f"Failed to send email: {e}")
+
+def get_user_by_email(email):
+    query = "SELECT * FROM Users WHERE Email = %s"
+    return execute_query(query, (email,), fetchone=True)
+
+def update_user(user_id, first_name, last_name, email, google_id=None, password_hash=None):
+    if google_id:
+        # Update user with Google authentication
+        query = """
+        UPDATE Users
+        SET FirstName = %s, LastName = %s, Email = %s, GoogleID = %s
+        WHERE UserID = %s
+        """
+        data = (first_name, last_name, email, google_id, user_id)
+    else:
+        # Update user with regular registration
+        query = """
+        UPDATE Users
+        SET FirstName = %s, LastName = %s, Email = %s, PasswordHash = %s
+        WHERE UserID = %s
+        """
+        data = (first_name, last_name, email, password_hash, user_id)
+    
+    return execute_query(query, data)
+

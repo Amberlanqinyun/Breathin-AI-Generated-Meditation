@@ -6,6 +6,8 @@ from mod_db_account import searchUserById
 @app.route('/contact_us', methods=['GET', 'POST'])
 def contact_us():
     userDetails = None
+    first_name = ''
+    last_name = ''
     
     if request.method == 'POST':
         # Get the feedback info from the form
@@ -17,7 +19,7 @@ def contact_us():
         # Server-side validation (if required)
         if not first_name or not last_name or not email or not message:
             flash('All fields are required. Please fill out the form completely.', 'danger')
-            return render_template('contact_us.html', userDetails=userDetails)
+            return render_template('contact_us.html', userDetails=userDetails, first_name=first_name, last_name=last_name)
         
         # Insert the message into the feedback/queries table for admins to review
         addANewQueries(first_name, last_name, email, message)
@@ -30,6 +32,9 @@ def contact_us():
     if 'user_id' in session:
         user_id = session['user_id']
         userDetails = searchUserById(user_id)
+        if userDetails:
+            first_name = userDetails.get('FirstName', '')
+            last_name = userDetails.get('LastName', '')
 
     # Render the feedback page
-    return render_template('contact_us.html', userDetails=userDetails)
+    return render_template('contact_us.html', userDetails=userDetails, first_name=first_name, last_name=last_name)

@@ -1,7 +1,7 @@
 # Import various modules created for and used in this python script
 from mod_utilize import app, session, redirect, url_for, request, flash, render_template
 import hashlib
-from mod_db_account import searchUser, generate_reset_token
+from mod_db_account import search_user, generate_reset_token
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -12,7 +12,7 @@ from mod_db_account import send_reset_email, generate_random_password
 def forgot_password():
     if request.method == 'POST':
         email = request.form['email']
-        user = searchUser(email)
+        user = search_user(email)
         
         if user:
             token = generate_reset_token(user['UserID'])

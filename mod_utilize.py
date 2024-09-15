@@ -2,17 +2,32 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 from flask_bcrypt import Bcrypt
 from flask import Flask, session, redirect, url_for, request, render_template, flash, send_file
+from itsdangerous import URLSafeTimedSerializer
 import pymysql
 from db_credentials import *
 from db_baseOperation import execute_query
-
+import os
+from flask_mail import Mail, Message
 # Create a Flask application instance
 app = Flask(__name__)
 
 # Secret key to sign session cookies
 app.secret_key = 'our_secret_key'
-
+# Configure Flask-Mail with Google SMTP
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')  # Your Gmail address
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')  # Your Gmail password or App Password
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')  # Your Gmail address
+mail = Mail(app)
+s = URLSafeTimedSerializer(app.secret_key)
 ## CONTEXT PROCESSORS TO MAKE FUNCTIONS AND VARIABLES DIRECTLY AVAILABLE IN TEMPLATES ##
+# Additional session configuration if needed
+app.config['SESSION_TYPE'] = 'filesystem'  # Store session data on the filesystem
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_KEY_PREFIX'] = 'flask_session:'
 
 # Make the user details available on all templates after login so they don't need to be rendered.
 @app.context_processor

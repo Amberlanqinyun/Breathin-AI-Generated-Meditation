@@ -34,6 +34,7 @@ CREATE TABLE Users (
     LastName VARCHAR(50) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
+    GoogleID VARCHAR(255),  -- Add GoogleID column
     RoleID INT NOT NULL,
     banned TINYINT(1) DEFAULT 0,
     reset_token VARCHAR(255),
@@ -102,6 +103,7 @@ CREATE TABLE Notifications (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
+ALTER TABLE Users MODIFY COLUMN PasswordHash VARCHAR(255) NULL;
 -- Indexes
 CREATE INDEX idx_user_id_userfeedback ON UserFeedback(UserID);
 CREATE INDEX idx_user_id_achievements ON Achievements(UserID);

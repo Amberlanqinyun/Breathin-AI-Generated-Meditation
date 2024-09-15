@@ -18,8 +18,11 @@ from mod_change_password import change_password
 from app_error_handling import *
 from mod_admin import *
 import os
+import ssl
+import certifi
 
-
+ssl_context = ssl.create_default_context(cafile=certifi.where())
+print("SSL context created with certifi path:", certifi.where())
 # Initialize Google OAuth
 try:
     init_oauth(app)

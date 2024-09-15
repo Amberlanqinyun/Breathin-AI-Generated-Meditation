@@ -4,10 +4,10 @@ INSERT IGNORE INTO Roles (RoleName) VALUES
 ('User');
 
 -- Insert dummy data into Users
-INSERT IGNORE INTO Users (FirstName, LastName, Email, PasswordHash, RoleID) VALUES 
-('John', 'Doe', 'john@example.com', '$2b$12$JxP1gD/J5vZjDHCmTVTnZ.eF1TV0QTFM.yjG3fxtKlzjY8Ph7G2LC', 2),  -- User role; Password: userpassword
-('Jane', 'Smith', 'jane@example.com', '$2b$12$aP3sLDaV3i7AUpiMaU89J.0PGft/0FH2nOK9e0Zy3K3AfzLx/dCnq', 2),  -- User role; Password: userpassword
-('Admin', 'User', 'admin@example.com', '$2b$12$GzP5tL3yV7zD/Cy1mA9eB.PjZfF2F1bS0UvxDbjlF8uP1U8jzGkXm', 1);  -- Admin role; Password: adminpassword
+INSERT IGNORE INTO Users (FirstName, LastName, Email, PasswordHash, GoogleID, RoleID) VALUES 
+('John', 'Doe', 'john@example.com', '$2b$12$JxP1gD/J5vZjDHCmTVTnZ.eF1TV0QTFM.yjG3fxtKlzjY8Ph7G2LC', '1234567890', 2),  -- User role; Password: userpassword
+('Jane', 'Smith', 'jane@example.com', '$2b$12$aP3sLDaV3i7AUpiMaU89J.0PGft/0FH2nOK9e0Zy3K3AfzLx/dCnq', NULL, 2),  -- User role; Password: userpassword
+('Admin', 'User', 'admin@example.com', '$2b$12$GzP5tL3yV7zD/Cy1mA9eB.PjZfF2F1bS0UvxDbjlF8uP1U8jzGkXm', NULL, 1);  -- Admin role; Password: adminpassword
 
 -- Insert dummy data into Categories
 INSERT INTO Categories (Name, Description) VALUES 

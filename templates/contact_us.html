@@ -11,7 +11,7 @@
         <div class="form-group">
             <label for="first_name" class="form-label"><span class="text-danger">*</span>First Name</label>
             {% if userDetails %}
-            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ userDetails.Firstname }}" readonly>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ userDetails.FirstName }}" readonly>
             {% else %}
             <input type="text" class="form-control" id="first_name" name="first_name" maxlength="50" pattern="[A-Za-z-]+" required>
             <div class="invalid-feedback" id="first-name-invalid-feedback"></div>
@@ -21,7 +21,7 @@
         <div class="form-group">
             <label for="last_name" class="form-label"><span class="text-danger">*</span>Last Name</label>
             {% if userDetails %}
-            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ userDetails.Lastname }}" readonly>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ userDetails.LastName }}" readonly>
             {% else %}
             <input type="text" class="form-control" id="last_name" name="last_name" maxlength="50" pattern="[A-Za-z-]+" required>
             <div class="invalid-feedback" id="last-name-invalid-feedback"></div>
