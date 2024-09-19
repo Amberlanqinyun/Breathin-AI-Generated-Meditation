@@ -39,7 +39,7 @@
                         </div>
                         <!-- Play button links to details page instead of redundant play action -->
                         <a href="{{ url_for('meditation_details', meditation_id=result['MeditationID']) }}" class="details-link">
-                            <i class="fas fa-info-circle"></i> Details
+                            <span class="play-text">Play Now</span>
                         </a>
                     </li>
                 {% else %}

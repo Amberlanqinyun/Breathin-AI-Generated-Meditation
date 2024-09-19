@@ -262,3 +262,44 @@ input[type="submit"]:hover, .btn-submit:hover {
         gap: 15px;
     }
 }
+
+.search-container {
+    display: flex;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.search-container input[type="text"] {
+    width: 100%;
+    padding: 10px 40px 10px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    font-size: 16px;
+    color: var(--text-light);
+    background-color: var(--secondary);
+}
+
+.search-button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.search-button i {
+    color: var(--background);
+    font-size: 18px;
+}
+
+.search-button:hover {
+    background-color: var(--accent);
+}

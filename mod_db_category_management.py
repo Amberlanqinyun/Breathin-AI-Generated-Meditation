@@ -1,9 +1,18 @@
 from mod_utilize import execute_query
 
 # Get all categories
-def get_all_categories():
-    sql = "SELECT * FROM Categories"
-    return execute_query(sql)
+def get_all_categories(search_query=''):
+    if search_query:
+        sql = """
+        SELECT * FROM Categories 
+        WHERE Name LIKE %s 
+        OR Description LIKE %s
+        """
+        search_param = f"%{search_query}%"
+        return execute_query(sql, (search_param, search_param))
+    else:
+        sql = "SELECT * FROM Categories"
+        return execute_query(sql)
 
 # Insert a new category
 def insert_category(name, description):

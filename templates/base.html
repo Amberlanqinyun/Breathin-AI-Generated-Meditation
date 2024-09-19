@@ -35,12 +35,23 @@
     <nav id="menu-content" class="hidden">
         <ul>
             <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('login') }}">Login</a></li>
-            <li><a href="{{ url_for('select_category') }}">Meditation</a></li>
-            <li><a href="{{ url_for('breathing_exercise') }}">Breathing Exercise</a></li>
-            <li><a href="{{ url_for('dashboard') }}">My Dashboard</a></li>
-            <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
-            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% if 'user_id' in session %}
+                {% if session['role_id'] == 1 %}
+                    <li><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
+                    <li><a href="{{ url_for('admin_users') }}">User Management</a></li>
+                    <li><a href="{{ url_for('admin_meditations') }}">Meditation Management</a></li>
+                {% elif session['role_id'] == 2 %}
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('select_category') }}">Meditation</a></li>
+                    <li><a href="{{ url_for('breathing_exercise') }}">Breathing Exercise</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Sign Up</a></li>
+                <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+            {% endif %}
         </ul>
         
         <div class="close-menu" id="close-menu">✕</div>

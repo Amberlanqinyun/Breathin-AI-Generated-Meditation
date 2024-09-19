@@ -87,8 +87,10 @@ def create_google_routes(app):
                 user_id = create_user(first_name, last_name, email, None, google_id)
                 print("New user created with ID:", user_id)
 
+            # Set session variables
+            session['user_id'] = user['UserID'] if user else user_id
+            session['role_id'] = user['RoleID'] if user else 2  # Assuming default role is 2 for new users
             session['user'] = user_data
-            session['user_id'] = user['UserID'] if user else user_id  # Set user_id in session
             print("Session set for user:", session['user'])
             flash('You have successfully logged in!', 'success')
             return redirect(url_for('dashboard'))

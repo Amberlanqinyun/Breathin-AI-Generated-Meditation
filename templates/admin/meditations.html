@@ -3,6 +3,12 @@
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Manage Meditations</h2>
+    <form method="GET" action="{{ url_for('admin_meditations') }}" class="search-form">
+        <div class="search-container">
+            <input type="text" name="search" placeholder="Search meditations..." value="{{ search_query }}">
+            <button type="submit" class="search-button">Search</button>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>

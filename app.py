@@ -16,7 +16,7 @@ from mod_edit_profile import edit_profile
 from mod_register import register
 from mod_change_password import change_password
 from app_error_handling import *
-from mod_admin import *
+from mod_admin import admin_dashboard, admin_meditations, admin_delete_meditation, admin_categories, admin_edit_meditation
 import os
 import ssl
 import certifi

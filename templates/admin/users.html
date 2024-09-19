@@ -4,6 +4,13 @@
 <div class="container">
     <h2 class="dashboard-title">Manage Users</h2>
     
+    <form method="GET" action="{{ url_for('admin_users') }}" class="search-form">
+        <div class="search-container">
+            <input type="text" name="search" placeholder="Search users..." value="{{ search_query }}" id="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </div>
+    </form>
+    
     <!-- User Table -->
     <table class="table user-table">
         <thead>

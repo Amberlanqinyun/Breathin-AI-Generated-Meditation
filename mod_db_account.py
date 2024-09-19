@@ -11,6 +11,9 @@ import pymysql
 from db_credentials import *
 from flask import session, url_for
 from flask_mail import Mail, Message
+import base64
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 
 def get_user_session_info():
     """Retrieve UserID and RoleID from the session."""
@@ -154,11 +157,12 @@ def authenticate_user(email, password):
         print(f"Password length: {len(password)}")
         is_match = check_password(user['PasswordHash'], password.strip())
         print(f"Bcrypt match result: {is_match}")  # Log bcrypt comparison result
-    
+        print(f"User banned status: {user['banned']}")
     # Check if user exists and verify password using bcrypt
     if user and is_match and not user['banned']:
         return user  # Return the user if authentication is successful
-    
+    else:
+        print("Authentication failed")
     return None  # Return None if authentication fails
 
 def generate_random_password(length=12):
@@ -167,18 +171,38 @@ def generate_random_password(length=12):
     password = ''.join(secrets.choice(characters) for i in range(length))
     return password
 
-def send_reset_email(user_email, token):
-    msg = Message('Password Reset Request',
-                  recipients=[user_email])
-    msg.body = f'''To reset your password, visit the following link:                
-{url_for('reset_token', token=token, _external=True)}
+def send_reset_email(email, token):
+    try:
+        # Email content
+        subject = "Password Reset Request"
+        body = f"Please use the following link to reset your password: http://yourdomain.com/reset_password?token={token}"
+        
+        # Create the email
+        message = MIMEText(body)
+        message['to'] = email
+        message['from'] = os.getenv('EMAIL_USER')
+        message['subject'] = subject
+        raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
 
-If you did not make this request then simply ignore this email and no changes will be made.
-'''
-    Mail.send(msg)      
+        # Load credentials from environment variables
+        credentials = Credentials(
+            None,
+            refresh_token=os.getenv('GOOGLE_REFRESH_TOKEN'),
+            client_id=os.getenv('GOOGLE_CLIENT_ID'),
+            client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+            token_uri='https://oauth2.googleapis.com/token'
+        )
 
+        # Build the Gmail API service
+        service = build('gmail', 'v1', credentials=credentials)
 
-
+        # Send the email
+        message = service.users().messages().send(userId='me', body={'raw': raw_message}).execute()
+        
+        print(f"Reset email sent to: {email}")  # Debugging statement
+        print(f"Gmail API response: {message}")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
 
 def get_user_by_email(email):
     query = "SELECT * FROM Users WHERE Email = %s"

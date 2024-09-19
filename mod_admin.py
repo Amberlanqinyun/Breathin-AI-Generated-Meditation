@@ -3,7 +3,7 @@ from mod_utilize import app
 from mod_db_user_management import get_all_users, get_user_by_id, update_user_profile, toggle_user_ban
 from mod_db_meditation_management import get_all_meditations, get_meditation_by_id, insert_meditation, update_meditation, delete_meditation
 from mod_db_category_management import get_all_categories, insert_category, update_category, get_category_by_id
-
+from mod_custom_login import *
 # Admin Dashboard Home
 @app.route('/admin', methods=['GET'])
 def admin_dashboard():
@@ -15,8 +15,9 @@ def admin_dashboard():
 # User Management
 @app.route('/admin/users', methods=['GET'])
 def admin_users():
-    users = get_all_users()
-    return render_template('admin/users.html', users=users)
+    search_query = request.args.get('search', '')
+    users = get_all_users(search_query)
+    return render_template('admin/users.html', users=users, search_query=search_query)
 
 @app.route('/admin/user/<int:user_id>', methods=['GET', 'POST'])
 def admin_edit_user(user_id):
@@ -38,8 +39,9 @@ def admin_edit_user(user_id):
 # Meditation Management
 @app.route('/admin/meditations', methods=['GET', 'POST'])
 def admin_meditations():
-    meditations = get_all_meditations()  # Fetch all meditations
-    categories = get_all_categories()  # Fetch all categories
+    search_query = request.args.get('search', '')
+    meditations = get_all_meditations(search_query)
+    categories = get_all_categories()
 
     if request.method == 'POST':
         category_id = request.form.get('category_id')
@@ -50,7 +52,7 @@ def admin_meditations():
         flash('New meditation added successfully!', 'success')
         return redirect(url_for('admin_meditations'))
 
-    return render_template('admin/meditations.html', meditations=meditations, categories=categories)
+    return render_template('admin/meditations.html', meditations=meditations, categories=categories, search_query=search_query)
 
 
 import os
@@ -102,7 +104,8 @@ def admin_delete_meditation(meditation_id):
 # Category Management
 @app.route('/admin/categories', methods=['GET', 'POST'])
 def admin_categories():
-    categories = get_all_categories()
+    search_query = request.args.get('search', '')
+    categories = get_all_categories(search_query)
 
     if request.method == 'POST':
         name = request.form.get('name')
@@ -112,7 +115,7 @@ def admin_categories():
         flash('Category created successfully!', 'success')
         return redirect(url_for('admin_categories'))
 
-    return render_template('admin/categories.html', categories=categories)
+    return render_template('admin/categories.html', categories=categories, search_query=search_query)
 
 @app.route('/admin/category/<int:category_id>', methods=['GET', 'POST'])
 def admin_edit_category(category_id):

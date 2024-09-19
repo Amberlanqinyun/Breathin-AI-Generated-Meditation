@@ -1,5 +1,5 @@
 from mod_utilize import app, session, redirect, url_for, request, flash, render_template
-from mod_db_account import *
+from mod_db_account import authenticate_user
 from mod_db_notifications import *
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -9,6 +9,7 @@ def login():
     
     if request.method == 'POST':
         email = request.form['email']
+        
         if email:
             session['email'] = email
             return redirect(url_for('enter_password'))
@@ -29,18 +30,23 @@ def enter_password():
     if request.method == 'POST':
         password = request.form['password']
         user = authenticate_user(email, password)  # Correctly handle the user authentication
-        
+        print(f'Authenticated user: {user}')
         if user:
             # Authentication successful
-            notification_count = getUnreadNotificationCount(user['UserID'])  # User-specific notifications
-            count = notification_count['count'] if notification_count and notification_count['count'] else 0
-            
             session['user_id'] = user['UserID']
             session['role_id'] = user['RoleID']
-            session['notification_number'] = count
+            flash('Login successful!', 'success')
             
-            # Redirect user to dashboard
-            return redirect(url_for('dashboard'))
+            # Debugging: Print session variables
+            print(f"User ID: {session['user_id']}, Role ID: {session['role_id']}")
+            
+            # Redirect based on role
+            if session['role_id'] == 1:
+                print("Redirecting to admin dashboard")
+                return redirect(url_for('admin_dashboard'))
+            else:
+                print("Redirecting to user dashboard")
+                return redirect(url_for('dashboard'))
         
         # Authentication failed
         flash('Invalid email or password. Please try again.', 'danger')

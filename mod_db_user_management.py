@@ -1,9 +1,19 @@
 from mod_utilize import execute_query
 
 # Fetch all users
-def get_all_users():
-    sql = "SELECT * FROM Users"
-    return execute_query(sql)
+def get_all_users(search_query=''):
+    if search_query:
+        sql = """
+        SELECT * FROM Users 
+        WHERE FirstName LIKE %s 
+        OR LastName LIKE %s 
+        OR Email LIKE %s
+        """
+        search_param = f"%{search_query}%"
+        return execute_query(sql, (search_param, search_param, search_param))
+    else:
+        sql = "SELECT * FROM Users"
+        return execute_query(sql)
 
 # Get user by ID
 def get_user_by_id(user_id):

@@ -3,6 +3,12 @@
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Manage Categories</h2>
+    <form method="GET" action="{{ url_for('admin_categories') }}" class="search-form">
+        <div class="search-container">
+            <input type="text" name="search" placeholder="Search categories..." value="{{ search_query }}">
+            <button type="submit" class="search-button">Search</button>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -37,7 +43,7 @@
             <label for="description">Description</label>
             <textarea id="description" name="description" class="form-control" required></textarea>
         </div>
-        <button type="submit" class="btn-submit">Add Category</button>
+        <button type="submit" class="btn">Add Category</button>
     </form>
 </div>
 {% endblock %}

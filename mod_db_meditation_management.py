@@ -1,13 +1,24 @@
 from mod_utilize import execute_query
 
 # Fetch all meditations
-def get_all_meditations():
-    sql = """
-    SELECT Meditations.MeditationID, Meditations.TextContent, Meditations.AudioFilePath, Meditations.CreatedAt, Categories.Name AS Category
-    FROM Meditations
-    LEFT JOIN Categories ON Meditations.CategoryID = Categories.CategoryID
-    """
-    return execute_query(sql)
+def get_all_meditations(search_query=''):
+    if search_query:
+        sql = """
+        SELECT m.*, c.Name AS CategoryName 
+        FROM Meditations m
+        JOIN Categories c ON m.CategoryID = c.CategoryID
+        WHERE m.TextContent LIKE %s 
+        OR c.Name LIKE %s
+        """
+        search_param = f"%{search_query}%"
+        return execute_query(sql, (search_param, search_param))
+    else:
+        sql = """
+        SELECT m.*, c.Name AS CategoryName 
+        FROM Meditations m
+        JOIN Categories c ON m.CategoryID = c.CategoryID
+        """
+        return execute_query(sql)
 
 # Get meditation by ID
 def get_meditation_by_id(meditation_id):
@@ -35,3 +46,8 @@ def update_meditation(meditation_id, text_content, audio_file_path):
 def delete_meditation(meditation_id):
     sql = "DELETE FROM Meditations WHERE MeditationID = %s"
     execute_query(sql, (meditation_id,))
+
+
+
+
+
