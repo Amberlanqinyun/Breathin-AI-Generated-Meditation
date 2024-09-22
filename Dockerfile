@@ -10,7 +10,7 @@
    # Install system dependencies
    RUN apt-get update && apt-get install -y \
     pkg-config \
-    libmysqlclient-dev
+    libmariadb-dev-compat
 
    # Install any needed packages specified in requirements.txt
    RUN pip install --no-cache-dir -r requirements.txt
