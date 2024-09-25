@@ -799,11 +799,6 @@ body, p, .form-control, .btn {
   margin-bottom: 20px;
 }
 
-.separator-heading {
-  text-align: center;
-  margin: 20px 0;
-}
-
 .separator-heading h2 {
   display: inline-block;
   background: #1C1D25; /* Match the background color */
@@ -1175,4 +1170,636 @@ body, p, .form-control, .btn {
 
 .play-text {
     margin-left: 5px;
+}
+
+/* Chat Bubble Styles */
+.chat-bubble {
+  position: fixed;
+  bottom: 20px;
+  right: 20px; /* Change to right for better visibility */
+  width: 60px;
+  height: 60px;
+  background-color: var(--header);
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.chat-bubble:hover {
+  transform: scale(1.1);
+}
+
+.chat-icon {
+  width: 30px;
+  height: 30px;
+  fill: var(--background);
+}
+
+.chat-content {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 350px; /* Increased width for better readability */
+  height: 600px; /* Increased height */
+  resize: both; /* Allow resizing */
+  overflow: auto;
+  background-color: var(--element-background);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.chat-header {
+  background-color: var(--header);
+  color: var(--element-main);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move; /* Indicate draggable */
+}
+
+.close-chat {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-chat:hover {
+  color: #333;
+}
+
+.chat-messages {
+  height: calc(100% - 160px); /* Adjust for header and input area */
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.chat-input-container {
+  padding: 15px;
+  border-top: 1px solid var(--element-placeholder);
+  background-color: var(--background);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.chat-input {
+  width: calc(100% - 40px); /* Adjust width to accommodate the submit button */
+  padding: 10px;
+  border: 1px solid var(--element-placeholder);
+  border-radius: 20px;
+  font-family: var(--font-primary);
+  background-color: white;
+  color: #333;
+}
+
+.chat-submit {
+  position: absolute;
+  right: 25px;
+  bottom: 23px;
+  background: none;
+  border: none;
+  color: var(--header);
+  cursor: pointer;
+}
+
+.user-message, .bot-message {
+  max-width: 80%;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border-radius: 18px;
+  line-height: 1.4;
+  color: #333; /* Darker text color for better visibility */
+}
+
+.user-message {
+  background-color: #e1f5fe;
+  align-self: flex-end;
+  margin-left: auto; /* Align user messages to the right */
+}
+
+.bot-message {
+  background-color: #f0f0f0; /* Slightly darker background for bot messages */
+  align-self: flex-start;
+  margin-right: auto; /* Align bot messages to the left */
+}
+
+.predefined-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.option-button {
+  background-color: var(--element-background);
+  color: var(--main);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.option-button:hover {
+  background-color: var(--header);
+  color: var(--background);
+}
+
+.google-logo {
+  margin-right: 10px;
+  width: 20px; /* Set to a comfortable viewing size */
+  height: 20px; /* Keep it proportional */
+}
+
+/* Improve visibility of links */
+.edit-email, .forgot-password {
+  color: var(--header);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.edit-email:hover, .forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Align edit link with email */
+.form-group .edit-email {
+  font-size: 0.9rem;
+  margin-left: 10px; /* Spacing to keep distance from the email */
+}
+
+.form-group .forgot-password {
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 5px; /* More space below the password field */
+  text-align: right;
+}
+
+.alert {
+  max-width: 400px; /* Set a maximum width for the alert box */
+  margin: 20px auto; /* Center horizontally and add some margin for spacing */
+  padding: 15px; /* Add some padding for better readability */
+  border-radius: 8px; /* Add rounded corners */
+  text-align: center; /* Center the text inside the alert */
+  font-size: 1rem; /* Adjust font size */
+}
+
+.alert-danger {
+  color: var(--main-color) ; /* Ensure text is readable against the background */
+ 
+}
+
+/* Separator Line */
+.separator-line {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 0.9rem; /* Slightly smaller font size for the text */
+  color: var(--element-placeholder); /* Matches the placeholder color */
+}
+
+.separator-line::before,
+.separator-line::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background: var(--element-placeholder); /* Matches the placeholder color */
+  margin: 0 10px; /* Spacing on either side of the text */
+}
+
+.separator-line a {
+  color: var(--header); /* Matches the header color for the link */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.separator-line a:hover {
+  text-decoration: underline;
+}
+
+.instructions {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+
+
+/* Dashboard Page Specific Styles */
+.page-container {
+  background-color: var(--element-background);
+  border-radius: 12px;
+  padding: 25px;
+  color: var(--main);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Added shadow for depth */
+  margin-bottom: 30px;
+}
+
+.page-heading {
+  font-size: 2rem;
+  font-family: var(--font-primary);
+  color: var(--main);
+  text-align: center;
+  margin-bottom: 20px; /* Add some space below the heading */
+}
+
+.card {
+  margin-bottom: 30px; /* Increased space between cards */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: var(--header);
+  color: var(--background);
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.achievement-item {
+  margin-bottom: 15px; /* Increased space between achievements */
+}
+
+.text-center {
+  text-align: center;
+  margin-top: 30px; /* Space above the button */
+}
+
+.container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;  /* Ensures the container takes up the full height of the viewport */
+}
+
+.meditation-animation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.meditation-animation-container img {
+  width: 250px;  /* Set to a comfortable viewing size */
+  height: 250px; /* Keep it proportional */
+  cursor: pointer;
+  border-radius: 50%;  /* Keeps the circular appearance */
+  transition: transform 0.3s ease;
+}
+
+.meditation-animation-container img.paused {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+/* General Container */
+.container-fluid {
+  background-color: #1C1D25; /* Consistent dark background */
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Search Bar Styles */
+.search-form {
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.search-container {
+  display: flex;
+  position: relative;
+}
+
+.search-container input[type="text"] {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 24px;
+  font-size: 16px;
+  color: var(--text-light);
+  background-color: var(--secondary);
+  transition: all 0.3s ease;
+}
+
+.search-container input[type="text"]:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.3);
+}
+
+.search-button {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--primary);
+  color: var(--background);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: var(--accent);
+}
+
+.search-container input[type="text"]:not(:placeholder-shown) + .search-button {
+  background-color: var(--accent);
+  transform: translateY(-50%) scale(1.05);
+}
+
+
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the modal */
+  width: 80%; /* Responsive width */
+  max-width: 400px; /* Maximum width for desktop */
+  background-color: rgba(0, 0, 0, 0.7); /* Darker background for overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  border-radius: 15px; /* Rounded corners for a smoother look */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Deep shadow for floating effect */
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: linear-gradient(145deg, #2A2B37, #1A1B25); /* Gradient background matching category cards */
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Shadow consistent with cards */
+}
+
+.modal-content h2 {
+  color:primary; /* Light text color for contrast */
+  font-family: 'Comfortaa';
+  font-size: 1.5rem; /* Slightly larger title for emphasis */
+  margin-bottom: 15px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle text shadow for depth */
+}
+
+.modal-confirm-button,
+.modal-cancel-button,
+.modal-submit-button,
+.modal-close-button {
+  padding: 12px 20px;
+  font-size: 1.1rem; /* Consistent font size */
+  border-radius: 8px;
+  margin: 10px;
+  cursor: pointer;
+  background-color: #D38638; /* Button color consistent with category card focus state */
+  color: #F3EED9; /* Light text color for contrast */
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.modal-confirm-button:hover,
+.modal-cancel-button:hover,
+.modal-submit-button:hover,
+.modal-close-button:hover {
+  background-color: #B96E29; /* Slightly darker hover color */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.modal input,
+.modal select,
+.modal textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #D38638; /* Matching border color */
+  background-color: #1E1F29; /* Consistent dark background */
+  color: #F3EED9; /* Light text color for readability */
+  font-family: 'Comfortaa';
+  font-size: 1rem;
+}
+
+.modal input:focus,
+.modal select:focus,
+.modal textarea:focus {
+  border-color: #D38638; /* Highlighted border on focus */
+  outline: none;
+}
+
+
+
+
+/* Ensure modal fits within the container and remains responsive */
+@media (max-width: 768px) {
+  .modal {
+    width: 90%; /* More responsive width for smaller screens */
+  }
+
+  .modal-content {
+    padding: 20px; /* Adjusted padding for smaller screens */
+  }
+
+  .modal-confirm-button,
+  .modal-cancel-button,
+  .modal-submit-button,
+  .modal-close-button {
+    font-size: 1rem; /* Slightly smaller font size for mobile */
+  }
+
+  .modal-content h2 {
+    font-size: 1.4rem; /* Adjusted title size for mobile */
+  }
+}
+
+.achievement-item {
+  margin-bottom: 20px;
+}
+
+#heatmap {
+  margin-top: 20px;
+}
+
+.play-text {
+    margin-left: 5px;
+}
+
+/* Chat Bubble Styles */
+.chat-bubble {
+  position: fixed;
+  bottom: 20px;
+  right: 20px; /* Change to right for better visibility */
+  width: 60px;
+  height: 60px;
+  background-color: var(--header);
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.chat-bubble:hover {
+  transform: scale(1.1);
+}
+
+.chat-icon {
+  width: 30px;
+  height: 30px;
+  fill: var(--background);
+}
+
+.chat-content {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 350px; /* Increased width for better readability */
+  height: 600px; /* Increased height */
+  resize: both; /* Allow resizing */
+  overflow: auto;
+  background-color: var(--element-background);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.chat-header {
+  background-color: var(--header);
+  color: var(--element-main);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move; /* Indicate draggable */
+}
+
+.close-chat {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-chat:hover {
+  color: #333;
+}
+
+.chat-messages {
+  height: calc(100% - 120px); /* Adjust for header and input area */
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.user-message, .bot-message {
+  max-width: 80%;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border-radius: 18px;
+  line-height: 1.4;
+  color: #333; /* Darker text color for better visibility */
+}
+
+.user-message {
+  background-color: #e1f5fe;
+  align-self: flex-end;
+  margin-left: auto; /* Align user messages to the right */
+}
+
+.bot-message {
+  background-color: #f0f0f0; /* Slightly darker background for bot messages */
+  align-self: flex-start;
+  margin-right: auto; /* Align bot messages to the left */
+}
+
+.chat-input-container {
+  padding: 15px;
+  border-top: 1px solid var(--element-placeholder);
+  background-color: var(--background);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.chat-input {
+  width: calc(100% - 40px); /* Adjust width to accommodate the submit button */
+  padding: 10px;
+  border: 1px solid var(--element-placeholder);
+  border-radius: 20px;
+  font-family: var(--font-primary);
+  background-color: white;
+  color: #333;
+}
+
+.chat-submit {
+  position: absolute;
+  right: 25px;
+  bottom: 23px;
+  background: none;
+  border: none;
+  color: var(--header);
+  cursor: pointer;
+}
+
+.predefined-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.option-button {
+  background-color: var(--element-background);
+  color: var(--main);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.option-button:hover {
+  background-color: var(--header);
+  color: var(--background);
 }

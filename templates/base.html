@@ -34,24 +34,27 @@
     </div>
     <!-- Chat Bubble -->
     <div id="chat-bubble" class="chat-bubble">
-        <img src="{{ url_for('static', filename='images/chat_icon.png') }}" alt="Chat with us!" class="chat-icon">
-        <div id="chat-content" class="chat-content">
-            <div class="chat-header">
-                <span>How can I help you today?</span>
-                <button class="close-chat" onclick="document.getElementById('chat-content').style.display='none'; document.getElementById('chat-bubble').style.pointerEvents='auto';">X</button>
-            </div>
-            <div id="predefined-options" class="predefined-options">
-                <button class="option-button" data-message="I'm feeling stressed">I'm feeling stressed</button>
-                <button class="option-button" data-message="I need help finding a therapist">I need help finding a therapist</button>
-                <button class="option-button" data-message="How to feel better">How to feel better</button>
-                <button class="option-button" data-message="I need to call someone">I need to call someone</button>
-            </div>
-            <div id="chat-messages" class="chat-messages"></div>
-            <form id="chat-form" class="chat-form">
-                <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
-                <button type="submit" class="chat-submit"><i class="fas fa-paper-plane"></i></button>
-            </form>
+        <svg class="chat-icon" viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+    </div>
+    <div id="chat-content" class="chat-content">
+        <div id="chat-header" class="chat-header">
+            <span>How can I help you today?</span>
+            <button class="close-chat">&times;</button>
         </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div id="predefined-options" class="predefined-options"></div>
+        <form id="chat-form" class="chat-form">
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+                <button type="submit" class="chat-submit">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </form>
     </div>
     <!-- Hidden Menu Content -->
     <nav id="menu-content" class="hidden">
@@ -99,4 +102,3 @@
     <script src="{{ url_for('static', filename='js/donation.js') }}"></script>
 </body>
 </html>
-
