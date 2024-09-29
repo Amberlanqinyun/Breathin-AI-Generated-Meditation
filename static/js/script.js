@@ -17,6 +17,120 @@ window.addEventListener('load', function() {
     const chatInput = document.getElementById('chat-input');
     const chatMessages = document.getElementById('chat-messages');
     const predefinedOptions = document.getElementById('predefined-options');
+    const homepageUrl = "/";
+    const meditationID = 7;
+    const meditationPage = document.getElementById('meditation-page');
+    const meditationAudio = document.getElementById(`meditation-audio-${meditationID}`);
+    const skipFeedbackModal = document.getElementById('skipFeedbackModal');
+    const feedbackFormModal = document.getElementById('feedbackFormModal');
+    const thankYouModal = document.getElementById('thankYouModal');
+    const yesButton = document.getElementById('yes-button');
+    const noButton = document.getElementById('no-button');
+    const closeFeedbackButton = document.getElementById('close-feedback');
+    const closeThankYouButton = document.getElementById('close-thank-you');
+    const feedbackForm = document.getElementById('feedback-form');
+    const stars = document.querySelectorAll('.star');
+    const ratingValue = document.getElementById('rating-value');
+    const loginNote = document.getElementById('login-note');
+
+    let isAudioPausedByUser = false;
+
+    console.log('Meditation page:', meditationPage);
+    console.log('Skip feedback modal:', skipFeedbackModal);
+
+    function showModal(modal) {
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('show');
+        } else {
+            console.warn('Modal element not found to show:', modal);
+        }
+    }
+
+    function hideModal(modal) {
+        if (modal) {
+            modal.classList.remove('show');
+            modal.classList.add('hidden');
+        } else {
+            console.warn('Modal element not found to hide:', modal);
+        }
+    }
+
+    // Attach event listener to the whole page to trigger the modal
+    if (meditationPage) {
+        meditationPage.addEventListener('click', function(event) {
+            console.log('Meditation page clicked');
+            if (meditationAudio && !meditationAudio.paused) {
+                meditationAudio.pause();
+                isAudioPausedByUser = true;
+                console.log('Audio paused');
+            }
+            if (skipFeedbackModal) {
+                showModal(skipFeedbackModal);
+            } else {
+                console.warn('Skip feedback modal not found');
+            }
+        });
+    }
+
+    if (yesButton) {
+        yesButton.addEventListener('click', function() {
+            console.log('Yes button clicked');
+            hideModal(skipFeedbackModal);
+            showModal(feedbackFormModal);
+        });
+    }
+
+    if (noButton) {
+        noButton.addEventListener('click', function() {
+            console.log('No button clicked');
+            hideModal(skipFeedbackModal);
+            // Refresh the page to restart audio
+            location.reload();
+        });
+    }
+
+    if (closeFeedbackButton) {
+        closeFeedbackButton.addEventListener('click', function() {
+            console.log('Close feedback button clicked');
+            hideModal(feedbackFormModal);
+            window.location.href = homepageUrl; // Redirect to homepage on close
+        });
+    }
+
+    if (closeThankYouButton) {
+        closeThankYouButton.addEventListener('click', function() {
+            console.log('Close thank you button clicked');
+            hideModal(thankYouModal);
+            window.location.href = homepageUrl;
+        });
+    }
+
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            console.log("Feedback submitted:", {
+                rating: feedbackForm.rating.value,
+                comments: feedbackForm.comments.value
+            });
+
+            fetch("/submit_feedback", {
+                method: 'POST',
+                body: new FormData(feedbackForm)
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.message) {
+                      console.log('Feedback successfully submitted:', data);
+                      hideModal(feedbackFormModal);
+                      showModal(thankYouModal);
+                  } else if (data.error) {
+                      console.error('Error submitting feedback:', data.error);
+                      alert(data.error);
+                  }
+              })
+              .catch(error => console.error('Error submitting feedback:', error));
+        });
+    }
 
     // Toggle chat bubble expansion
     if (chatBubble && chatContent) {
@@ -86,8 +200,20 @@ window.addEventListener('load', function() {
 
     // Handle menu interactions
     if (menuIcon && menuContent && closeMenu) {
-        menuIcon.addEventListener('click', () => menuContent.classList.add('show'));
-        closeMenu.addEventListener('click', () => menuContent.classList.remove('show'));
+        menuIcon.addEventListener('click', function() {
+            menuContent.classList.toggle('show');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            menuContent.classList.remove('show');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!menuIcon.contains(event.target) && !menuContent.contains(event.target)) {
+                menuContent.classList.remove('show');
+            }
+        });
     }
 
     // Handle user input validation and modal display
@@ -209,13 +335,7 @@ window.addEventListener('load', function() {
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const chatBubble = document.getElementById('chat-bubble');
         const chatHeader = document.getElementById('chat-header');
-        const chatContent = document.getElementById('chat-content');
-        const chatForm = document.getElementById('chat-form');
-        const chatInput = document.getElementById('chat-input');
-        const chatMessages = document.getElementById('chat-messages');
-        const predefinedOptions = document.getElementById('predefined-options');
 
         chatBubble.addEventListener('click', toggleChat);
         chatHeader.querySelector('.close-chat').addEventListener('click', toggleChat);

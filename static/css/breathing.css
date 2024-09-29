@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap');
+
 /* Define colors and fonts */
 :root {
     --background: #21232F;
@@ -6,7 +7,7 @@
     --header: #d38638;
     --element-background: #2d3143;
     --element-placeholder: #5D605E;
-    --element-main: white;
+    --element-main: #F0F4F8;
 
     /* Font families */
     --font-primary: 'Comfortaa', sans-serif;
@@ -64,123 +65,130 @@ main {
 }
 
 #sidebar {
-    position: absolute;
-    background-color: var(--element-background);
+    position: fixed;
+    top: 0;
     right: -15em;
-    color: var(--element-main);
-    height: 100%;
     width: 15em;
-    z-index: -1;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    height: 100%;
+    background-color: var(--element-background);
+    color: var(--element-main);
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow-y: auto;
 }
 
-#sidebar div {
-    position: fixed;
-    width: 100%;
-    height: 3em;
-    background-color: var(--header);
+#sidebar.open {
+    right: 0;
+}
+
+.sidebar-content {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
 
 #sidebar ul {
     list-style: none;
-    text-align: right;
-    height: 100%;
     padding: 0;
     margin: 0;
     font-family: var(--font-primary);
 }
 
-#sidebar li {
-    padding: 1em 1em 0 0;
+#sidebar ul li {
+    margin-bottom: 1em;
 }
 
-#sidebar li:first-child {
-    padding-top: 5em;
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
 
-#sidebar li:last-child {
-    padding-bottom: 3em;
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 0;
+    transition: background-color 0.3s ease;
 }
 
-#sidebar li a {
-    text-decoration: none;
+.setting-item:hover {
+    background-color: var(--element-placeholder);
+}
+
+.setting-item label {
+    flex: 1;
+    text-align: left;
+    margin-right: 0.5em;
+    font-size: 0.9em;
+}
+
+.setting-item input[type="text"],
+.setting-item input[type="number"] {
+    flex: 2;
+    padding: 0.5em;
+    border: 1px solid var(--element-placeholder);
+    border-radius: 0.5em; /* Rounded corners */
+    background-color: var(--element-main);
+    color: var(--element-background);
+    font-size: 0.9em;
+}
+
+.setting-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5em;
+}
+
+.setting-actions button {
+    flex: 1;
+    padding: 0.5em;
+    border: none;
+    border-radius: 0.5em; /* Rounded corners */
+    background-color: var(--header);
     color: var(--element-main);
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em;
 }
 
-#sidebar .checked:before {
-    content: '';
-    display: inline-block;
-    width: 0.3em;
-    height: 0.6em;
-    border: solid var(--element-placeholder);
-    border-width: 0 3px 3px 0;
-    transform: rotate(45deg);
-    margin: 0 0.7em 0.1em;
+.setting-actions button:hover {
+    background-color: var(--main);
 }
 
-/* Customize Sidebar Toggle */
 #sidebar-toggle {
-    color: var(--element-main);
     position: fixed;
-    bottom: 20px; /* Position at the bottom */
-    right: 20px; /* Offset from the right */
-    padding: 10px 20px; /* Add padding for better click area */
-    background-color: var(--element-background);
-    border: 1px solid var(--header);
-    border-radius: 8px;
-    opacity: 0.7;
-    transition: opacity 0.5s, transform 0.3s ease;
-    z-index: 1;
-    font-family: var(--font-primary);
-    font-size: 1rem;
-}
-
-#sidebar-toggle:hover,
-#sidebar-toggle:focus-within,
-#sidebar-toggle.open {
-    opacity: 1;
-    transform: scale(1.05);
+    top: 1em;
+    left: 1em;
+    background-color: var(--header);
+    color: var(--element-main);
+    padding: 0.5em;
+    border-radius: 0.25em;
+    cursor: pointer;
+    z-index: 1001;
 }
 
 #sidebar-toggle span {
     display: block;
-    width: 1em;
-    height: 3px;
+    width: 1.5em;
+    height: 0.2em;
     background-color: var(--element-main);
-    margin: 1em 0.5em;
+    margin: 0.3em 0;
+    transition: all 0.3s ease;
 }
 
-#sidebar-toggle span::before,
-#sidebar-toggle span::after {
-    content: '';
-    display: block;
-    position: absolute;
-    background-color: var(--element-main);
-    width: 1em;
-    height: 3px;
-    transition: all 0.3s;
+#sidebar-toggle.open span:nth-child(1) {
+    transform: rotate(45deg) translate(0.3em, 0.3em);
 }
 
-#sidebar-toggle span::before {
-    transform: translateY(-0.33em);
+#sidebar-toggle.open span:nth-child(2) {
+    opacity: 0;
 }
 
-#sidebar-toggle span::after {
-    transform: translateY(0.33em);
-}
-
-#sidebar-toggle.open span {
-    background-color: transparent;
-}
-
-#sidebar-toggle.open span::before {
-    transform: rotate(45deg);
-}
-
-#sidebar-toggle.open span::after {
-    transform: rotate(-45deg);
+#sidebar-toggle.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(0.3em, -0.3em);
 }
 
 #sidebar table {
@@ -243,7 +251,32 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
+.btn {
+    display: inline-block;
+    padding: 0.75em 1.5em; /* Increased padding for better spacing */
+    border: none;
+    border-radius: 0.75em; /* More rounded corners */
+    background-color: var(--background); /* Changed background color for better contrast */
+    color: var(--element-main);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Added transition for transform and box-shadow */
+    font-size: 1em; /* Increased font size for better readability */
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added subtle shadow for depth */
+}
 
+.btn:hover {
+    background-color: var(--main); /* Changed hover background color for better effect */
+    color: var(--background); /* Changed text color on hover */
+    transform: translateY(-3px); /* Slight lift on hover */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.btn:active {
+    transform: translateY(1px); /* Slight press effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Reduced shadow on press */
+}
 
 @media screen and (max-width: 600px) {
     #circle {

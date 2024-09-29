@@ -4,52 +4,106 @@
 
 {% block content %}
   {% if audio_file %}
-    <div id="meditation-page" class="content-center" style="position: relative;">
-      <img src="{{ url_for('static', filename='images/logo.gif') }}" alt="Logo" class="logo-img">
-      <audio id="meditation-audio" autoplay>
+    <div id="meditation-page" class="container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100" style="position: relative;">
+      <!-- Meditation Animation -->
+      <div class="meditation-animation-container text-center mt-5">
+        <img src="{{ url_for('static', filename='images/meditation.gif') }}" alt="Logo" class="logo-img">
+      </div>
+
+      <!-- Audio Player (auto-play and loop) -->
+      <audio id="meditation-audio" autoplay loop>
         <source src="{{ url_for('static', filename=audio_file) }}" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
+
+      <!-- Play/Pause Indicator -->
       <div id="play-pause-indicator" class="play-pause play-indicator"></div>
+
+      <!-- Feedback Button or Other UI Elements -->
+      <!-- Additional buttons or features can be added here -->
+    </div>
+
+    <!-- Skip & Feedback Modal -->
+    <div id="skipFeedbackModal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Skip & Feedback?</h2>
+        <p>Would you like to provide feedback on this session?</p>
+        <button id="yes-button" class="modal-confirm-button">Yes</button>
+        <button id="no-button" class="modal-cancel-button">No</button>
+      </div>
+    </div>
+
+    <!-- Feedback Form Modal -->
+    <div id="feedbackFormModal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Feedback</h2>
+        <form id="feedback-form">
+          <div class="rating">
+            <span class="star" data-rating="1">&#9733;</span>
+            <span class="star" data-rating="2">&#9733;</span>
+            <span class="star" data-rating="3">&#9733;</span>
+            <span class="star" data-rating="4">&#9733;</span>
+            <span class="star" data-rating="5">&#9733;</span>
+          </div>
+          <input type="hidden" name="rating" id="rating-value">
+          <textarea name="comments" placeholder="Your comments..." style="width: 100%; height: 100px; font-size: 1rem; padding: 10px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+          <button type="submit" class="modal-submit-button">Submit Feedback</button>
+          <button type="button" id="close-feedback" class="modal-close-button">Close</button>
+        </form>
+        <p id="login-note" class="hidden" style="color: red; margin-top: 10px;">Please log in or register to submit feedback.</p>
+      </div>
+    </div>
+
+    <!-- Thank You Modal -->
+    <div id="thankYouModal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Thank You!</h2>
+        <p>Your feedback has been submitted successfully.</p>
+        <button type="button" id="close-thank-you" class="modal-close-button">Close</button>
+      </div>
     </div>
   {% endif %}
-
-  <div class="feedback-container">
-    <h2>How was your session?</h2>
-    <div class="rating-stars">
-      <span class="star" data-rating="1">&#9733;</span>
-      <span class="star" data-rating="2">&#9733;</span>
-      <span class="star" data-rating="3">&#9733;</span>
-      <span class="star" data-rating="4">&#9733;</span>
-      <span class="star" data-rating="5">&#9733;</span>
-    </div>
-
-    <h3>What went wrong?</h3>
-    <div class="feedback-options">
-      <button class="feedback-option">Poor audio</button>
-      <button class="feedback-option">Not relaxing</button>
-      <button class="feedback-option">Too repetitive</button>
-      <button class="feedback-option">Distracting background</button>
-      <button class="feedback-option">Other</button>
-    </div>
-
-    <button class="submit-button">Submit</button>
-  </div>
 {% endblock %}
 
-{% block scripts %}
+{% block script %}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const audio = document.getElementById('meditation-audio');
-
-    audio.addEventListener('ended', function() {
-      window.location.href = "{{ url_for('meditation_end') }}";
-    });
-
     const playPauseIndicator = document.getElementById('play-pause-indicator');
     const meditationPage = document.getElementById('meditation-page');
+    const skipFeedbackModal = document.getElementById('skipFeedbackModal');
+    const feedbackFormModal = document.getElementById('feedbackFormModal');
+    const thankYouModal = document.getElementById('thankYouModal');
+    const yesButton = document.getElementById('yes-button');
+    const noButton = document.getElementById('no-button');
+    const closeFeedbackButton = document.getElementById('close-feedback');
+    const closeThankYouButton = document.getElementById('close-thank-you');
+    const feedbackForm = document.getElementById('feedback-form');
+    const stars = document.querySelectorAll('.star');
+    const ratingValue = document.getElementById('rating-value');
+    const loginNote = document.getElementById('login-note');
 
-    meditationPage.addEventListener('click', function() {
+    let isAudioPausedByUser = false;
+
+    function showModal(modal) {
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('show');
+      } else {
+        console.warn('Modal element not found to show:', modal);
+      }
+    }
+
+    function hideModal(modal) {
+      if (modal) {
+        modal.classList.remove('show');
+        modal.classList.add('hidden');
+      } else {
+        console.warn('Modal element not found to hide:', modal);
+      }
+    }
+
+    meditationPage.addEventListener('click', function(event) {
       if (audio.paused) {
         audio.play();
         playPauseIndicator.classList.remove('pause-indicator');
@@ -58,18 +112,72 @@
         audio.pause();
         playPauseIndicator.classList.remove('play-indicator');
         playPauseIndicator.classList.add('pause-indicator');
+        isAudioPausedByUser = true;
+        showModal(skipFeedbackModal);
       }
     });
 
-    const stars = document.querySelectorAll('.star');
+    yesButton.addEventListener('click', function() {
+      hideModal(skipFeedbackModal);
+      showModal(feedbackFormModal);
+    });
+
+    noButton.addEventListener('click', function() {
+      hideModal(skipFeedbackModal);
+      audio.play();
+      isAudioPausedByUser = false;
+      playPauseIndicator.classList.remove('pause-indicator');
+      playPauseIndicator.classList.add('play-indicator');
+    });
+
+    closeFeedbackButton.addEventListener('click', function() {
+      hideModal(feedbackFormModal);
+      window.location.href = "{{ url_for('index') }}";
+    });
+
+    closeThankYouButton.addEventListener('click', function() {
+      hideModal(thankYouModal);
+      window.location.href = "{{ url_for('index') }}";
+    });
+
+    // Star rating functionality
     stars.forEach(star => {
       star.addEventListener('click', function() {
-        let rating = this.getAttribute('data-rating');
-        stars.forEach(s => s.classList.remove('selected'));
-        for (let i = 0; i < rating; i++) {
-          stars[i].classList.add('selected');
-        }
+        const rating = this.getAttribute('data-rating');
+        ratingValue.value = rating;
+        stars.forEach((s, index) => {
+          if (index < rating) {
+            s.classList.add('selected');
+          } else {
+            s.classList.remove('selected');
+          }
+        });
       });
+    });
+
+    feedbackForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      fetch("{{ url_for('submit_feedback') }}", {
+        method: 'POST',
+        body: new FormData(feedbackForm)
+      }).then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            hideModal(feedbackFormModal);
+            showModal(thankYouModal);
+          } else if (data.error) {
+            if (data.error === 'User not logged in') {
+              loginNote.classList.remove('hidden');
+            } else {
+              alert(data.error);
+            }
+          }
+        })
+        .catch(error => console.error('Error submitting feedback:', error));
+    });
+
+    audio.addEventListener('ended', function() {
+      window.location.href = "{{ url_for('meditation_end') }}";
     });
   });
 </script>
@@ -78,74 +186,60 @@
 {% block stylesheet %}
 <style>
 /* Feedback Container */
-.feedback-container {
-  max-width: 400px;
-  margin: 30px auto; /* Added some margin for better spacing */
-  padding: 20px;
-  text-align: center;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2A2B37;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* Rating Stars */
-.rating-stars {
-  margin: 20px 0;
+.modal.show {
+    opacity: 1;
+    visibility: visible;
 }
 
-.rating-stars .star {
-  font-size: 2rem;
-  color: #ccc;
-  cursor: pointer;
-  margin: 0 5px;
-  transition: color 0.2s ease-in-out;
+.modal-content {
+    text-align: center;
 }
 
-.rating-stars .star.selected {
-  color: #ffd700;
+.modal h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
 }
 
-/* Feedback Options */
-.feedback-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 20px 0;
-  justify-content: center; /* Center align the options */
+.modal p {
+    font-size: 1rem;
+    margin-bottom: 20px;
 }
 
-.feedback-option {
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  flex: 1 1 calc(50% - 10px); /* Responsive flex sizing */
-  max-width: 120px; /* Set a max width for buttons */
-  box-sizing: border-box;
+.modal-confirm-button, .modal-cancel-button, .modal-submit-button, .modal-close-button {
+    background-color: #D38638;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.feedback-option:hover {
-  background-color: #eee;
+.modal-confirm-button:hover, .modal-cancel-button:hover, .modal-submit-button:hover, .modal-close-button:hover {
+    background-color: #B36A2E;
+    transform: translateY(-2px);
 }
 
-/* Submit Button */
-.submit-button {
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  width: 100%;
-  margin-top: 20px;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.submit-button:hover {
-  background-color: #333;
+.modal-confirm-button:active, .modal-cancel-button:active, .modal-submit-button:active, .modal-close-button:active {
+    transform: translateY(1px);
 }
 
 /* Centering the logo */
@@ -154,7 +248,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 20px;
-  width: 60px; /* Adjust logo size if necessary */
+  width: 60px;
 }
 
 /* Centering the play-pause indicator */
@@ -163,7 +257,27 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background: url('{{ url_for('static', filename='images/play.png') }}') center center no-repeat;
 }
 
+.play-indicator {
+  background: url('{{ url_for('static', filename='images/play.png') }}') center center no-repeat;
+}
+
+.pause-indicator {
+  background: url('{{ url_for('static', filename='images/pause.png') }}') center center no-repeat;
+}
+
+.star {
+  font-size: 24px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star.selected {
+  color: gold;
+}
 </style>
 {% endblock %}

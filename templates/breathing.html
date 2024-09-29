@@ -6,44 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/breathing.css') }}">
-    <title>breathing</title>
+    <title>Breathing</title>
 </head>
 
 <body>
     <a id="sidebar-toggle" tabindex="0"><span></span></a>
     <main id="main">
-        <div id="sidebar">
-            <div></div>
-            <ul>
-                <li>
-                    <table>
-                        <tr>
-                            <td><input type="text" name="word" value="inhale"/></td>
-                            <td><input type="number" name="time" min="2" max="10" value="4"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" name="word" value="hold"/></td>
-                            <td><input type="number" name="time" min="0" max="10" value="4"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" name="word" value="exhale"/></td>
-                            <td><input type="number" name="time" min="2" max="10" value="4"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" name="word" value="pause"/></td>
-                            <td><input type="number" name="time" min="0" max="10" value="4"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="button" value="reset" name="reset" onclick="resetSettings()"/></td>
-                            <td><input type="button" value="save" name="save" onclick="saveSettings()"/></td>
-                        </tr>
-                    </table>
-                </li>
-                <li><a id="noSleepToggle" tabindex="0" class="btn">Prevent Display Sleep</a></li>
-                <li><a href="{{ url_for('index') }}" class="btn">Home</a></li>
-                
-                
-        </div>
+        <aside id="sidebar">
+            <div class="sidebar-content">
+                <ul>
+                    <li>
+                        <div class="settings">
+                            <div class="setting-item">
+                                <label for="inhale-word">Inhale</label>
+                                <input type="text" id="inhale-word" name="word" value="inhale"/>
+                                <input type="number" id="inhale-time" name="time" min="2" max="10" value="4">
+                            </div>
+                            <div class="setting-item">
+                                <label for="hold-word">Hold</label>
+                                <input type="text" id="hold-word" name="word" value="hold"/>
+                                <input type="number" id="hold-time" name="time" min="0" max="10" value="4">
+                            </div>
+                            <div class="setting-item">
+                                <label for="exhale-word">Exhale</label>
+                                <input type="text" id="exhale-word" name="word" value="exhale"/>
+                                <input type="number" id="exhale-time" name="time" min="2" max="10" value="4">
+                            </div>
+                            <div class="setting-item">
+                                <label for="pause-word">Pause</label>
+                                <input type="text" id="pause-word" name="word" value="pause"/>
+                                <input type="number" id="pause-time" name="time" min="0" max="10" value="4">
+                            </div>
+                            <div class="setting-actions">
+                                <button onclick="resetSettings()"class="btn">Reset</button>
+                                <button onclick="saveSettings()" class="btn">Save</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a id="noSleepToggle" tabindex="0" class="btn">Prevent Display Sleep</a></li>
+                    <li><a href="{{ url_for('index') }}" class="btn">Home</a></li>
+                </ul>
+            </div>
+        </aside>
         <div id="main-view">
             <div id="circle">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -53,8 +57,8 @@
             <h2 id="text">ready</h2>
         </div>
     </main>
-    <script type="text/javascript" src="static/js/NoSleep.js"></script>
-    <script type="text/javascript" src="static/js/breathing.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/NoSleep.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/breathing.js') }}"></script>
 </body>
 
 {% endblock %}
