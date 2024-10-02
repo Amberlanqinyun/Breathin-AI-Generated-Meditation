@@ -11,6 +11,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.gif') }}" type="image/gif">
     <script src="https://pay.google.com/gp/p/js/pay.js" async></script>
+    <style>
+        {% if request.path == url_for('breathing_exercise') %}
+        .hamburger-menu, #menu-content {
+            display: none;
+        }
+        {% endif %}
+    </style>
+
 </head>
 <body>
     <!-- Flash messages -->
@@ -36,7 +44,8 @@
     <!-- Chat Bubble -->
     <div id="chat-bubble" class="chat-bubble">
         <svg class="chat-icon" viewBox="0 0 24 24">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+            <pat
+            h d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
     </div>
     <div id="chat-content" class="chat-content">
