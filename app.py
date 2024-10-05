@@ -22,6 +22,9 @@ from mod_chat_ai import chat_ai
 import os
 import ssl
 import certifi
+import logging
+logging.basicConfig(level=logging.DEBUG)
+print("Starting Flask Application...")
 
 ssl_context = ssl.create_default_context(cafile=certifi.where())
 print("SSL context created with certifi path:", certifi.where())
