@@ -1,6 +1,6 @@
 from mod_utilize import execute_query
 
-# Fetch all meditations
+# Fetch all meditations 
 def get_all_meditations(search_query=''):
     if search_query:
         sql = """
