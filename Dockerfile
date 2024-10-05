@@ -10,10 +10,7 @@ COPY . /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     pkg-config \
-    libmariadb-dev-compat
-
-# Install dependencies for mysqlclient
-RUN apt-get update && apt-get install -y \
+    libmariadb-dev-compat \
     build-essential \
     default-libmysqlclient-dev
 
