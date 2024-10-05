@@ -151,6 +151,3 @@ WTForms==3.0.1
 xattr==1.1.0
 yarg==0.1.9
 zipp==3.19.2
-gunicorn==20.1.0
-flask_mail
-flask_oauthlib
