@@ -1,7 +1,23 @@
-.streamlit
-venv/
-__pycache__/app.cpython-311.pyc
-__pycache__/app_error_handling.cpython-311.pyc
+# Python-related
+__pycache__/
 *.pyc
-*.pyc
+
+# Environment
 .env
+*.env
+
+# Virtual environments
+venv/
+
+# Streamlit-related
+.streamlit/
+
+# Service account keys (should never be committed)
+*.json
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore cache files
+static/cache/
+static/output/

@@ -1201,13 +1201,10 @@ textarea:focus {
 .chat-icon {
   width: 30px;
   height: 30px;
-  fill: var(--main);
+  fill: var(--background);
   transition: fill 0.3s ease;
 }
 
-.chat-bubble:hover .chat-icon {
-  fill: var(--element-background);
-}
 
 .chat-content {
   display: none;
@@ -1396,4 +1393,17 @@ textarea:focus {
   color: #F3EED9;          /* Sets text color */
   text-align: center;      /* Center-aligns the text inside the h2 */
   font-family: var(--font-primary); /* Optional: Use your custom font */
+}
+/* Customize the Buy Me a Coffee widget */
+#bmc-wbtn {
+  background-color: var(--header) !important; /* Match your header color */
+  color: var(--background) !important; /* Match your background color */
+  border-radius: 8px !important; /* Match your button styles */
+  font-family: var(--font-primary) !important; /* Match your font */
+  transition: background-color 0.3s ease, transform 0.3s ease !important;
+}
+
+#bmc-wbtn:hover {
+  background-color: var(--main) !important; /* Match your hover color */
+  transform: scale(1.05) !important; /* Add a hover effect */
 }

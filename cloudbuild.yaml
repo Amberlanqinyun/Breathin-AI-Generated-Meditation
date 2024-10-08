@@ -1,11 +1,11 @@
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/meditation-431811/my-flask-app', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/meditation-431811/my-flask-app']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy', 'my-flask-app', '--image', 'gcr.io/meditation-431811/my-flask-app', '--region', 'us-central1', '--platform', 'managed']
-images:
-- 'gcr.io/$PROJECT_ID/my-flask-app'
-options:
-  logging: CLOUD_LOGGING_ONLY
+   steps:
+   - name: 'gcr.io/cloud-builders/docker'
+     args: ['build', '-t', 'gcr.io/meditation-431811/my-flask-app', '.']
+   - name: 'gcr.io/cloud-builders/docker'
+     args: ['push', 'gcr.io/meditation-431811/my-flask-app']
+   - name: 'gcr.io/cloud-builders/gcloud'
+     args: ['run', 'deploy', 'my-flask-app', '--image', 'gcr.io/meditation-431811/my-flask-app', '--region', 'australia-southeast1', '--platform', 'managed']
+   images:
+   - 'gcr.io/$PROJECT_ID/my-flask-app'
+   options:
+     logging: CLOUD_LOGGING_ONLY
