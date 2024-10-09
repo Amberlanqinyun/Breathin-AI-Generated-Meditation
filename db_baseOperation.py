@@ -1,16 +1,18 @@
-from db_credentials import db_config
 import pymysql
-
+import os 
+from dotenv import load_dotenv
+# Load environment variables
+load_dotenv()
 def execute_query(query, data=None, fetchone=False, is_insert=False):
     result = None
 
     try:
         with pymysql.connect(
-            host=db_config['db_host'],
-            user=db_config['db_user'],
-            password=db_config['db_password'],
-            db=db_config['db_name'],
-            port=db_config['port'],
+            host=os.getenv('DB_HOST'),
+            user=os.getenv('DB_USER'),
+            password=os.getenv('DB_PASSWORD'),
+            db=os.getenv('DB_NAME'),
+            port=int(os.getenv('DB_PORT')),
             cursorclass=pymysql.cursors.DictCursor
         ) as connection:
             with connection.cursor() as cursor:

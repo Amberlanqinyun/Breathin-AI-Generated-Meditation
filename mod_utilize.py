@@ -4,7 +4,6 @@ from flask_bcrypt import Bcrypt
 from flask import Flask, session, redirect, url_for, request, render_template, flash, send_file
 from itsdangerous import URLSafeTimedSerializer
 import pymysql
-from db_credentials import *
 from db_baseOperation import execute_query
 import os
 from flask_mail import Mail, Message

@@ -1,5 +1,11 @@
 import pytest
-from db_credentials import db_config as db  # Import your database module
+import os
+import sys
+
+# Add the parent directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from mod_db_account import db
 
 def test_create_user(app, mock_db_connection):
     with app.app_context():

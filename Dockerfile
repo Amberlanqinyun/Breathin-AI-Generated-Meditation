@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     libmariadb-dev-compat \
     build-essential \
     default-libmysqlclient-dev \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*  
     # Clean up after installing packages
 

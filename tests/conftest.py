@@ -9,7 +9,6 @@ from mod_utilize import app as flask_app  # Import the app instance from mod_uti
 from mod_db_account import search_user, create_user, hash_password
 from flask_login import login_user
 from flask import session
-from db_credentials import db_config
 from db_baseOperation import execute_query
 from flask import Flask
 from flask_bcrypt import Bcrypt

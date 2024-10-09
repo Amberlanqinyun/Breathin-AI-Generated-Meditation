@@ -17,12 +17,13 @@ from mod_register import register
 from mod_change_password import change_password
 from app_error_handling import *
 from mod_admin import admin_dashboard, admin_meditations, admin_delete_meditation, admin_categories, admin_edit_meditation
-from mod_donate import donate
 from mod_chat_ai import chat_ai
 import os
 import ssl
 import certifi
 import logging
+from dotenv import load_dotenv
+load_dotenv()
 logging.basicConfig(level=logging.DEBUG)
 print("Starting Flask Application...")
 

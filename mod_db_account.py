@@ -8,7 +8,6 @@ import bcrypt
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pymysql
-from db_credentials import *
 from flask import session, url_for
 from flask_mail import Mail, Message
 import base64
