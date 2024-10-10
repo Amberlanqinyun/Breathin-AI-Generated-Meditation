@@ -1,6 +1,12 @@
-tests/
+# Ignore local development files
+*.env
+*.pyc
 __pycache__/
-*.md
-.git/
-docs/
-.DS_Store
+venv/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore large assets
+static/assets/
