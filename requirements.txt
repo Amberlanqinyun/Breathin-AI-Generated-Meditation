@@ -172,7 +172,7 @@ uritemplate==4.1.1
 urllib3==2.0.4
 virtualenv==20.26.3
 wcwidth==0.2.6
-Werkzeug==2.3.7
+Werkzeug==3.0.3
 WTForms==3.0.1
 xattr==1.1.0
 yarg==0.1.9
