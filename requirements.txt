@@ -1,4 +1,4 @@
-certifi==2024.8.30
+
 certifi==2024.7.4
 Flask==3.0.3
 Flask_Bcrypt==1.0.1
