@@ -9,7 +9,7 @@ asttokens==2.2.1
 attrs==23.2.0
 autopep8==1.7.0
 backcall==0.2.0
-flask_bcrypt==4.0.1
+bcrypt==4.0.1
 blinker==1.6.2
 build==1.2.1
 CacheControl==0.14.0
