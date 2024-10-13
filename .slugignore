@@ -3,14 +3,16 @@
 *.pyc
 __pycache__/
 /venv/
-
+docs/
 # Ignore logs and temporary files
 *.log
 *.tmp
-
+*.tmp
 # Ignore large assets
 static/assets/
 .env
 /tests/
 /docs/
-/static/cache/
+static/cache/
+*.json
+static/output/

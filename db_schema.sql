@@ -108,3 +108,17 @@ ALTER TABLE Users MODIFY COLUMN PasswordHash VARCHAR(255) NULL;
 CREATE INDEX idx_user_id_userfeedback ON UserFeedback(UserID);
 CREATE INDEX idx_user_id_achievements ON Achievements(UserID);
 CREATE INDEX idx_user_id_notifications ON Notifications(UserID);
+
+
+ALTER TABLE MeditationSessions
+ADD CONSTRAINT MeditationSessions_ibfk_3
+FOREIGN KEY (UserID)
+REFERENCES Users(UserID)
+ON DELETE CASCADE;
+
+
+ALTER TABLE notifications
+ADD CONSTRAINT fk_user
+FOREIGN KEY (UserID)
+REFERENCES Users(UserID)
+ON DELETE CASCADE;

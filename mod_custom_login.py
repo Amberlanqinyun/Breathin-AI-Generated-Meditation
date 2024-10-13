@@ -5,6 +5,9 @@ from mod_db_notifications import *
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'user_id' in session:
+        # Check if the user is an admin and redirect accordingly
+        if session['role_id'] == 1:
+            return redirect(url_for('admin_users'))
         return redirect(url_for('dashboard'))
     
     if request.method == 'POST':
@@ -43,7 +46,7 @@ def enter_password():
             # Redirect based on role
             if session['role_id'] == 1:
                 print("Redirecting to admin dashboard")
-                return redirect(url_for('admin_dashboard'))
+                return redirect(url_for('admin_users'))
             else:
                 print("Redirecting to user dashboard")
                 return redirect(url_for('dashboard'))

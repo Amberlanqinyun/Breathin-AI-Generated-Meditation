@@ -21,3 +21,21 @@ venv/
 # Ignore cache files
 static/cache/
 static/output/
+# Ignore local development files
+*.env
+*.pyc
+__pycache__/
+/venv/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore large assets
+static/assets/
+.env
+/tests/
+/docs/
+static/cache/
+*.json
+static/output/

@@ -23,12 +23,18 @@ import ssl
 import certifi
 import logging
 from dotenv import load_dotenv
+
+# Load environment variables
 load_dotenv()
+
+# Set up logging
 logging.basicConfig(level=logging.DEBUG)
 print("Starting Flask Application...")
 
+# Create SSL context
 ssl_context = ssl.create_default_context(cafile=certifi.where())
 print("SSL context created with certifi path:", certifi.where())
+
 # Initialize Google OAuth
 try:
     init_oauth(app)
@@ -36,18 +42,28 @@ try:
 except Exception as e:
     print(f"Error initializing Google OAuth: {e}")
 
-
+# Define routes
 @app.route('/')
 def index():
     return render_template('homepage.html')
 
-
+# Add URL rule for prepare_meditation
 app.add_url_rule('/prepare_meditation', 'prepare_meditation', prepare_meditation, methods=['GET', 'POST'])
 
+# Define another route
 @app.route('/meditation_end')
 def meditation_end():
     return render_template('meditation_end.html')
 
+
+# Main application entry point
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 8080))
-    app.run(host="0.0.0.0", port=port) 
+
+    # Print all routes
+    print("\nListing all registered routes:")
+    for rule in app.url_map.iter_rules():
+        print(f"Endpoint: {rule.endpoint}, URL: {rule.rule}")
+
+    # Start the Flask app
+    app.run(host="0.0.0.0", port=port)

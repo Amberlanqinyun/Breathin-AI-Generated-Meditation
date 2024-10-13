@@ -1407,3 +1407,7 @@ textarea:focus {
   background-color: var(--main) !important; /* Match your hover color */
   transform: scale(1.05) !important; /* Add a hover effect */
 }
+.chat-icon {
+  width: 65px;
+  height: 65px;
+}

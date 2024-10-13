@@ -33,7 +33,11 @@ def chat_ai():
 
     try:
         response_message = generate_meditation_text(user_message)
-        suggestions = ["How are you feeling now?", "Would you like to talk more?", "Can I help you with something else?"]
+        suggestions = [
+            "Can meditation help with anxiety and stress?",
+            "Are there different types of meditation?",
+            "What should I focus on while meditating?"
+        ]
         return jsonify({'response': response_message, 'suggestions': suggestions})
     except Exception as e:
         return jsonify({'error': str(e)}), 500

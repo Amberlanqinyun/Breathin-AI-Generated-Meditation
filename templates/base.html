@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <title>{% block title %}Breathe In{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/select_category.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
@@ -43,10 +42,7 @@
     
     <!-- Chat Bubble -->
     <div id="chat-bubble" class="chat-bubble">
-        <svg class="chat-icon" viewBox="0 0 24 24">
-            <pat
-            h d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-        </svg>
+        <img src="{{ url_for('static', filename='images/chat_icon.png') }}" alt="Chat Icon" class="chat-icon">
     </div>
     <div id="chat-content" class="chat-content">
         <div id="chat-header" class="chat-header">
