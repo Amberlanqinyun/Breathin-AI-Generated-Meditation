@@ -2,9 +2,8 @@
 __pycache__/
 *.pyc
 
-# Environment
+# Environment files
 .env
-*.env
 
 # Virtual environments
 venv/
@@ -15,27 +14,20 @@ venv/
 # Service account keys (should never be committed)
 *.json
 
-# Ignore Mac system files
+# Mac system files
 .DS_Store
 
-# Ignore cache files
+# Cache and output files
 static/cache/
 static/output/
-# Ignore local development files
-*.env
-*.pyc
-__pycache__/
-/venv/
 
-# Ignore logs and temporary files
+# Logs and temporary files
 *.log
 *.tmp
 
-# Ignore large assets
+# Large assets
 static/assets/
-.env
+
+# Development and documentation
 /tests/
 /docs/
-static/cache/
-*.json
-static/output/
