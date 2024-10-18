@@ -160,7 +160,7 @@ def prepare_meditation():
             logging.error(f"Error during meditation generation: {e}")
             return render_template('error.html', error=str(e))  # Render an error page or message
 
-    return render_template('prepare_meditation.html')
+    return render_template('meditation_page.html')
 
 # Flask route to start the meditation session
 @app.route("/start_meditation")

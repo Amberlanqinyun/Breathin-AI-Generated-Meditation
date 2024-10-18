@@ -22,9 +22,11 @@
             {% for meditation in meditations %}
             <tr>
                 <td>{{ meditation.MeditationID }}</td>
-                <td>{{ meditation.Category }}</td> <!-- Display the category name -->
+                <td>{{ meditation.CategoryName }}</td> <!-- Display the category name -->
                 <td>{{ meditation.TextContent }}</td> <!-- Display the meditation name -->
-                <td><a href="{{ url_for('admin_edit_meditation', meditation_id=meditation.MeditationID) }}">Edit</a></td>
+                <td>
+                    <a href="{{ url_for('admin_edit_meditation', meditation_id=meditation.MeditationID) }}">Edit</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

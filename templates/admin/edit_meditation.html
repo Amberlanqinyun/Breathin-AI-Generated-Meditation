@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Edit Meditation</h2>
-    <form method="POST" action="{{ url_for('admin_edit_meditation', meditation_id=meditation.MeditationID) }}" enctype="multipart/form-data">
+    <form id="deleteMeditationForm" method="POST" action="{{ url_for('admin_delete_meditation', meditation_id=meditation.MeditationID) }}" enctype="multipart/form-data">
         <div class="form-group">
             <label for="text_content">Meditation Name</label>
             <textarea id="text_content" name="text_content" required>{{ meditation.TextContent }}</textarea>
@@ -12,7 +12,18 @@
             <label for="audio_file_path">Audio File</label>
             <input type="file" id="audio_file_path" name="audio_file_path">
         </div>
-        <button type="submit" class="btn">Update Meditation</button>
+        <div class="form-actions">
+            <button type="submit" class="btn">Update Meditation</button>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete('deleteMeditationForm')">Delete Meditation</button>
+        </div>
     </form>
 </div>
+
+<script>
+function confirmDelete(formId) {
+    if (confirm("Are you sure you want to delete this meditation?")) {
+        document.getElementById(formId).submit();
+    }
+}
+</script>
 {% endblock %}

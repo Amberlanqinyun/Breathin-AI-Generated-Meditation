@@ -62,4 +62,4 @@ def enter_password():
 def logout():
     session.clear()  # Clears the entire session
     flash('You have been logged out.', 'success')
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))

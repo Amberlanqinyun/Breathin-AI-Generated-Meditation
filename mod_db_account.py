@@ -227,3 +227,4 @@ def update_user(user_id, first_name, last_name, email, google_id=None, password_
     
     return execute_query(query, data)
 
+

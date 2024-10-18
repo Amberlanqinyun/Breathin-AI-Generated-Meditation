@@ -2,23 +2,14 @@ from mod_utilize import execute_query
 
 # Fetch all meditations t
 def get_all_meditations(search_query=''):
-    if search_query:
-        sql = """
-        SELECT m.*, c.Name AS CategoryName 
-        FROM Meditations m
-        JOIN Categories c ON m.CategoryID = c.CategoryID
-        WHERE m.TextContent LIKE %s 
-        OR c.Name LIKE %s
-        """
-        search_param = f"%{search_query}%"
-        return execute_query(sql, (search_param, search_param))
-    else:
-        sql = """
-        SELECT m.*, c.Name AS CategoryName 
-        FROM Meditations m
-        JOIN Categories c ON m.CategoryID = c.CategoryID
-        """
-        return execute_query(sql)
+    query = """
+    SELECT Meditations.MeditationID, Meditations.TextContent, Categories.Name AS CategoryName
+    FROM Meditations
+    JOIN Categories ON Meditations.CategoryID = Categories.CategoryID
+    WHERE Meditations.TextContent LIKE %s
+    """
+    search_term = f"%{search_query}%"
+    return execute_query(query, (search_term,))
 
 # Get meditation by ID
 def get_meditation_by_id(meditation_id):

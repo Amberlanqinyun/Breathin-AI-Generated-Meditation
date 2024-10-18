@@ -29,3 +29,8 @@ def update_category(category_id, name, description):
 def get_category_by_id(category_id):
     sql = "SELECT * FROM Categories WHERE CategoryID = %s"
     return execute_query(sql, (category_id,), fetchone=True)
+
+def delete_category(category_id):
+    """Delete a category from the Categories table by CategoryID."""
+    query = "DELETE FROM Categories WHERE CategoryID = %s"
+    return execute_query(query, (category_id,))

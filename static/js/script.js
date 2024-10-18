@@ -312,7 +312,6 @@ window.addEventListener('load', function() {
         // Scroll to bottom of chat
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-
     function updatePredefinedOptions(suggestions) {
         if (!predefinedOptions) return; // Guard clause
 

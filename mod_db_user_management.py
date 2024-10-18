@@ -57,3 +57,9 @@ def searchUser(email):
 def toggle_user_ban(user_id, ban_status):
     sql = "UPDATE Users SET banned = %s WHERE UserID = %s"
     execute_query(sql, (ban_status, user_id))
+
+
+def delete_user(user_id):
+    """Delete a user from the Users table by UserID."""
+    query = "DELETE FROM Users WHERE UserID = %s"
+    return execute_query(query, (user_id,))

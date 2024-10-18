@@ -4,17 +4,21 @@ import pytest
 from flask import session
 from flask_bcrypt import Bcrypt
 
+
 # Add the correct directory to Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Now import the app
-from mod_utilize import app as flask_app
+from app import app as flask_app
 from mod_db_account import create_user, hash_password
 from db_baseOperation import execute_query
 
 # Initialize Bcrypt
 bcrypt = Bcrypt(flask_app)
 flask_app.bcrypt = bcrypt
+
+
+
 
 @pytest.fixture(scope='session')
 def app():
@@ -99,10 +103,16 @@ def login_admin(client, admin):
 @pytest.fixture(scope='function', autouse=True)
 def clear_database():
     """Fixture for clearing the database before and after each test."""
-    # Clear the Users table
+    # Clear related tables first to avoid foreign key constraint errors
+    execute_query("DELETE FROM Achievements")
+    execute_query("DELETE FROM MeditationSessions")
+    execute_query("DELETE FROM UserFeedback")
     execute_query("DELETE FROM Users")
     yield
     # Clear again after test to reset the database
+    execute_query("DELETE FROM Achievements")
+    execute_query("DELETE FROM MeditationSessions")
+    execute_query("DELETE FROM UserFeedback")
     execute_query("DELETE FROM Users")
 
 @pytest.fixture(scope='function')

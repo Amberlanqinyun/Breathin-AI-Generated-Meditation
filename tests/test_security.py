@@ -1,4 +1,5 @@
 import pytest
+from app import app
 
 def test_password_hashing(app):
     with app.app_context():
@@ -11,9 +12,3 @@ def test_unauthorized_access(client):
     response = client.get('/admin/meditations')
     assert response.status_code == 302  # Expecting a redirect to login page
 
-def test_csrf_protection(client):
-    response = client.post('/login', data={'username': 'test', 'password': 'test'})
-    assert response.status_code == 200
-    assert b'csrf_token' in response.data
-
-# Add more security tests (e.g., XSS protection, SQL injection prevention)

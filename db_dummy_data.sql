@@ -57,11 +57,6 @@ INSERT INTO Achievements (UserID, Type, Description) VALUES
 (2, 'Consistency', 'Meditated every day for a week.'),
 (3, 'Stress Free', 'Reduced stress levels significantly.');
 
--- Insert dummy data into Notifications
-INSERT INTO Notifications (UserID, Details, NotificationTime, Status) VALUES 
-(1, 'Welcome to the meditation app! Your journey begins now.', CURRENT_TIMESTAMP, 0),
-(2, 'You have earned a new achievement: Consistency!', CURRENT_TIMESTAMP, 0);
-
 -- Insert mock meditation sessions for User 1
 INSERT INTO MeditationSessions (UserID, MeditationID, SessionDateTime) VALUES
 (1, 1, '2023-09-08 06:30:00'),

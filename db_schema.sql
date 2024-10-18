@@ -76,7 +76,7 @@ CREATE TABLE UserFeedback (
     FeedbackID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     MeditationID INT NOT NULL,
-    Rating INT,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
     Comments TEXT,
     SubmittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
@@ -93,21 +93,12 @@ CREATE TABLE Achievements (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- Create Notifications table
-CREATE TABLE Notifications (
-    NotificationID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT NOT NULL,
-    Details TEXT NOT NULL,
-    NotificationTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Status TINYINT(1) DEFAULT 0,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
-);
+
 
 ALTER TABLE Users MODIFY COLUMN PasswordHash VARCHAR(255) NULL;
 -- Indexes
 CREATE INDEX idx_user_id_userfeedback ON UserFeedback(UserID);
 CREATE INDEX idx_user_id_achievements ON Achievements(UserID);
-CREATE INDEX idx_user_id_notifications ON Notifications(UserID);
 
 
 ALTER TABLE MeditationSessions
@@ -116,9 +107,3 @@ FOREIGN KEY (UserID)
 REFERENCES Users(UserID)
 ON DELETE CASCADE;
 
-
-ALTER TABLE notifications
-ADD CONSTRAINT fk_user
-FOREIGN KEY (UserID)
-REFERENCES Users(UserID)
-ON DELETE CASCADE;

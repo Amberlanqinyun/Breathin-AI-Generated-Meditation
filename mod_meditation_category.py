@@ -27,7 +27,7 @@ def meditation_category(category_id):
     if not meditations:
         flash("No meditation found for the selected category.", "error")
         return redirect(url_for('select_category'))
-    
+
     # Render the meditation selection page
     return render_template('select_meditation.html', meditations=meditations, category_id=category_id)
 
@@ -85,11 +85,13 @@ def submit_feedback():
     user_id = session.get('user_id')
 
     if not user_id:
-        flash("Please log in to submit feedback.", "error")
         return jsonify({'error': 'User not logged in'}), 400
 
     if not meditation_id or not meditation_id.isdigit():
         return jsonify({'error': 'Invalid meditation session.'}), 400
+
+    if not comments:  # Check if feedback is empty
+        return jsonify({'error': 'Feedback cannot be empty'}), 400
 
     try:
         insert_user_feedback(user_id, int(meditation_id), rating, comments)

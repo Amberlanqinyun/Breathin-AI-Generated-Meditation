@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h2 class="dashboard-title">Edit Category</h2>
-    <form method="POST" action="{{ url_for('admin_edit_category', category_id=category.CategoryID) }}" class="form-container">
+    <form id="deleteCategoryForm" method="POST" action="{{ url_for('admin_delete_category', category_id=category.CategoryID) }}" class="form-container">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" value="{{ category.Name }}" class="form-control" required>
@@ -12,7 +12,18 @@
             <label for="description">Description</label>
             <textarea id="description" name="description" class="form-control" required>{{ category.Description }}</textarea>
         </div>
-        <button type="submit" class="btn">Update Category</button>
+        <div class="form-actions">
+            <button type="submit" class="btn">Update Category</button>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete('deleteCategoryForm')">Delete Category</button>
+        </div>
     </form>
 </div>
+
+<script>
+function confirmDelete(formId) {
+    if (confirm("Are you sure you want to delete this category?")) {
+        document.getElementById(formId).submit();
+    }
+}
+</script>
 {% endblock %}
